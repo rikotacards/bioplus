@@ -1,8 +1,4 @@
-import React from 'react';
+import React from "react";
 export const Landing: React.FC = () => {
-  return (
-    <>
-    Landing
-    </>
-  )
-}
+  return <div>Welcome to Rootlink</div>;
+};

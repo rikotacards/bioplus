@@ -1,0 +1,11 @@
+.react-grid-layout {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+.react-grid-item {
+  display: flex;
+  width: 100% !important;
+  /* left: 0 !important; */
+  /* transform: translate(0px,170px) !important; */
+}

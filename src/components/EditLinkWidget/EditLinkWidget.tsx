@@ -6,14 +6,30 @@ import {
   Card,
   Switch,
   Button,
+  TextField,
 } from "@mui/material";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+
+import EditIcon from "@mui/icons-material/Edit";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard"; // activate / deavtivate, edit title, edit link
 import BarChartIcon from "@mui/icons-material/BarChart";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { EditableTextField } from "../EditableTextField/EditableTextField";
 export const EditLinkWidget: React.FC = () => {
+  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+  const onEditClick = () => {
+    setIsEditing(!isEditing);
+  };
   return (
-    <Card>
-      <CardContent style={{ display: "flex", flexDirection: "row" }}>
+    <Card sx={{ display: "flex", width: "100%", alignItems: "center" }}>
+      <div className={"drag"}>
+        <IconButton>
+          <DragIndicatorIcon />
+        </IconButton>
+      </div>
+      <CardContent
+        style={{ display: "flex", flexDirection: "row", width: "100%" }}
+      >
         <div style={{ display: "flex", flex: 1 }}>
           <div
             style={{
@@ -24,8 +40,9 @@ export const EditLinkWidget: React.FC = () => {
               textAlign: "left",
             }}
           >
-            <Typography>Title</Typography>
-            <Typography>Link</Typography>
+            <EditableTextField placeholder="Name" />
+            <EditableTextField placeholder="Link" />
+
             <div>
               <Button variant="outlined" size="small">
                 <div

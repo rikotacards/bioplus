@@ -8,6 +8,14 @@ export const ProfileLinks: React.FC = () => {
     <DisplayedLink/>
     <DisplayedLink/>
     <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
+    <DisplayedLink/>
     </>
   )
 }
