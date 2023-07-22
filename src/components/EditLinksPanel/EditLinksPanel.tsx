@@ -1,28 +1,45 @@
 import React from "react";
 import "./EdlintLinksPanel.css";
 import RGL, { WidthProvider } from "react-grid-layout";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { EditLinkWidget } from "../EditLinkWidget/EditLinkWidget";
-import { IconButton } from "@mui/material";
+import { getOrder, updateOrdering } from "../../db/api";
+import { useAuthContext } from "../../providers/AuthProvider";
+import { LinksContext, useLinksContext } from "../../providers/LinksProvider";
 const ReactGridLayout = WidthProvider(RGL);
 
-export const EditLinksPanel: React.FC = () => {
-  const links = [1, 2, 3, 4, 5];
-  const displayedLinks = links.map((link, i) => (
-    <div
-      key={i}
-      style={{left: "-10px"}}
-    >
-      <EditLinkWidget key={link} />
+interface Link {
+  title?: string;
+  link?: string;
+  linkId: string;
+  isDisplayed?: boolean;
+}
+interface EditLinksPanelProps {
+  links: Link[];
+}
+export const EditLinksPanel: React.FC<EditLinksPanelProps> = (props) => {
+  const linksContext = useLinksContext();
+  const displayedLinks = linksContext.links.map((link, i) => (
+    <div key={i + link?.title} style={{ left: "-10px" }}>
+      <EditLinkWidget
+        link={link.link}
+        linkId={link.linkId}
+        title={link.title}
+        key={link.linkId}
+        isDisplayed={link.isDisplayed}
+        index={i}
+      />
     </div>
   ));
   return (
     <ReactGridLayout
-      onLayoutChange={(d) => {
-        console.log(d);
+      onLayoutChange={(newLayout) => {
+        const newOrder = [] as any;
+        newLayout.forEach((row, index) => {
+          newOrder[Number(index)] = linksContext.links[row.y]
+        });
+        linksContext.onReorder(newOrder)
       }}
       useCSSTransforms={true}
-      isResizable={false}
       isDraggable
       cols={1}
       draggableHandle=".drag"

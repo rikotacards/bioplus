@@ -37,10 +37,9 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
             alignSelf: "center",
             margin: "20px",
           }}
+          onClick={onToggle}
         >
-          <IconButton onClick={onToggle}>
             <CloseIcon />
-          </IconButton>
         </Fab>
       </Drawer>
     </DrawerContext.Provider>

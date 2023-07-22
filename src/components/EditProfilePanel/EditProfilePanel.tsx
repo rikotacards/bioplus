@@ -25,8 +25,8 @@ export const EditProfilePanel: React.FC = () => {
             </Button>
           </div>
         </div>
-          <TextField size='small' />
-          <TextField  size='small' placeholder="bio" />
+          <TextField sx={{mb:1}}  />
+          <TextField   placeholder="bio" />
       </CardContent>
     </Card>
   );

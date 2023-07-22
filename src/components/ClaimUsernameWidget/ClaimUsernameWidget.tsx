@@ -1,17 +1,40 @@
 import React from "react";
-import { Button,Typography, TextField, Card, CardContent } from "@mui/material";
+import {
+  Button,
+  Typography,
+  TextField,
+  Card,
+  CardContent,
+} from "@mui/material";
+import { addUsername } from "../../db/api";
+import { useAuthContext } from "../../providers/AuthProvider";
 export const ClaimUsernameWidget: React.FC = () => {
+  const [username, setUsername] = React.useState('')
+  const auth = useAuthContext();
+  const uid = auth?.user?.uid
+  const [hasError, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('')
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setUsername(e.target.value)
+  }
+  const onSubmit = () => {
+    uid && addUsername({uid, username}).catch((e) => {
+      setError(true);
+      setErrorMessage('Dupe')
+    })
+  }
   return (
-    <Card elevation={2} sx={{mb:1}}>
-      <CardContent>
-        <div style={{display: 'flex'}}>
-          <Typography>Claim Username</Typography>
-        </div>
-        <div>
-        <TextField size="small" variant="outlined" />
-        <Button sx={{ml:1}} variant='contained'>Claim</Button>
-        </div>
-      </CardContent>
-    </Card>
+    <div>
+      <Typography variant="h6">Claim Username</Typography>
+
+      <Card elevation={2} sx={{ mb: 1 }}>
+        <CardContent sx={{display: 'flex'}}>
+            <TextField error={hasError} onChange={onChange} size="small" variant="outlined" />
+            <Button onClick={onSubmit} sx={{ ml: 1 }} variant="contained">
+              Claim
+            </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 };

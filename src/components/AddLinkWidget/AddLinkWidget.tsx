@@ -1,27 +1,70 @@
 import React from "react";
 
-
-
-import CloseIcon from '@mui/icons-material/Close';
-import { Button,Typography, TextField, Card, CardContent, IconButton } from "@mui/material";
-export const AddLinkWidget: React.FC = () => {
-  const [url, setUrl] = React.useState('')
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Button,
+  Typography,
+  TextField,
+  Card,
+  CardContent,
+  IconButton,
+} from "@mui/material";
+import { useAuthContext } from "../../providers/AuthProvider";
+import { isValidUrl } from "../../util/validateLink";
+import { useLinksContext } from "../../providers/LinksProvider";
+interface AddLinkWidgetProps {
+  links: {title: string, link: string, linkId: string, isDisplayed: boolean}[]
+}
+export const AddLinkWidget: React.FC<AddLinkWidgetProps> = () => {
+  const linksContext = useLinksContext();
+  const [url, setUrl] = React.useState("");
+  const auth = useAuthContext();
+  const [hasError, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('')
+  const uid = auth?.user?.uid;
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
     setUrl(e.target.value);
-  }
+  };
   const onAdd = () => {
-    console.log(url)
-  }
+    setError(false);
+    if (!uid) {
+      return;
+    }
+    if (!isValidUrl(url)) {
+      setError(true);
+      setErrorMessage('Url is not valid')
+      return;
+    }
+    linksContext.onAddLink({link:url, title: '', linkId: '', isDisplayed: false})
+    setUrl('')
+    
+  };
   return (
-    <Card sx={{mb:1}}>
+    <Card sx={{ mb: 1 }}>
       <CardContent>
-        <div style={{display: 'flex'}}>
+        <div style={{ display: "flex", alignItems: 'center' }}>
           <Typography>Enter URL</Typography>
-          <div style={{marginLeft: 'auto'}}><IconButton><CloseIcon/></IconButton></div>
+          <div style={{ marginLeft: "auto" }}>
+            <IconButton>
+              <CloseIcon />
+            </IconButton>
+          </div>
         </div>
-        <div>
-        <TextField onChange={onChange} size="small" variant="outlined" />
-        <Button onClick={onAdd} sx={{ml:1}} variant='contained'>Add</Button>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <TextField
+            name="url"
+            error={hasError}
+            onChange={onChange}
+            variant="outlined"
+            value={url}
+            type="text"
+            autoComplete="off"
+            helperText={errorMessage}
+          />
+          <Button size="large" fullWidth onClick={onAdd} sx={{ mt: 1 }} variant="contained">
+            Add
+          </Button>
         </div>
       </CardContent>
     </Card>

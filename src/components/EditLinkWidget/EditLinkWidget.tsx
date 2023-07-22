@@ -6,20 +6,24 @@ import {
   Card,
   Switch,
   Button,
-  TextField,
 } from "@mui/material";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
-import EditIcon from "@mui/icons-material/Edit";
-import LeaderboardIcon from "@mui/icons-material/Leaderboard"; // activate / deavtivate, edit title, edit link
 import BarChartIcon from "@mui/icons-material/BarChart";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { EditableTextField } from "../EditableTextField/EditableTextField";
-export const EditLinkWidget: React.FC = () => {
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
-  const onEditClick = () => {
-    setIsEditing(!isEditing);
-  };
+import { useLinksContext } from "../../providers/LinksProvider";
+interface EditLinkWidgetProps {
+  title?: string;
+  link?: string;
+  linkId: string;
+  isDisplayed?: boolean;
+  index: number;
+}
+export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
+  const {  isDisplayed, link, title, index } = props;
+  const linksContext = useLinksContext();
+  
   return (
     <Card sx={{ display: "flex", width: "100%", alignItems: "center" }}>
       <div className={"drag"}>
@@ -40,10 +44,10 @@ export const EditLinkWidget: React.FC = () => {
               textAlign: "left",
             }}
           >
-            <EditableTextField placeholder="Name" />
-            <EditableTextField placeholder="Link" />
+            <EditableTextField key={index+'title'} index={index} fieldName={'title'}  placeholder={title || "Name"} />
+            <EditableTextField key={index+'link'} index={index} fieldName='link'  placeholder={link || "link"} />
 
-            <div>
+            <div style={{marginTop: '8px'}}>
               <Button variant="outlined" size="small">
                 <div
                   style={{
@@ -66,8 +70,8 @@ export const EditLinkWidget: React.FC = () => {
             flexDirection: "column",
           }}
         >
-          <Switch />
-          <IconButton>
+          <Switch defaultChecked={isDisplayed} onChange={(e) => {linksContext.onUpdateLink(index,{...linksContext.links[index], isDisplayed:e.target.checked})}} />
+          <IconButton onClick={() => linksContext.onDeleteLink(index)}>
             <HighlightOffIcon />
           </IconButton>
         </div>

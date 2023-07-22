@@ -22,8 +22,8 @@ const mainNavItems = [
 
 export const MainNav: React.FC = () => {
   const navItems = mainNavItems.map((item) => (
-    <Link style={{ width: "100%" }} to={item.path}>
-      <Button variant="outlined">{item.name}</Button>
+    <Link key={item.path} to={item.path}>
+      <Button size='small' variant="outlined">{item.name}</Button>
     </Link>
   ));
   return (
@@ -32,7 +32,6 @@ export const MainNav: React.FC = () => {
         padding: '8px',
         display: "flex",
         justifyContent: "space-between",
-        background: "white",
       }}
     >
       {navItems}
