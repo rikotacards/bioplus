@@ -42,6 +42,7 @@ export const EditLinksPanel: React.FC<EditLinksPanelProps> = (props) => {
       useCSSTransforms={true}
       isDraggable
       cols={1}
+      rowHeight={165}
       draggableHandle=".drag"
     >
       {displayedLinks}

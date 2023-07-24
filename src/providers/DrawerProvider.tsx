@@ -1,10 +1,11 @@
-import { AppBar, Drawer, Fab, IconButton, Toolbar } from "@mui/material";
+import { Drawer, Fab, Paper } from "@mui/material";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { Profile } from "../pages/Profile";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+interface DrawerContextProps {
+  onToggle: () => void;
+}
 import { Preview } from "../components/Preview/Preview";
-export const DrawerContext = React.createContext({});
+export const DrawerContext = React.createContext({} as DrawerContextProps);
 export const useDrawerContext = () => React.useContext(DrawerContext);
 
 interface DrawerProviderProps {
@@ -29,7 +30,9 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
         onClose={onToggle}
         open={open}
       >
-        <Preview />
+        <Paper elevation={0}>
+          <Preview />
+        </Paper>
         <Fab
           sx={{
             position: "fixed",
@@ -39,7 +42,7 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
           }}
           onClick={onToggle}
         >
-            <CloseIcon />
+          <CloseIcon />
         </Fab>
       </Drawer>
     </DrawerContext.Provider>

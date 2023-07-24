@@ -13,6 +13,8 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { EditableTextField } from "../EditableTextField/EditableTextField";
 import { useLinksContext } from "../../providers/LinksProvider";
+import { getLinkDetails } from "../../db/api";
+import { useAuthContext } from "../../providers/AuthProvider";
 interface EditLinkWidgetProps {
   title?: string;
   link?: string;
@@ -21,60 +23,76 @@ interface EditLinkWidgetProps {
   index: number;
 }
 export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
-  const {  isDisplayed, link, title, index } = props;
+  const { isDisplayed, link, title, index, linkId } = props;
+  const auth = useAuthContext();
+  const uid = auth?.user?.uid
   const linksContext = useLinksContext();
-  
+  const [linkStats, setLink] = React.useState('')
+  React.useEffect(() => {
+    if(!uid){
+      return;
+    }
+    getLinkDetails({uid, linkId}).then((res) => {
+      console.log('reas', res)
+      setLink(res?.clicks)
+    })
+  })
+
   return (
-    <Card sx={{ display: "flex", width: "100%", alignItems: "center" }}>
-      <div className={"drag"}>
+    <Card
+      elevation={1}
+      sx={{
+        display: "flex",
+        width: "100%",
+      }}
+    >
+      <div className={"drag"} style={{display: 'flex'}}>
         <IconButton>
           <DragIndicatorIcon />
         </IconButton>
       </div>
       <CardContent
-        style={{ display: "flex", flexDirection: "row", width: "100%" }}
-      >
-        <div style={{ display: "flex", flex: 1 }}>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              textAlign: "left",
-            }}
-          >
-            <EditableTextField key={index+'title'} index={index} fieldName={'title'}  placeholder={title || "Name"} />
-            <EditableTextField key={index+'link'} index={index} fieldName='link'  placeholder={link || "link"} />
+      sx={{padding:2, width: '100%'}}
 
-            <div style={{marginTop: '8px'}}>
-              <Button variant="outlined" size="small">
-                <div
-                  style={{
-                    textTransform: "capitalize",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <BarChartIcon />
-                  <Typography>0 Clicks</Typography>
-                </div>
-              </Button>
-            </div>
-          </div>
+      >
+        <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+        <EditableTextField
+          key={index + "title"}
+          index={index}
+          fieldName={"title"}
+          placeholder={"Name"}
+          textValue={title}
+        />
+        <EditableTextField
+          key={index + "link"}
+          index={index}
+          fieldName="link"
+          placeholder={"link"}
+          textValue={link}
+        />
+
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
+        <div style={{display: 'flex'}}>
+       <Button size='small' variant='outlined'>
+        {linkStats} Clicks
+       </Button>
+        <div style={{display: 'flex', marginLeft: 'auto'}}>
+       <IconButton onClick={() => linksContext.onDeleteLink(index)}>
+          <HighlightOffIcon />
+        </IconButton>
+
+        <Switch
+          defaultChecked={isDisplayed}
+          onChange={(e) => {
+            linksContext.onUpdateLink(index, {
+              ...linksContext.links[index],
+              isDisplayed: e.target.checked,
+            });
           }}
-        >
-          <Switch defaultChecked={isDisplayed} onChange={(e) => {linksContext.onUpdateLink(index,{...linksContext.links[index], isDisplayed:e.target.checked})}} />
-          <IconButton onClick={() => linksContext.onDeleteLink(index)}>
-            <HighlightOffIcon />
-          </IconButton>
-        </div>
+          />
+          </div>
+          </div>
+        
       </CardContent>
     </Card>
   );

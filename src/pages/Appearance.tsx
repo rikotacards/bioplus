@@ -6,19 +6,20 @@ import { useDrawerContext } from "../providers/DrawerProvider";
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   return (
-    <>
+    <div style={{position: 'relative', display: 'flex', flexDirection: 'column'}}>
       <EditProfilePanel />
       <Fab
         variant="extended"
         onClick={drawerContext?.onToggle}
         sx={{ position: 
-          "absolute", 
-          bottom: " 0", 
-          margin: 2, 
-          left: "33%" }}
+          "fixed", 
+          bottom: "0", 
+          margin:'4px', 
+          alignSelf: 'center'
+          }}
       >
-        <Typography>Preview</Typography>
+        <Typography sx={{textTransform: 'capitalize'}}>Preview</Typography>
       </Fab>
-    </>
+    </div>
   );
 };

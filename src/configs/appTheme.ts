@@ -8,6 +8,7 @@ palette: {
   
   mode: 'dark',
   background: {
+
     // paper: 'black',
     // default: 'black'
   },

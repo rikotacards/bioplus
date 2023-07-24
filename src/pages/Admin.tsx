@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, Collapse, TextField, Typography } from "@mui/material";
 
 import { AddLinkWidget } from "../components/AddLinkWidget/AddLinkWidget";
 import { ClaimUsernameWidget } from "../components/ClaimUsernameWidget/ClaimUsernameWidget";
@@ -7,26 +7,38 @@ import { EditLinksPanel } from "../components/EditLinksPanel/EditLinksPanel";
 import { useAuthContext } from "../providers/AuthProvider";
 import { useLinksContext } from "../providers/LinksProvider";
 import { getUsernameFromUsers } from "../db/api";
-
+import { useLoadingContext } from "../providers/LoadingProvider";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 export const Admin: React.FC = () => {
-  const auth = useAuthContext()
+  const auth = useAuthContext();
+  const loadingContext = useLoadingContext();
   const uid = auth?.user?.uid;
-
+  const [show, setShow] = React.useState(false);
+  const toggle = () => {
+    setShow(!show);
+  };
   const linksContext = useLinksContext();
-  const [username, setUsername] = React.useState('');
-  React.useEffect(() => {
-    uid && getUsernameFromUsers({uid}).then((res) => {
-      console.log('res', res)
-      setUsername(res)
-    })
-  },[uid])
-  console.log('username, ', username)
+
   return (
-    <>
-      {!username?.length && auth?.user?.uid && <ClaimUsernameWidget/>}
-      <Button size='large' sx={{mb:1}} fullWidth variant='contained'>Add Link</Button>
-      <AddLinkWidget links={linksContext?.links || []}/>
-      <EditLinksPanel links={linksContext?.links || []}/>
-    </>
+    <div style={{marginTop: '8px'}}>
+      {!loadingContext.isLoading && !auth.username && <ClaimUsernameWidget />}
+      <div>
+        <Collapse in={!show}>
+          <div
+            onClick={toggle}
+            style={{height: '50px', margin: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+          
+          ><AddCircleOutlineIcon/>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              Add Link
+            </Typography>
+          </div>
+        </Collapse>
+        <Collapse in={show}>
+          <AddLinkWidget toggle={toggle} links={linksContext?.links || []} />
+        </Collapse>
+      </div>
+      <EditLinksPanel links={linksContext?.links || []} />
+    </div>
   );
 };

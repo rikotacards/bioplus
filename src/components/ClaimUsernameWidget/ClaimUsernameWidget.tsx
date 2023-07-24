@@ -25,11 +25,11 @@ export const ClaimUsernameWidget: React.FC = () => {
   }
   return (
     <div>
-      <Typography variant="h6">Claim Username</Typography>
+      <Typography variant="h5" sx={{fontWeight: 'bold', mb:1}}>Claim Username</Typography>
 
       <Card elevation={2} sx={{ mb: 1 }}>
-        <CardContent sx={{display: 'flex'}}>
-            <TextField error={hasError} onChange={onChange} size="small" variant="outlined" />
+        <CardContent sx={{display: 'flex', width: '100%'}}>
+            <TextField fullWidth error={hasError} onChange={onChange} size="small" variant="outlined" />
             <Button onClick={onSubmit} sx={{ ml: 1 }} variant="contained">
               Claim
             </Button>

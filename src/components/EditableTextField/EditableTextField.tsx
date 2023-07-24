@@ -1,47 +1,74 @@
-import { Button, TextField, Typography } from '@mui/material';
-import React from 'react';
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React from "react";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import { useLinksContext } from '../../providers/LinksProvider';
+import { useLinksContext } from "../../providers/LinksProvider";
+import { HighlightAltOutlined } from "@mui/icons-material";
 interface EditableTextFieldProps {
   placeholder: string;
-  fieldName: 'title' | 'link';
+  fieldName: "title" | "link";
   index: number;
-  onSave?: () => ((fieldName: string, text: string) => Promise<void>) | undefined
+  textValue?: string;
+  onSave?: () =>
+    | ((fieldName: string, text: string) => Promise<void>)
+    | undefined;
 }
-export const EditableTextField: React.FC<EditableTextFieldProps> = ({index,fieldName, placeholder, onSave}) => {
+export const EditableTextField: React.FC<EditableTextFieldProps> = ({
+  index,
+  fieldName,
+  placeholder,
+  textValue = ""
+}) => {
   const linksContext = useLinksContext();
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
-  const [text, setText] = React.useState<string>('')
-  const toggleEdit = () => {
-    setIsEditing(!isEditing);
-  }
-  const newLink = {...linksContext.links[index]}
+  const [text, setText] = React.useState<string>("");
+  React.useEffect(() => {
+    setText(textValue)
+  }, [textValue])
+  const [showClear, setShowClear] = React.useState(false);
+  const toggleShowClear = (set: boolean) => {
+    setShowClear(set);
+  };
+
+  const newLink = { ...linksContext.links[index] };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value)
-  }
+    const value = fieldName==='link' ? e.target.value.toLowerCase() : e.target.value;
+    setText(value)
+  };
 
-  const EditField = <div>
-    <TextField 
-    placeholder={placeholder} 
-    value={text} 
-    onChange={onChange} 
-    size='small' variant='outlined'/>
-    <Button  onClick={() => {
-      toggleEdit();
-      newLink[fieldName] = text || placeholder
-      linksContext.onUpdateLink(index, newLink)
-      setText('')
-    }}
-      sx={{textTransform:'capitalize'}}>Save</Button>
-  </div>
+  const EditField = (
+    <TextField
+      sx={{ mb: 1 }}
+      fullWidth
+      onFocus={() => {
+        toggleShowClear(true);
+      }}
+      InputProps={{
+        endAdornment: !showClear ? null : (
+          <InputAdornment position="end">
+            <CancelIcon />
+          </InputAdornment>
+        ),
+      }}
+      onBlur={() => {
+        newLink[fieldName] = text
+        linksContext.onUpdateLink(index, newLink);
+        toggleShowClear(false);
+      }}
+      placeholder={placeholder}
+      value={text}
+      onChange={onChange}
+      size="small"
+      variant="outlined"
+    />
+  );
 
-  const displayed = <div style={{display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={toggleEdit}>
-    <Typography>{text || placeholder}</Typography><EditIcon sx={{ml:1}} onClick={toggleEdit} fontSize='small'/>
-  </div>
-  
-  return (
-    <div >
-      {isEditing ? EditField: displayed}
-    </div>
-  )
-}
+  return <div style={{ display: "flex", width: "100%" }}>{EditField}</div>;
+};

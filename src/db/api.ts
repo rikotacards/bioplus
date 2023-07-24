@@ -159,11 +159,28 @@ export const addLink = async ({
     isDisplayed,
     uid,
     linkId: linkRef.id,
+    clicks: 0,
     timeStamp: serverTimestamp(),
   };
-  await setDoc(linkRef, linkData);
-  await updateOrdering({ uid, data: { linkId: linkRef.id } });
+  await setDoc(linkRef, linkData)
+  return linkRef.id;
+  
 };
+export const incrementLinkClick = ({uid, linkId}:{uid: string, linkId: string}) => {
+  console.log('clcikc')
+  setDoc(doc(firestore, "users", uid, "links", linkId), {clicks: increment(1)}, {merge: true});
+}
+
+export const getLinkDetails = async({uid, linkId}: {uid: string, linkId: string}) => {
+  try{
+    const res = await getDoc(doc(firestore, "users", uid, "links", linkId))
+    if(res.exists()){
+      return res.data()
+    }
+  }catch(e){
+    throw new Error('couldn get')
+  }
+}
 
 export const updateLink = async ({
   uid,
@@ -234,6 +251,7 @@ export const updateLinksNew = (
   links: { title: string; link: string; linkId: string; isDisplayed: boolean }[]
 ) => {
   console.log(links)
+  
   setDoc(doc(firestore,'users',uid),{links},{merge: true})
 };
 
@@ -244,6 +262,9 @@ export const deleteLinkNew = (uid: string, index: number, links: Link[]) => {
 
 export const onSnapshotUser = (uid:string, setState: (links: Link[]) => void) => onSnapshot(doc(firestore,'users',uid), (doc) => {
   const data = doc.data() as any || []
-  console.log('DUD', data)
   setState(data?.links || []);
 })
+
+export const updateBio = ({uid, bio}:{uid: string, bio: string}) => {
+  setDoc(doc(firestore,'users',uid), {bio}, {merge: true})
+}

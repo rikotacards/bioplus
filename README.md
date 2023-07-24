@@ -16,3 +16,8 @@ Email is tied to a uid
 * uid -> userinfo {username}
 
 ## User
+
+# Problems encountered
+Had THE most annoying issue with Google firebase authentication, signInWithRedirect. Documents ask you to whitelist the redirect URI. 
+
+The palce you need to go is in Auth > Google Signin method > whitelist ClientIds from externap projects. 

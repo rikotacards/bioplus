@@ -1,6 +1,6 @@
 import React from'react'
 import { useAuthContext } from './AuthProvider';
-import { Link, deleteLinkNew, onSnapshotUser, updateLinksNew } from '../db/api';
+import { Link, addLink, deleteLinkNew, onSnapshotUser, updateLinksNew } from '../db/api';
 interface LinksContextProps {
   links: Link[];
   onDeleteLink: (index: number) => void;
@@ -41,6 +41,7 @@ export const LinksProvider: React.FC<LinksProviderProps> = ({children}) => {
     if(!uid){
       return;
     }
+    
     updateLinksNew(uid,[link, ...links])
   }
 

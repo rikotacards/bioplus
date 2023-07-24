@@ -11,7 +11,7 @@ interface LoadingProviderProps {
   children: React.ReactNode;
 }
 export const LoadingProvider: React.FC<LoadingProviderProps> = ({children}) => {
-  const [isLoading, setLoading] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(true);
 
   const setLoadingTrue = () => {
     setLoading(true);

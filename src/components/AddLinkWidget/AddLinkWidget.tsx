@@ -12,10 +12,12 @@ import {
 import { useAuthContext } from "../../providers/AuthProvider";
 import { isValidUrl } from "../../util/validateLink";
 import { useLinksContext } from "../../providers/LinksProvider";
+import { addLink } from "../../db/api";
 interface AddLinkWidgetProps {
+  toggle: () => void;
   links: {title: string, link: string, linkId: string, isDisplayed: boolean}[]
 }
-export const AddLinkWidget: React.FC<AddLinkWidgetProps> = () => {
+export const AddLinkWidget: React.FC<AddLinkWidgetProps> = ({toggle}) => {
   const linksContext = useLinksContext();
   const [url, setUrl] = React.useState("");
   const auth = useAuthContext();
@@ -36,17 +38,21 @@ export const AddLinkWidget: React.FC<AddLinkWidgetProps> = () => {
       setErrorMessage('Url is not valid')
       return;
     }
-    linksContext.onAddLink({link:url, title: '', linkId: '', isDisplayed: false})
+    addLink({title:'', link: url, isDisplayed: true,uid}).then((res) => {
+      if(res){
+        linksContext.onAddLink({link:url, title: '', linkId: res, isDisplayed: true})
+      }
+    })
     setUrl('')
     
   };
   return (
     <Card sx={{ mb: 1 }}>
       <CardContent>
-        <div style={{ display: "flex", alignItems: 'center' }}>
-          <Typography>Enter URL</Typography>
+        <div style={{marginBottom:'8px', display: "flex", alignItems: 'center' }}>
+          <Typography sx={{fontWeight: 'bold'}} variant='h6'>Enter URL</Typography>
           <div style={{ marginLeft: "auto" }}>
-            <IconButton>
+            <IconButton onClick={toggle}>
               <CloseIcon />
             </IconButton>
           </div>
@@ -54,6 +60,7 @@ export const AddLinkWidget: React.FC<AddLinkWidgetProps> = () => {
         <div style={{display: 'flex', flexDirection: 'column'}}>
           <TextField
             name="url"
+            placeholder="www.myawesomesite.com"
             error={hasError}
             onChange={onChange}
             variant="outlined"
