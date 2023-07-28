@@ -30,7 +30,7 @@ export const getUsername = async ({ uid }: GetUsernameProps) => {
   const snap = await getDoc(usernamesRef);
   if (snap.exists()) {
     const name = snap.data()
-    console.log('name', name)
+    console.log('username', name)
     return snap.data();
   }
   return undefined;
@@ -167,7 +167,6 @@ export const addLink = async ({
   
 };
 export const incrementLinkClick = ({uid, linkId}:{uid: string, linkId: string}) => {
-  console.log('clcikc')
   setDoc(doc(firestore, "users", uid, "links", linkId), {clicks: increment(1)}, {merge: true});
 }
 

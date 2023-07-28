@@ -8,8 +8,16 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { onSignIn } from "../util/onSignIn";
+import { useOnSignIn } from "../util/onSignIn";
+import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+import { useAuthContext } from "../providers/AuthProvider";
+import { onSignOut } from "../util/onSignOut";
 export const Landing: React.FC = () => {
+  const onSignIn = useOnSignIn();
+  const nav = useNavigate();
+  const auth = useAuthContext();
+
   const [text, setText] = React.useState("bioup.io/");
   const [ref, setRef] = React.useState("");
   const onClick = () => {
@@ -18,6 +26,7 @@ export const Landing: React.FC = () => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
+
   return (
     <div
       style={{
@@ -25,7 +34,7 @@ export const Landing: React.FC = () => {
         flexDirection: "column",
         margin: "4px",
         padding: "4px",
-        marginTop: '32px'
+        marginTop: "32px",
       }}
     >
       <div>
@@ -33,10 +42,20 @@ export const Landing: React.FC = () => {
           Your bio, upgraded. Everything you are, in one simple link in bio.
         </Typography>
       </div>
-      <Button sx={{mb: 0}} size='large' onClick={onSignIn} fullWidth variant="contained">
-        Upgrade your bio
-      </Button>
-      <Divider sx={{mt:1, mb:1}}/>
+      {auth.isLoggedIn ? (
+        <Button fullWidth onClick={onSignOut}>Sign Out</Button>
+      ) : (
+        <Button
+          sx={{ mb: 0 }}
+          size="large"
+          onClick={() => nav("/signup")}
+          fullWidth
+          variant="contained"
+        >
+          Upgrade your bio
+        </Button>
+      )}
+      <Divider sx={{ mt: 1, mb: 1 }} />
     </div>
   );
 };

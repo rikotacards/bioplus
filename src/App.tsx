@@ -13,6 +13,7 @@ import { LoadingProvider } from "./providers/LoadingProvider";
 import { LinksProvider } from "./providers/LinksProvider";
 import { PublicProfile } from "./pages/PublicProfile";
 import { ErrorPage } from "./pages/ErrorPage";
+import { EmailPasswordSignUp } from "./pages/EmailPasswordSignUp";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
                 <Route element={<Layout />}>
                   <Route path="/" element={<Landing />} />
                   <Route path="/home" element={<Landing />} />
-
+                  <Route path='/signup' element={<EmailPasswordSignUp/>}/>
                   <Route path="/admin" element={<Admin />} />
                   <Route path="/admin/appearance" element={<Appearance />} />
                   <Route path="/admin/settings" element={<Settings />} />

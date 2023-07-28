@@ -11,7 +11,8 @@ interface AuthContextProps {
   isLoggedIn: boolean;
   user?: User;
   username?: string;
-  signOut: () => Promise<void>
+  signOut: () => Promise<void>;
+  setUsername: (username: string) => void;
 }
 export const AuthContext = React.createContext({} as AuthContextProps);
 export const useAuthContext = () => React.useContext(AuthContext);
@@ -26,17 +27,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loadingContext.setLoadingTrue()
 
     const subscriber = auth.onAuthStateChanged((d) => {
+      console.log('AUTH STATE CHANGED', d)
       if (d?.uid) {
         setUser({ ...user, ...d });
         setLogIn(true);
+        // used if signing in from Google
         getUsernameFromUsers({ uid:d.uid }).then((res) => {
-          setUsername(() =>res);
+          console.log('AUTHUID',res)
+          setUsername(res);
         }).then(() => {
 
           loadingContext.setLoadingFalse()
         })
         
       } else {
+        console.log('FALSENOW')
         setLogIn(false);
         setUser({} as User);
         loadingContext.setLoadingFalse()
@@ -50,12 +55,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         addUserToDb({ uid: res.user.uid, photoUrl: res.user.photoURL });
     });
     return subscriber;
-  }, []);
+  }, [isLoggedIn]);
   const context: AuthContextProps = {
     isLoggedIn,
     user,
     username,
-    signOut: auth.signOut
+    signOut: auth.signOut,
+    setUsername: (username: string) => setUsername(username)
+
   };
   
   return (

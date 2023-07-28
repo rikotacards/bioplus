@@ -1,8 +1,8 @@
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../providers/AuthProvider";
 
 export const onSignOut = () => {
-  const nav = useNavigate();
-  const a = getAuth()
-  a.signOut().then(() => nav('/'))
+  const a = getAuth();
+  signOut(a)
 }

@@ -18,7 +18,7 @@ export const Admin: React.FC = () => {
     setShow(!show);
   };
   const linksContext = useLinksContext();
-
+  console.log('adminloaded', auth)
   return (
     <div style={{marginTop: '8px'}}>
       {!loadingContext.isLoading && !auth.username && <ClaimUsernameWidget />}
