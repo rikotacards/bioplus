@@ -5,78 +5,87 @@ import { signInWithEmailPassword } from "../util/signInWithEmailPassword";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../providers/AuthProvider";
 
+interface SignInObjectType {
+  [key: string]: {
+    value: string; 
+    isLoading: boolean;
+    hasError: boolean;
+    errorMessage: string;
+  }
+}
+
 export const EmailPasswordSignUp: React.FC = () => {
   const nav = useNavigate();
   const auth = useAuthContext();
-  const [signUpObject, setSignUpObject] = React.useState({
+  const [signUpObject, setSignUpObject] = React.useState<SignInObjectType>({
     username: {
-      username: "",
-      isLoading: "",
+      value: "",
+      isLoading: false,
       hasError: false,
       errorMessage: "",
     },
-    signUpFinal: {
-      isLoading: false, 
-      hasError: false, 
-      errorMessage: ""
+    email: {
+      value: "",
+      isLoading: false,
+      hasError: false,
+      errorMessage: "",
     },
     password: {
-      hasError: false
+      hasError: false, 
+      value: "",
+      isLoading: false,
+      errorMessage: ""
     }
   });
-  const [errorMessage, setErrorMessage] = React.useState("");
-  const [usernameError, setUsernameError] = React.useState(false);
-  const [emailError, setEmailError] = React.useState(false);
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [password, setPassword] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [success, setSuccess] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  
+  const [signUpSuccess, setSignUpSuccess] = React.useState(false)
   const [loginError, setLoginError] = React.useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = React.useState("");
+  
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSignUpObject((o) => ({...o, [e.target.name]: {...o[e.target.name], value: e.target.value}}))
+    console.log(signUpObject)
+  }
 
+  const setError = (field: string, hasError: boolean) => {
+    setSignUpObject((o) => ({...o, [field]:{...o[field], hasError}}))
+  }
+  const setErrorMessage = (field: string, errorMessage: string) => {
+    setSignUpObject((o) => ({...o, [field]: {...o[field], errorMessage}}))
+  }
+  
   
   const onSuccess = () => {
-    setSuccess(true);
+    setSignUpSuccess(true);
   };
-  const onPwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-  const onUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
+ 
   const checkUsernameExist = (username: string) => {
-    console.log("user", username);
     getUsernameDetails(username).then((res) => {
       if (res) {
-        setUsernameError(true);
-        setErrorMessage("username exists");
+        setError('username', true)
+        setErrorMessage("username", "username exists");
         throw new Error("username exists");
       } else {
-        setUsernameError(false);
-        setErrorMessage("");
+        setError('username', false);
+        setErrorMessage('username', "");
       }
     });
   };
-
+  const {email, password, username} = signUpObject
   const onSignupClick = () => {
-    signInWithEmailPassword({ email, password })
+    signInWithEmailPassword({ email:email.value, password: password.value })
       .then((res) => {
         if (res?.user) {
           res.user?.uid &&
-            addUsername({ uid: res.user?.uid, username })
+            addUsername({ uid: res.user?.uid, username:username.value })
               .then((res) => {
                 onSuccess();
-                auth.setUsername(username);
+                auth.setUsername(username.value);
                 nav("/admin");
               })
               .catch((e) => {
-                setUsernameError(true);
-                setErrorMessage("Username has been taken");
+                setError('username', true);
+                setErrorMessage('username', "Username has been taken");
               });
         }
       })
@@ -90,24 +99,24 @@ export const EmailPasswordSignUp: React.FC = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", paddingTop: '8px' }}>
       <TextField
-        onChange={onUsernameChange}
-        onBlur={() => checkUsernameExist(username)}
-        error={usernameError}
+        onChange={onChange}
+        onBlur={() => checkUsernameExist(username.value)}
+        error={username.hasError}
         sx={{ mb: 1 }}
         name="username"
         placeholder={"username"}
-        helperText={errorMessage}
+        helperText={username.errorMessage}
       />
       <TextField
-        error={emailError}
+        error={email.hasError}
         sx={{ mb: 1 }}
-        onChange={onEmailChange}
+        onChange={onChange}
         name="email"
         placeholder={"email"}
       />
       <TextField
         sx={{ mb: 1 }}
-        onChange={onPwChange}
+        onChange={onChange}
         name="password"
         type="password"
         placeholder="password"
@@ -121,6 +130,7 @@ export const EmailPasswordSignUp: React.FC = () => {
       {loginError && "Error Logging in" + loginErrorMessage}
         </CardContent>
       </Card>}
+      <Button variant='outlined' onClick={() => nav('/')}>Back</Button>
     </div>
   );
 };

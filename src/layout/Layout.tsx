@@ -1,7 +1,6 @@
 import React from "react";
 import { TopAppBar } from "../components/TopAppBar/TopAppBar";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../providers/AuthProvider";
+import { Outlet } from "react-router-dom";
 
 export const Layout: React.FC = () => {
   

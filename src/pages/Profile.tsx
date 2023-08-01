@@ -2,6 +2,9 @@ import React from "react";
 import { ProfileHeader } from "../components/ProfileHeader/ProfileHeader";
 import { DisplayedLink } from "../components/DisplayedLink/DisplayedLink";
 import { incrementLinkClick } from "../db/api";
+import { useUserThemeContext } from "../providers/UserThemeProvider";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from "@mui/material";
 interface ProfileProps {
   username?: string;
   uid?: string;
@@ -13,17 +16,20 @@ interface ProfileProps {
     isDisplayed: boolean;
   }[];
 }
-export const Profile: React.FC<ProfileProps> = ({uid, profilePhotoUrl, links, username }) => {
-  
+export const Profile: React.FC<ProfileProps> = ({ uid, profilePhotoUrl, links, username }) => {
+  const userThemeContext = useUserThemeContext();
+  const theme = createTheme(userThemeContext.theme)
   return (
-    <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
-      <ProfileHeader profilePhotoUrl={profilePhotoUrl} username={username} />
-      {links.map((link,index) => {
-        const onClick = uid ? () => incrementLinkClick({uid, linkId: link.linkId}): undefined;
-        if (link.isDisplayed) {
-          return <DisplayedLink onClick={onClick} key={link.title+index + link.link} title={link.title} link={link.link} />;
-        }
-      })}
-    </div>
+    <ThemeProvider theme={theme}>
+      <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        <ProfileHeader profilePhotoUrl={profilePhotoUrl} username={username} />
+        {links.map((link, index) => {
+          const onClick = uid ? () => incrementLinkClick({ uid, linkId: link.linkId }) : undefined;
+          if (link.isDisplayed) {
+            return <DisplayedLink onClick={onClick} key={link.title + index + link.link} title={link.title} link={link.link} />;
+          }
+        })}
+      </div>
+    </ThemeProvider>
   );
 };

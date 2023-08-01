@@ -1,6 +1,7 @@
 import React from'react'
 import { useAuthContext } from './AuthProvider';
 import { Link, addLink, deleteLinkNew, onSnapshotUser, updateLinksNew } from '../db/api';
+import { mockLinks } from '../mocks/mockState.data';
 interface LinksContextProps {
   links: Link[];
   onDeleteLink: (index: number) => void;
@@ -18,7 +19,7 @@ export const useLinksContext = () => React.useContext(LinksContext);
 export const LinksProvider: React.FC<LinksProviderProps> = ({children}) => {
   const auth = useAuthContext()
   const uid = auth?.user?.uid
-  const [links, setLinks] = React.useState<Link[]>([])
+  const [links, setLinks] = React.useState<Link[]>(mockLinks)
   const set = (links: Link[]) => {
     setLinks(links)
   }

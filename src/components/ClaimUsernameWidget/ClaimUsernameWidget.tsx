@@ -27,7 +27,7 @@ export const ClaimUsernameWidget: React.FC = () => {
     <div>
       <Typography variant="h5" sx={{fontWeight: 'bold', mb:1}}>Claim Username</Typography>
 
-      <Card elevation={2} sx={{ mb: 1 }}>
+      <Card elevation={1} sx={{ mb: 1 }}>
         <CardContent sx={{display: 'flex', width: '100%'}}>
             <TextField fullWidth error={hasError} onChange={onChange} size="small" variant="outlined" />
             <Button onClick={onSubmit} sx={{ ml: 1 }} variant="contained">
