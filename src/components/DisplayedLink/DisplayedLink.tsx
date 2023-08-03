@@ -9,7 +9,6 @@ interface DisplayedLinkProps {
 }
 export const DisplayedLink: React.FC<DisplayedLinkProps> = ({title,link, onClick}) => {
   const userThemeContext = useUserThemeContext();
-  console.log('sp', userThemeContext.theme.borderRadius)
   return (
     <a target="_blank" href={prependHttp(link)}>
       <Card onClick={() => {onClick?.()}} sx={{width: '100%', marginBottom: 1, borderRadius: userThemeContext.theme.borderRadius}}>

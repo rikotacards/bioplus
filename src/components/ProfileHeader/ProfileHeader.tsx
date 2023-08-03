@@ -6,7 +6,7 @@ interface ProfileHeaderProps {
 }
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, username}) => {
   return (
-    <Card sx={{ mb: 1 }} elevation={0}>
+    <div>
       <CardContent
         style={{
           display: "flex",
@@ -22,6 +22,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, us
           <Typography>A collection of stuff</Typography>
         </div>
       </CardContent>
-    </Card>
+    </div>
   );
 };

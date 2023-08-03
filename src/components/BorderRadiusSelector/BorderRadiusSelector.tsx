@@ -9,7 +9,7 @@ export const BorderRadiusSelector: React.FC = () => {
   
   return (
     <div>
-      <Typography sx={{fontWeight: 'bold'}} variant='h4'>Link Style</Typography>
+      <Typography sx={{fontWeight: 'bold', mt: 1, mb:1 }} variant='h4'>Link Style</Typography>
       <div>
         {
           borderRadius.map((b) => <Button onClick={() => userThemeContext.setBorderRadius(b)} sx={{mr:1}} variant='contained'>{b}</Button>)

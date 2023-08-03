@@ -1,24 +1,42 @@
 import { Button, Typography } from '@mui/material';
 import React from 'react';
+import '../../configs/backgrounds.css'
 import { useUserThemeContext } from '../../providers/UserThemeProvider';
-
+import { backgrounds } from '../../configs/backgrounds';
+import clx from 'clsx';
 //todo
-const backgrounds = ['red', 'orange', 'blue']
-export const BackgroundSelector: React.FC = () => {
-  const userThemeContext = useUserThemeContext();
-  const onClick = () => {
-    userThemeContext.theme.palette.mode === 'dark' ? 
-    userThemeContext.setLightMode() : userThemeContext.setDarkMode();
+
+interface BackgroundOptionsProps {
+  style: { [key: string]: any },
+  name: string;
+}
+const BackgroundOption: React.FC<BackgroundOptionsProps> = ({ style, name }) => {
+  const userTheme = useUserThemeContext();
+  const onClick = (styleName: string) => {
+    userTheme.setBackgroundClassName(styleName)
   }
   return (
+    <div onClick={() => onClick(name)} style={{cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '8px'}}>
+      <div className={clx('common', name)} />
+      <Typography>{name}</Typography>
+    </div>
+  )
+}
+
+
+export const BackgroundSelector: React.FC = () => {
+
+  return (
     <div>
-      <Typography sx={{fontWeight: 'bold'}} variant='h4'>Background</Typography>
       <div>
+
+        <Typography sx={{mb: 1,mt:1, fontWeight: 'bold' }} variant='h4'>Background</Typography>
+      </div>
+      <div style={{display: 'flex'}}>
         {
-          backgrounds.map((b) => <Button onClick={() => userThemeContext.setBackground(b)} sx={{mr:1}} variant='contained'>{b}</Button>)
+          backgrounds.map((b) => <BackgroundOption style={b.style} name={b.name} />)
         }
       </div>
-      <Button variant='outlined' onClick={onClick}>Enable LightMode</Button>
     </div>
   )
 }

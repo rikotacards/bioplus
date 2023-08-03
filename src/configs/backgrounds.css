@@ -1,0 +1,46 @@
+.common {
+  height: 150px;
+  width: 100px;
+}
+.solid {
+  background-color: black;
+}
+
+.gradient {
+  background: linear-gradient(to top, #333, #666, #999, #ccc)
+}
+
+.sunset {
+  width: 100px;
+  height: 150px;
+  background: linear-gradient(135deg, #FFA500, #FF6347, #8B0000);
+  animation: shiftColors 6s linear infinite alternate;
+  background-size: 300% 300%;
+}
+
+@keyframes shiftColors {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.flux {
+  background: linear-gradient(45deg, #ff00a2, #4a00e0, #00ffe1, #00e8a3);
+  background-size: 600% 600%;
+  animation: fluxAnimation 6s linear infinite;
+}
+
+@keyframes fluxAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

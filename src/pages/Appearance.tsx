@@ -19,7 +19,8 @@ export const Appearance: React.FC = () => {
           "fixed", 
           bottom: "0", 
           margin:'4px', 
-          alignSelf: 'center'
+          alignSelf: 'center',
+          m: 2
           }}
       >
         <Typography sx={{textTransform: 'capitalize'}}>Preview</Typography>

@@ -3,6 +3,7 @@ import { red } from "@mui/material/colors";
 //**@description user theme**
 export const userDefaultTheme: ThemeOptions = {
   palette: {
+    mode: 'dark',
     background: {
       // paper: 'black',
       // default: 'black'

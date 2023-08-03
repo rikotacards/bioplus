@@ -1,10 +1,12 @@
-import { ThemeProvider } from '@emotion/react';
-import { Theme, ThemeOptions, createTheme } from '@mui/material';
-import { create } from '@mui/material/styles/createTransitions';
+import { ThemeOptions } from '@mui/material';
 import React from 'react';
 import { userDefaultTheme } from '../configs/userDefaultTheme';
-interface UserThemeContextProps {
-  theme: Theme;
+interface UserThemeContextProps extends CustomStyles {
+  theme: ThemeOptions;
+  setDarkMode: () => void;
+  setLightMode: () => void;
+  setBackgroundClassName: (className: string) => void;
+  setBorderRadius: (borderRadius: number) => void;
   updateTheme: (args: {
     [key: string]: any;
   }) => void
@@ -15,29 +17,34 @@ export const useUserThemeContext = () => React.useContext(UserThemeContext);
 interface UserThemeProviderProps {
   children: React.ReactNode;
 }
+interface CustomStyles {
+  backgroundClassName: string
+}
 
-
-export const UserThemeProvider: React.FC<UserThemeProviderProps> = ({ children }) => {
-  const [theme, setTheme] = React.useState<ThemeOptions>(userDefaultTheme)
+export const UserThemeProvider: React.FC<UserThemeProviderProps & CustomStyles> = ({ children }) => {
+  const [theme, setTheme] = React.useState<UserThemeContextProps>({} as UserThemeContextProps)
 
   console.log(theme)
-  const setDarkMode = () => setTheme((t) => ({...t, palette: {...t.palette, mode: 'dark'}}))
-  const setLightMode = () => setTheme((t) => ({...t, palette: {...t.palette, mode: 'light'}}))
-  const setBackground = (color: string) => setTheme((t) => ({...t, palette: {...t.palette, background: {...t.palette?.background, paper: color}}}))
+  const setDarkMode = () => setTheme((t) => ({...t, theme: {...theme, palette: {mode: 'dark'}}}))
+  const setLightMode = () => setTheme((t) => ({...t, theme: {...theme, palette: { mode: 'light'}}}))
   const setBorderRadius = (borderRadius: number) => {
     setTheme((t) => ({...t, borderRadius}))
+  }
+  const setBackgroundClassName = (className: string) => {
+    setTheme((t) => ({...t, backgroundClassName: className}))
   }
   const updateTheme = () => {
     setTheme((t) => ({...t, }))
   }
 
   const context = {
-    theme,
+    theme: userDefaultTheme,
     updateTheme,
     setDarkMode,
     setLightMode,
-    setBackground,
     setBorderRadius,
+    setBackgroundClassName,
+    backgroundClassName: theme.backgroundClassName,
   }
 
 
