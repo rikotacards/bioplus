@@ -6,7 +6,6 @@ import {  getUsernameFromUsers } from '../../db/api';
 
 export const Preview: React.FC = () => {
   const linksContext = useLinksContext();
-  console.log(linksContext)
   const auth = useAuthContext();
   const uid = auth?.user?.uid;
   const [username, setUsername] = React.useState('');
@@ -16,7 +15,7 @@ export const Preview: React.FC = () => {
     })
   })
   return (
-    <div style={{padding: '10px', height: '100vh'}}>
+    <div style={{ height: '100vh', display: 'flex'}}>
       <Profile profilePhotoUrl='' username={username} links={linksContext.links || []}/>
     </div>
   )

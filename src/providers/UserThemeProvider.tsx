@@ -5,8 +5,10 @@ interface UserThemeContextProps extends CustomStyles {
   theme: ThemeOptions;
   setDarkMode: () => void;
   setLightMode: () => void;
+  buttonClassName: string;
+  backgroundClassName: string;
   setBackgroundClassName: (className: string) => void;
-  setBorderRadius: (borderRadius: number) => void;
+  setButtonClassName: (className: string) => void;
   updateTheme: (args: {
     [key: string]: any;
   }) => void
@@ -27,8 +29,8 @@ export const UserThemeProvider: React.FC<UserThemeProviderProps & CustomStyles> 
   console.log(theme)
   const setDarkMode = () => setTheme((t) => ({...t, theme: {...theme, palette: {mode: 'dark'}}}))
   const setLightMode = () => setTheme((t) => ({...t, theme: {...theme, palette: { mode: 'light'}}}))
-  const setBorderRadius = (borderRadius: number) => {
-    setTheme((t) => ({...t, borderRadius}))
+  const setButtonClassName = (className: string) => {
+    setTheme((t) => ({...t, buttonClassName: className}))
   }
   const setBackgroundClassName = (className: string) => {
     setTheme((t) => ({...t, backgroundClassName: className}))
@@ -42,9 +44,10 @@ export const UserThemeProvider: React.FC<UserThemeProviderProps & CustomStyles> 
     updateTheme,
     setDarkMode,
     setLightMode,
-    setBorderRadius,
+    setButtonClassName,
     setBackgroundClassName,
     backgroundClassName: theme.backgroundClassName,
+    buttonClassName: theme.buttonClassName
   }
 
 

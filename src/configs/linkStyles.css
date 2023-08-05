@@ -1,0 +1,21 @@
+.common-link {
+  margin: 8px;
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.filled {
+  background: black;
+}
+
+.border {
+  border: 2px solid white
+}
+
+.br-high {
+  border-radius: 100px;
+}
+.br-medium {
+  border-radius: 10px
+}

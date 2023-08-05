@@ -1,0 +1,16 @@
+/* Set the size of the container */
+.rainbow {
+  width: 100%;
+  background: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red);
+  background-size: 1400% 1400%; /* Controls the size of the gradient */
+  animation: rainbow 20s linear infinite; /* Adjust the animation duration as needed */
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0% 50%; /* Start position */
+  }
+  100% {
+    background-position: 100% 50%; /* End position */
+  }
+}

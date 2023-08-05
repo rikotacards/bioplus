@@ -1,23 +1,26 @@
 import React from "react";
-import {CardActionArea, Card, CardContent, Typography } from "@mui/material";
+import '../../configs/linkStyles.css'
+import { CardActionArea, Card, CardContent, Typography } from "@mui/material";
 import { prependHttp } from "../../util/prependHttp";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
+import { linkStyles } from "../../configs/linkStyles";
 interface DisplayedLinkProps {
   title: string;
   link: string;
   onClick?: () => void;
 }
-export const DisplayedLink: React.FC<DisplayedLinkProps> = ({title,link, onClick}) => {
+export const DisplayedLink: React.FC<DisplayedLinkProps> = ({ title, link, onClick }) => {
   const userThemeContext = useUserThemeContext();
+  console.log('hi', linkStyles[userThemeContext.buttonClassName])
   return (
-    <a target="_blank" href={prependHttp(link)}>
-      <Card onClick={() => {onClick?.()}} sx={{width: '100%', marginBottom: 1, borderRadius: userThemeContext.theme.borderRadius}}>
+    <a style={{  margin: '4px' }} href={prependHttp(link)} >
+      <Card sx={linkStyles[userThemeContext.buttonClassName] } onClick={() => { onClick?.() }} >
         <CardActionArea>
           <CardContent>
-          <Typography variant='h6'>{title}</Typography>
+            <Typography variant='body1'>{title}</Typography>
           </CardContent>
         </CardActionArea>
       </Card>
-      </a>
+    </a>
   );
 };

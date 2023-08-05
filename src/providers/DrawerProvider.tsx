@@ -25,7 +25,7 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
     <DrawerContext.Provider value={context}>
       {props.children}
       <Drawer
-        sx={{ display: "flex" }}
+        sx={{ display: "flex", justifyContent: 'center' }}
         anchor="bottom"
         onClose={onToggle}
         open={open}

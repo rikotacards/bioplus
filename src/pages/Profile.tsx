@@ -4,8 +4,8 @@ import { DisplayedLink } from "../components/DisplayedLink/DisplayedLink";
 import { incrementLinkClick } from "../db/api";
 import { useUserThemeContext } from "../providers/UserThemeProvider";
 import { ThemeProvider } from "@emotion/react";
-import { Paper, createTheme } from "@mui/material";
-import '../configs/backgrounds.css'
+import {  createTheme } from "@mui/material";
+import { backgroundMapping } from "../configs/backgroundMapping";
 interface ProfileProps {
   username?: string;
   uid?: string;
@@ -21,9 +21,10 @@ export const Profile: React.FC<ProfileProps> = ({ uid, profilePhotoUrl, links, u
   const userThemeContext = useUserThemeContext();
   console.log(userThemeContext)
   const theme = createTheme(userThemeContext.theme)
+  const backgroud = backgroundMapping[userThemeContext.backgroundClassName]
   return (
     <ThemeProvider theme={theme}>
-      <div className={userThemeContext.backgroundClassName} style={{ height: '100%', width: "100%", display: "flex", flexDirection: "column" }}>
+      <div id='container' style={{ maxWidth: '500px', zIndex: 1000, height: '100%', width: "100%", position: 'relative', margin: 'auto', display: 'flex', flexDirection: 'column' }}>
         <ProfileHeader profilePhotoUrl={profilePhotoUrl} username={username} />
         {links.map((link, index) => {
           const onClick = uid ? () => incrementLinkClick({ uid, linkId: link.linkId }) : undefined;
@@ -31,6 +32,8 @@ export const Profile: React.FC<ProfileProps> = ({ uid, profilePhotoUrl, links, u
             return <DisplayedLink onClick={onClick} key={link.title + index + link.link} title={link.title} link={link.link} />;
           }
         })}
+        {backgroud}
+
       </div>
     </ThemeProvider>
   );

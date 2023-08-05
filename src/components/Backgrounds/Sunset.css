@@ -1,0 +1,13 @@
+.sunset {
+  background: linear-gradient(135deg, #FFA500, #FF6347, #8B0000);
+  background-size: 300% 300%;
+  animation: shiftColors 6s linear infinite alternate;
+}
+@keyframes shiftColors {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
