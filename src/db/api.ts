@@ -16,6 +16,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
+import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
+import { User } from "firebase/auth";
+const storage = getStorage();
 
 export const claimUsername = async () => {};
 interface GetUsernameProps {
@@ -48,6 +51,20 @@ export const getUsernameFromUsers = async ({ uid }: GetUsernameProps) => {
     return snap.data()?.username;
   }
   return undefined;
+};
+
+export const getUser = async ({ uid }: GetUsernameProps) => {
+  // Used at the start, when user creates username
+  // We check if the username exists or not.
+  // if no, user can claim the username.
+  const usernamesRef = doc(firestore, "users", uid);
+  const snap = await getDoc(usernamesRef);
+  if (snap.exists()) {
+    const name = snap.data()
+    console.log('name', name)
+    return snap.data() as User
+  }
+  return {};
 };
 
 interface UpdateUsernameProps {
@@ -267,3 +284,36 @@ export const onSnapshotUser = (uid:string, setState: (links: Link[]) => void) =>
 export const updateBio = ({uid, bio}:{uid: string, bio: string}) => {
   setDoc(doc(firestore,'users',uid), {bio}, {merge: true})
 }
+export const getBio = async({uid}: {uid: string}) => {
+  const usernamesRef = doc(firestore, "users", uid);
+  const snap = await getDoc(usernamesRef);
+  if(snap.exists()){
+    return snap.data().bio
+  } return ''
+}
+export const getImagePath = (imagePath: string) => {
+  const pathReference = ref(storage, imagePath);
+  return getDownloadURL(pathReference)
+    .then((url) => url)
+    .catch((e) => {
+      return e;
+    });
+};
+export const updateProfileImage = async (
+  uid: string,
+  localImagePath: string
+) => {
+  if (!localImagePath) {
+    return;
+  }
+  const storageRef = ref(storage, `${uid}/profieImage/profileImage.jpg`);
+  const snapshot = await uploadString(storageRef, localImagePath, "data_url");
+  const url = await getImagePath(snapshot.ref.fullPath);
+  await setDoc(
+    doc(firestore, "users", uid),
+    {
+      photoUrl: url,
+    },
+    { merge: true }
+  );
+};

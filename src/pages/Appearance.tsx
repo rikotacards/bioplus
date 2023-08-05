@@ -8,22 +8,24 @@ import { BorderRadiusSelector } from "../components/BorderRadiusSelector/BorderR
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   return (
-    <div style={{position: 'relative', display: 'flex', flexDirection: 'column'}}>
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
       <EditProfilePanel />
-      <BackgroundSelector/>
-      <BorderRadiusSelector/>
+      <BackgroundSelector />
+      <BorderRadiusSelector />
       <Fab
+        color='primary'
         variant="extended"
         onClick={drawerContext?.onToggle}
-        sx={{ position: 
-          "fixed", 
-          bottom: "0", 
-          margin:'4px', 
+        sx={{
+          position:
+            "fixed",
+          bottom: "0",
+          margin: '4px',
           alignSelf: 'center',
           m: 2
-          }}
+        }}
       >
-        <Typography sx={{textTransform: 'capitalize'}}>Preview</Typography>
+        <Typography sx={{ textTransform: 'capitalize' }}>Preview</Typography>
       </Fab>
     </div>
   );

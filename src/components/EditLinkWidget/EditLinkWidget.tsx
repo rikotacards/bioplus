@@ -73,8 +73,8 @@ export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
 
         </div>
         <div style={{display: 'flex'}}>
-       <Button size='small' variant='outlined'>
-        {linkStats} Clicks
+       <Button sx={{textTransform: 'capitalize'}} size='small' variant='outlined'>
+        {linkStats || 0} Clicks
        </Button>
         <div style={{display: 'flex', marginLeft: 'auto'}}>
        <IconButton onClick={() => linksContext.onDeleteLink(index)}>

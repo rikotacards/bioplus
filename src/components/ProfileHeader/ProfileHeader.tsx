@@ -1,10 +1,12 @@
 import React from "react";
-import { Avatar, Typography, Card, CardContent } from "@mui/material";
+import { Avatar, Typography, CardContent, Skeleton } from "@mui/material";
 interface ProfileHeaderProps {
   username?: string;
   profilePhotoUrl?: string;
+  bio?: string;
 }
-export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, username}) => {
+export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, username, bio}) => {
+  const avatarStyle = {height:"150px", width: '150px'}
   return (
     <div>
       <CardContent
@@ -16,10 +18,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, us
           width: '100%'
         }}
       >
-        <Avatar src={profilePhotoUrl} sx={{ height: "120px", width: "120px" }} />
+       {profilePhotoUrl? <Avatar src={profilePhotoUrl} sx={avatarStyle} />: <Skeleton variant='circular' sx={avatarStyle} />}
         <div style={{alignItems: 'center', margin: "8px", display: 'flex', flexDirection: 'column', width: '100%'}}>
-          <Typography sx={{fontWeight: 'bold'}}>@{username}</Typography>
-          <Typography>A collection of stuff</Typography>
+          <Typography sx={{fontWeight: 'bold'}}>@{username||'Username'}</Typography>
+          <Typography>{bio}</Typography>
         </div>
       </CardContent>
     </div>

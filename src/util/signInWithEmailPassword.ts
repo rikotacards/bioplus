@@ -1,5 +1,4 @@
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import React from 'react';
 
 export const signInWithEmailPassword = ({email, password}:{email: string, password: string}) => {
   const auth = getAuth();

@@ -2,13 +2,17 @@ export type BackgroundName = 'solid' |
 'gradient' |
 'sunset' | 
 'flux' | 
-'rainbow'
+'rainbow'| 
+'default'
 
 export type BackgroundType = {
   name: BackgroundName;
 }[]
 
 export const backgrounds: BackgroundType = [
+  {
+    name: 'default'
+  },
   {
     name: 'solid',
 

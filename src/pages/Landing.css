@@ -1,0 +1,35 @@
+.upgrade-text-container {
+  background-color: #111;
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+}
+@keyframes rainbowLoading {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes buttonLoading {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+  /* Apply the rainbow loading gradient to the text */
+  .rainbow-text {
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #ff00ff);
+    background-size: 600% 600%;
+    -webkit-background-clip: text;
+    font-weight: bold;
+    color: transparent;
+    animation: rainbowLoading 5s linear infinite alternate;
+  }
+  

@@ -11,10 +11,9 @@ interface DisplayedLinkProps {
 }
 export const DisplayedLink: React.FC<DisplayedLinkProps> = ({ title, link, onClick }) => {
   const userThemeContext = useUserThemeContext();
-  console.log('hi', linkStyles[userThemeContext.buttonClassName])
   return (
-    <a style={{  margin: '4px' }} href={prependHttp(link)} >
-      <Card sx={linkStyles[userThemeContext.buttonClassName] } onClick={() => { onClick?.() }} >
+    <a style={{ margin: '4px' }} href={prependHttp(link)} >
+      <Card sx={linkStyles[userThemeContext.buttonClassName]} onClick={() => { onClick?.() }} >
         <CardActionArea>
           <CardContent>
             <Typography variant='body1'>{title}</Typography>

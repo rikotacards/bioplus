@@ -1,33 +1,50 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, Chip, IconButton, Typography } from "@mui/material";
 import React from "react";
+import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
-import { Link } from "react-router-dom";
+import LinkIcon from '@mui/icons-material/Link';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Link, useLocation } from "react-router-dom";
+import { useAuthContext } from "../../providers/AuthProvider";
 const mainNavItems = [
   {
     name: "admin",
     path: "/admin",
+    icon: <LinkIcon sx={{ mr: 0.5 }} />
   },
   {
     name: "appearance",
-    path: "/admin/appearance",
+    path: "/appearance",
+    icon: <VisibilityIcon sx={{ mr: 0.5 }} />
   },
   {
     name: "analytics",
-    path: "/admin/analytics",
+    path: "/analytics",
+    icon: <LeaderboardIcon sx={{ mr: 0.5 }} />
   },
   {
-    name: "settings",
-    path: "/admin/settings",
+    name: "",
+    path: "/settings",
+    icon: <SettingsIcon sx={{ mr: 0.5 }} />
+
   },
 ];
 
 export const MainNav: React.FC = () => {
+  const auth = useAuthContext();
+  const location = useLocation();
+  console.log(location)
+  const isLoggedIn = auth?.isLoggedIn;
   const navItems = mainNavItems.map((item) => (
-    <Link style={{marginRight: '4px'}} relative='route' key={item.path} to={item.path}>
-      <Button size='small' variant="outlined">
-        <Typography sx={{textTransform: 'capitalize'}}>
-        {item.name}
-        </Typography>
+    <Link style={{ marginRight: '4px', display: 'flex', alignItems: 'center' }} relative='route' key={item.path} to={item.path}>
+      <Button size='small' variant={location.pathname.indexOf(item.name)>0 ? 'contained' :'outlined'} >
+          <div style={{margin:4, display: 'flex', alignItems: 'center'}}>
+            {item.icon}
+          </div>
+          <Typography sx={{ textTransform: 'capitalize' }}>
+            {item.name}
+          </Typography>
       </Button>
     </Link>
   ));
@@ -40,12 +57,15 @@ export const MainNav: React.FC = () => {
         justifyContent: "space-between",
       }}
     >
-      <Link relative={'route'} to={'/'}>
-      <IconButton>
-        <HomeIcon/>
-      </IconButton>
-      </Link>
-      {navItems}
+      {!isLoggedIn && <Link relative={'route'} to={'/'}>
+        <IconButton>
+          <HomeIcon />
+        </IconButton>
+      </Link>}
+      <div style={{ width:'100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+        {navItems}
+      </div>
     </div>
   );
 };

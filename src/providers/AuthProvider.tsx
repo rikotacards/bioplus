@@ -1,6 +1,6 @@
 import React from "react";
 import { auth } from "../firebase/firebase";
-import { User, getRedirectResult } from "firebase/auth";
+import { User, getRedirectResult, signOut } from "firebase/auth";
 import { addUserToDb, getUsernameFromUsers } from "../db/api";
 import { useLoadingContext } from "./LoadingProvider";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ interface AuthContextProps {
   isLoggedIn: boolean;
   user?: User;
   username?: string;
-  signOut: () => Promise<void>;
+  signOut: () => void;
   setUsername: (username: string) => void;
 }
 export const AuthContext = React.createContext({} as AuthContextProps);
@@ -23,6 +23,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const [username, setUsername]=React.useState("")
   const [user, setUser] = React.useState({} as User);
+  const onSignOut = () => {
+    signOut(auth).then(() => {
+      setUser({} as User);
+      setUsername('')
+      setLogIn(false)
+    }).then(() => nav('/'))
+  }
   React.useEffect(() => {
     loadingContext.setLoadingTrue()
 
@@ -52,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('geting red', res)
       res?.user &&
         res.user?.photoURL &&
-        addUserToDb({ uid: res.user.uid, photoUrl: res.user.photoURL });
+        addUserToDb({ uid: res.user.uid, photoUrl: res.user.photoURL }).then(() => nav('/admin'))
     });
     return subscriber;
   }, [isLoggedIn]);
@@ -60,7 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoggedIn,
     user,
     username,
-    signOut: auth.signOut,
+    signOut: onSignOut,
     setUsername: (username: string) => setUsername(username)
 
   };
