@@ -1,16 +1,11 @@
 import {
-  Button,
-  IconButton,
+ 
   InputAdornment,
   TextField,
-  Typography,
 } from "@mui/material";
 import React from "react";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CancelIcon from "@mui/icons-material/Cancel";
-import EditIcon from "@mui/icons-material/Edit";
 import { useLinksContext } from "../../providers/LinksProvider";
-import { HighlightAltOutlined } from "@mui/icons-material";
 interface EditableTextFieldProps {
   placeholder: string;
   fieldName: "title" | "link";
@@ -45,7 +40,7 @@ export const EditableTextField: React.FC<EditableTextFieldProps> = ({
 
   const EditField = (
     <TextField
-      sx={{ mb: 1 }}
+      sx={{ mb: 0.5 }}
       fullWidth
       onFocus={() => {
         toggleShowClear(true);

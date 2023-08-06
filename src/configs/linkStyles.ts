@@ -4,5 +4,10 @@ export const linkStyles = {
   },
   'br-medium': {
     borderRadius: '20px'
+  },
+  textAlign: {
+    left: 'left',
+    right: 'right',
+    center: 'center'
   }
 }

@@ -3,8 +3,9 @@ import { EditProfilePanel } from "../components/EditProfilePanel/EditProfilePane
 import { Fab, Typography } from "@mui/material";
 import { useDrawerContext } from "../providers/DrawerProvider";
 import { BackgroundSelector } from "../components/BackgroundSelector/BackgroundSelector";
-import { BorderRadiusSelector } from "../components/BorderRadiusSelector/BorderRadiusSelector";
-
+import { BorderRadiusSelector } from "../components/LinkStyleSelector/LinkStyleSelector";
+import './Appearance.css'
+import { LinkTransparencySelector } from "../components/LinkTransparencySelector/LinkTransparencySelector";
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   return (
@@ -12,6 +13,7 @@ export const Appearance: React.FC = () => {
       <EditProfilePanel />
       <BackgroundSelector />
       <BorderRadiusSelector />
+      <LinkTransparencySelector/>
       <Fab
         color='primary'
         variant="extended"
@@ -23,8 +25,7 @@ export const Appearance: React.FC = () => {
           margin: '4px',
           alignSelf: 'center',
           m: 2
-        }}
-      >
+        }}      >
         <Typography sx={{ textTransform: 'capitalize' }}>Preview</Typography>
       </Fab>
     </div>

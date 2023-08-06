@@ -34,12 +34,11 @@ const mainNavItems = [
 export const MainNav: React.FC = () => {
   const auth = useAuthContext();
   const location = useLocation();
-  console.log(location)
   const isLoggedIn = auth?.isLoggedIn;
   const navItems = mainNavItems.map((item) => (
     <Link style={{ marginRight: '4px', display: 'flex', alignItems: 'center' }} relative='route' key={item.path} to={item.path}>
       <Button size='small' variant={location.pathname.indexOf(item.name)>0 ? 'contained' :'outlined'} >
-          <div style={{margin:4, display: 'flex', alignItems: 'center'}}>
+          <div style={{ display: 'flex', alignItems: 'center'}}>
             {item.icon}
           </div>
           <Typography sx={{ textTransform: 'capitalize' }}>
@@ -54,7 +53,7 @@ export const MainNav: React.FC = () => {
         padding: '8px',
         display: "flex",
         alignItems: 'center',
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
       }}
     >
       {!isLoggedIn && <Link relative={'route'} to={'/'}>
@@ -62,7 +61,7 @@ export const MainNav: React.FC = () => {
           <HomeIcon />
         </IconButton>
       </Link>}
-      <div style={{ width:'100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <div style={{ width:'100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
 
         {navItems}
       </div>

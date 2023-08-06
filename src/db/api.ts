@@ -16,11 +16,12 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
-import { getDownloadURL, getStorage, ref, uploadString } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
 import { User } from "firebase/auth";
+import { getCountry } from "../util/getCountry";
 const storage = getStorage();
 
-export const claimUsername = async () => {};
+export const claimUsername = async () => { };
 interface GetUsernameProps {
   uid: string;
 }
@@ -46,8 +47,6 @@ export const getUsernameFromUsers = async ({ uid }: GetUsernameProps) => {
   const usernamesRef = doc(firestore, "users", uid);
   const snap = await getDoc(usernamesRef);
   if (snap.exists()) {
-    const name = snap.data()
-    console.log('name', name)
     return snap.data()?.username;
   }
   return undefined;
@@ -61,7 +60,6 @@ export const getUser = async ({ uid }: GetUsernameProps) => {
   const snap = await getDoc(usernamesRef);
   if (snap.exists()) {
     const name = snap.data()
-    console.log('name', name)
     return snap.data() as User
   }
   return {};
@@ -94,7 +92,7 @@ export const addUsername = async ({ uid, username }: UpdateUsernameProps) => {
     await setDoc(doc(firestore, "usernames", lowercase), {
       uid: uid,
     });
-    await setDoc(doc(firestore, 'users', uid), {username: lowercase}, {merge: true, mergeFields: ['username']})
+    await setDoc(doc(firestore, 'users', uid), { username: lowercase }, { merge: true, mergeFields: ['username'] })
   }
 };
 
@@ -139,8 +137,8 @@ export const getLinksByUsername = async ({
 };
 
 export const getPublicProfileLinks = async (uid: string) => {
-  const snap = await getDoc(doc(firestore, 'users',uid))
-  if(snap.exists()){
+  const snap = await getDoc(doc(firestore, 'users', uid))
+  if (snap.exists()) {
     return snap.data()
   }
 }
@@ -158,6 +156,12 @@ export const onLinksChange = (uid: string, setState) => {
     setState(links);
   });
 };
+export type LinkDetails = {
+  clicks: number,
+  referrer: { [key: string]: number }, 
+  geo: { [key: string]: number },
+  link: string
+}
 export const addLink = async ({
   title = "",
   link,
@@ -181,19 +185,32 @@ export const addLink = async ({
   };
   await setDoc(linkRef, linkData)
   return linkRef.id;
-  
+
 };
-export const incrementLinkClick = ({uid, linkId}:{uid: string, linkId: string}) => {
-  setDoc(doc(firestore, "users", uid, "links", linkId), {clicks: increment(1)}, {merge: true});
+export const incrementLinkClick = async({ uid, linkId }: { uid: string, linkId: string }) => {
+ try {
+  const country = getCountry();
+  console.log('INCS')
+  console.log(uid, linkId)
+  const res = await setDoc(doc(firestore, "users", uid, "links", linkId),
+    {
+      clicks: increment(1),
+      geo: { [country]: increment(1) },
+      referrer: { [window?.document?.referrer || 'direct']: increment(1) }
+    }, { merge: true });
+    return res
+  } catch(e) {
+    console.log('ERR', e)
+  }
 }
 
-export const getLinkDetails = async({uid, linkId}: {uid: string, linkId: string}) => {
-  try{
+export const getLinkDetails = async ({ uid, linkId }: { uid: string, linkId: string }) => {
+  try {
     const res = await getDoc(doc(firestore, "users", uid, "links", linkId))
-    if(res.exists()){
+    if (res.exists()) {
       return res.data()
     }
-  }catch(e){
+  } catch (e) {
     throw new Error('couldn get')
   }
 }
@@ -267,27 +284,27 @@ export const updateLinksNew = (
   links: { title: string; link: string; linkId: string; isDisplayed: boolean }[]
 ) => {
   console.log(links)
-  
-  setDoc(doc(firestore,'users',uid),{links},{merge: true})
+
+  setDoc(doc(firestore, 'users', uid), { links }, { merge: true })
 };
 
 export const deleteLinkNew = (uid: string, index: number, links: Link[]) => {
-  links.splice(index,1)
+  links.splice(index, 1)
   updateLinksNew(uid, links)
 }
 
-export const onSnapshotUser = (uid:string, setState: (links: Link[]) => void) => onSnapshot(doc(firestore,'users',uid), (doc) => {
+export const onSnapshotUser = (uid: string, setState: (links: Link[]) => void) => onSnapshot(doc(firestore, 'users', uid), (doc) => {
   const data = doc.data() as any || []
   setState(data?.links || []);
 })
 
-export const updateBio = ({uid, bio}:{uid: string, bio: string}) => {
-  setDoc(doc(firestore,'users',uid), {bio}, {merge: true})
+export const updateBio = ({ uid, bio }: { uid: string, bio: string }) => {
+  setDoc(doc(firestore, 'users', uid), { bio }, { merge: true })
 }
-export const getBio = async({uid}: {uid: string}) => {
+export const getBio = async ({ uid }: { uid: string }) => {
   const usernamesRef = doc(firestore, "users", uid);
   const snap = await getDoc(usernamesRef);
-  if(snap.exists()){
+  if (snap.exists()) {
     return snap.data().bio
   } return ''
 }
@@ -296,7 +313,7 @@ export const getImagePath = (imagePath: string) => {
   return getDownloadURL(pathReference)
     .then((url) => url)
     .catch((e) => {
-      return e;
+      throw e;
     });
 };
 export const updateProfileImage = async (
@@ -317,3 +334,40 @@ export const updateProfileImage = async (
     { merge: true }
   );
 };
+
+export const updateTheme = async (
+  uid: string,
+  localImagePath: string
+) => {
+  if (!localImagePath) {
+    return;
+  }
+  const storageRef = ref(storage, `${uid}/backgroundImage/backgroundImage.jpg`);
+  const snapshot = await uploadString(storageRef, localImagePath, "data_url");
+  const url = await getImagePath(snapshot.ref.fullPath);
+  await setDoc(
+    doc(firestore, "users", uid),
+    {
+      theme: {backgroundImage: url},
+    },
+    { merge: true }
+  );
+};
+
+export const updateBackgroundImage = async({uid, file}:{uid:string, file: string}) => {
+  const path = `${uid}/backgroundImage/b.jpg`
+  const storageRef = ref(storage, path);
+  try {
+     await uploadString(storageRef, file, "data_url");
+    const downloadUrl = await getImagePath(path)
+    console.log(downloadUrl)
+    return downloadUrl 
+  }catch(e){
+    throw(e)
+  }
+  
+}
+
+export const getAllLinksInfo = () => {
+
+}

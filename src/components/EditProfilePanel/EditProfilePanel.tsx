@@ -45,7 +45,7 @@ export const EditProfilePanel: React.FC = () => {
     >
       <div style={{ alignItems: 'center', padding: '4px', display: "flex" }}>
         <div style={{ alignItems: 'center', width: '100%', display: "flex", flexDirection: "column" }}>
-          {uid ? <UploadProfileImage photoUrl={localImagePaths[0] || user.photoUrl} images={images} setImagePaths={setImagePaths} onImageChange={onImageChange} uid={uid} /> : <Skeleton variant="circular" height={150} width={150} />}
+          {uid ? <UploadProfileImage photoUrl={localImagePaths[0] || user.photoUrl} images={images} setImagePaths={setImagePaths} onImageChange={onImageChange} uid={uid} /> : <Skeleton variant="circular" height={150} width={150} sx={{mb:1}} />}
           {open && <Button onClick={onSave}>Save</Button>}
         </div>
       </div>

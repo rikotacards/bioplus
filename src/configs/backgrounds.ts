@@ -3,7 +3,8 @@ export type BackgroundName = 'solid' |
 'sunset' | 
 'flux' | 
 'rainbow'| 
-'default'
+'default'|
+'customImage'
 
 export type BackgroundType = {
   name: BackgroundName;

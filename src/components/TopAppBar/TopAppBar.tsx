@@ -57,7 +57,7 @@ export const TopAppBar: React.FC = () => {
         </Typography>
       </div>
       {!isLoggedIn && signInButton}
-      {isLoggedIn && <Button onClick={onClick} sx={{ textTransform: 'capitalize', borderRadius: '150px', ml: 'auto' }} variant='contained'><ContentCopyIcon />{isCopied ? 'Copied to Clipboard' : 'Share'}</Button>}
+      {isLoggedIn && <Button onClick={onClick} sx={{ textTransform: 'capitalize', borderRadius: '150px', ml: 'auto' }} variant='contained'><ContentCopyIcon fontSize='small' />{isCopied ? ' Copied' : ' Share'}</Button>}
     </Toolbar>
   );
   return (

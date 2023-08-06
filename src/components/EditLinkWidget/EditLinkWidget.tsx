@@ -8,6 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 
 import BarChartIcon from "@mui/icons-material/BarChart";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -29,11 +30,10 @@ export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
   const linksContext = useLinksContext();
   const [linkStats, setLink] = React.useState('')
   React.useEffect(() => {
-    if(!uid){
+    if (!uid) {
       return;
     }
-    getLinkDetails({uid, linkId}).then((res) => {
-      console.log('reas', res)
+    getLinkDetails({ uid, linkId }).then((res) => {
       setLink(res?.clicks)
     })
   })
@@ -44,56 +44,57 @@ export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
       sx={{
         display: "flex",
         width: "100%",
+        alignItems: 'center',
       }}
     >
-      <div className={"drag"} style={{display: 'flex'}}>
-        <IconButton>
+      <div className={"drag"} style={{ display: 'flex', height: '100%', alignItems: 'center', cursor: 'pointer', marginLeft: '4px' }}>
+        <div>
           <DragIndicatorIcon />
-        </IconButton>
+        </div>
       </div>
-      <CardContent
-      sx={{padding:2, width: '100%'}}
+      <div
+        style={{ padding: 2,paddingLeft:'4px', paddingRight: '16px', width: '100%' }}
 
       >
-        <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
-        <EditableTextField
-          key={index + "title"}
-          index={index}
-          fieldName={"title"}
-          placeholder={"Name"}
-          textValue={title}
-        />
-        <EditableTextField
-          key={index + "link"}
-          index={index}
-          fieldName="link"
-          placeholder={"link"}
-          textValue={link}
-        />
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+          <EditableTextField
+            key={index + "title"}
+            index={index}
+            fieldName="title"
+            placeholder="name"
+            textValue={title}
+          />
+          <EditableTextField
+            key={index + "link"}
+            index={index}
+            fieldName="link"
+            placeholder={"link"}
+            textValue={link}
+          />
 
         </div>
-        <div style={{display: 'flex'}}>
-       <Button sx={{textTransform: 'capitalize'}} size='small' variant='outlined'>
-        {linkStats || 0} Clicks
-       </Button>
-        <div style={{display: 'flex', marginLeft: 'auto'}}>
-       <IconButton onClick={() => linksContext.onDeleteLink(index)}>
-          <HighlightOffIcon />
-        </IconButton>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ textTransform: 'capitalize', display: 'flex', alignItems: 'center' }} variant='outlined'>
+            <LeaderboardIcon sx={{mr:0.5}} fontSize="small" />{linkStats || 0} Clicks
+          </div>
+          <div style={{ display: 'flex', marginLeft: 'auto' }}>
+            <IconButton onClick={() => linksContext.onDeleteLink(index)}>
+              <HighlightOffIcon />
+            </IconButton>
 
-        <Switch
-          defaultChecked={isDisplayed}
-          onChange={(e) => {
-            linksContext.onUpdateLink(index, {
-              ...linksContext.links[index],
-              isDisplayed: e.target.checked,
-            });
-          }}
-          />
+            <Switch
+              defaultChecked={isDisplayed}
+              onChange={(e) => {
+                linksContext.onUpdateLink(index, {
+                  ...linksContext.links[index],
+                  isDisplayed: e.target.checked,
+                });
+              }}
+            />
           </div>
-          </div>
-        
-      </CardContent>
+        </div>
+
+      </div>
     </Card>
   );
 };
