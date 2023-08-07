@@ -7,9 +7,9 @@ import { useAuthContext } from "../providers/AuthProvider";
 import { useLinksContext } from "../providers/LinksProvider";
 import { useLoadingContext } from "../providers/LoadingProvider";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { PageSpacing } from "../PageSpacing/PageSpacing";
 export const Admin: React.FC = () => {
   const auth = useAuthContext();
-  const loadingContext = useLoadingContext();
   const uid = auth?.user?.uid;
   const [show, setShow] = React.useState(false);
   const toggle = () => {
@@ -28,6 +28,7 @@ export const Admin: React.FC = () => {
   const linksContext = useLinksContext();
   return (
     <div style={{ marginTop: '8px' }} >
+      <PageSpacing>
       <Card variant="outlined" color='blue' onClick={onClick} sx={{ mb: 1, borderRadius: '100px', display: 'flex', alignItems: 'center' }}>
         <CardActionArea sx={{ display: 'flex'}}>
           <IconButton>
@@ -56,6 +57,7 @@ export const Admin: React.FC = () => {
         </Collapse>
       </div>
       <EditLinksPanel links={linksContext?.links || []} />
+      </PageSpacing>
     </div>
   );
 };

@@ -8,13 +8,23 @@ import { Sunset } from "../components/Backgrounds/Sunset";
 export type BackgroundMappingType = {
   [key:string]: JSX.Element
 }
-
-export const backgroundMapping: BackgroundMappingType = {
-  default: <Default/>,
-  solid: <Solid/>,
-  gradient: <Gradient/>,
-  flux: <Flux/>,
-  sunset:<Sunset/>,
-  rainbow: <Rainbow/>,
-  customImage:<CustomImage/>
+interface BackgroundMappingProps {
+  uid: string;
+  backgroundComponentName: string;
 }
+export const BackgroundMapping :React.FC<BackgroundMappingProps> = ({uid, backgroundComponentName}) =>{
+  const backgroundMappingType = {
+    default: <Default/>,
+    solid: <Solid/>,
+    gradient: <Gradient/>,
+    flux: <Flux/>,
+    sunset:<Sunset/>,
+    rainbow: <Rainbow/>,
+    customImage:<CustomImage passedInUid={uid}/>
+  }
+return (
+  <>
+  {backgroundMappingType[backgroundComponentName]}
+  </>
+)
+} 

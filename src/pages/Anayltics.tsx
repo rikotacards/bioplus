@@ -14,6 +14,7 @@ import {
   topReferrersData,
 } from "../mocks/mockAnalytics.data";
 import { SignUpCard } from "../components/SignUpBanner/SignUpBanner";
+import { PageSpacing } from "../PageSpacing/PageSpacing";
 const getLifetimeClicks = (links: LinkDetails[]) => {
   let total = 0;
 
@@ -55,6 +56,7 @@ export const Analytics: React.FC = () => {
     : topCountriesData;
   return (
     <div style={{ marginTop: 8 }}>
+      <PageSpacing>
       {showSkeleton ? (
         <Skeleton variant="rectangular" height="100px" />
       ) : (
@@ -154,6 +156,7 @@ export const Analytics: React.FC = () => {
           </div>}
         </Card>
       )}
+      </PageSpacing>
     </div>
   );
 };

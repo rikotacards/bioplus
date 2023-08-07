@@ -5,13 +5,15 @@ import { getImagePath } from "../../db/api";
 import { Box } from "@mui/material";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
 import { useAuthContext } from "../../providers/AuthProvider";
-export const CustomImage: React.FC = () => {
+interface CustomImageProps {
+  passedInUid: string;
+}
+export const CustomImage: React.FC<CustomImageProps> = ({passedInUid}) => {
   const [imagePath, setImagePath] = React.useState<string|undefined>(undefined);
   const auth = useAuthContext();
   const uid = auth?.user?.uid
   const userTheme = useUserThemeContext();
-  console.log('image', userTheme.customBackgroundImageSrc)
-  const path = `${uid}/backgroundImage/b.jpg`
+  const path = `${passedInUid || uid}/backgroundImage/b.jpg`
   React.useEffect(() => {
     getImagePath(path)
       .then((res) => {console.log('image', res);setImagePath(res)})

@@ -11,7 +11,7 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { backgroundMapping } from "../configs/backgroundMapping";
+import { BackgroundMapping, backgroundMapping } from "../configs/backgroundMapping";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 interface ProfileProps {
@@ -33,9 +33,10 @@ export const Profile: React.FC<ProfileProps> = ({
   links,
   username,
 }) => {
+  console.log(uid,'hi')
   const userThemeContext = useUserThemeContext();
   const theme = createTheme(userThemeContext.theme);
-  const backgroud = backgroundMapping[userThemeContext.backgroundClassName];
+  const backgroud = <BackgroundMapping uid={uid} backgroundComponentName={userThemeContext.backgroundClassName}/>
   const nav = useNavigate();
   return (
     <ThemeProvider theme={theme}>

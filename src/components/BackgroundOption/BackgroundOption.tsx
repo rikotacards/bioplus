@@ -1,14 +1,13 @@
 import React from "react";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
 import { BackgroundName } from "../../configs/backgrounds";
-import { backgroundMapping } from "../../configs/backgroundMapping";
+import { BackgroundMapping } from "../../configs/backgroundMapping";
 import { Typography } from "@mui/material";
 import "./BackgroundOption.css";
 interface BackgroundOptionsProps {
   name: BackgroundName;
   isSelected?: boolean;
 }
-import ImageIcon from "@mui/icons-material/Image";
 export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
   name,
   isSelected,
@@ -18,7 +17,7 @@ export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
   const onClick = (styleName: string) => {
     userTheme.setBackgroundClassName(styleName);
   };
-  const background = backgroundMapping[name];
+  const background = <BackgroundMapping backgroundComponentName={name}/>
   return (
     <div
       style={{

@@ -48,7 +48,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         })
         
       } else {
-        console.log('FALSENOW')
         setLogIn(false);
         setUser({} as User);
         loadingContext.setLoadingFalse()
@@ -56,7 +55,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     });
     getRedirectResult(auth).then((res) => {
-      console.log('geting red', res)
       res?.user &&
         res.user?.photoURL &&
         addUserToDb({ uid: res.user.uid, photoUrl: res.user.photoURL }).then(() => nav('/admin'))

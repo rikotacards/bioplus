@@ -19,7 +19,7 @@ export const BorderRadiusSelector: React.FC = () => {
   const [selectedBr, setBr] = React.useState("");
   const alignmentChange = (alignment: string) => {
     setAlignment(alignment);
-    userThemeContext.setButtonClassName(alignment);
+    userThemeContext.setButtonTextAlignment(alignment);
   };
   const borderRadiusChange = (className: string) => {
     setBr(className);
