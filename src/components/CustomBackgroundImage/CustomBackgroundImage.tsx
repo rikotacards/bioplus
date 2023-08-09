@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, Paper } from "@mui/material";
 import React from "react";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
 import { getImagePath, updateBackgroundImage } from "../../db/api";
@@ -66,7 +66,8 @@ export const CustomBackgroundImage: React.FC = () => {
     };
   };
   return (
-    <div>
+    <Box overflow={'hidden'} borderRadius={2} border={userTheme.backgroundClassName === 'customImage' ? 1 : 0}>
+      <Paper elevation={userTheme.backgroundClassName === 'customImage' ? 10 : 0}>
       <Box
         onClick={containerClick}
         style={{
@@ -121,6 +122,7 @@ export const CustomBackgroundImage: React.FC = () => {
       >
         Choose img
       </Button>
-    </div>
+      </Paper>
+    </Box>
   );
 };

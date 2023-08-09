@@ -14,16 +14,13 @@ const textAlign = [
   { name: "right", icon: <FormatAlignRightIcon /> },
 ];
 export const BorderRadiusSelector: React.FC = () => {
-  const userThemeContext = useUserThemeContext();
-  const [selectedAlignment, setAlignment] = React.useState("");
-  const [selectedBr, setBr] = React.useState("");
+  const userTheme = useUserThemeContext();
+
   const alignmentChange = (alignment: string) => {
-    setAlignment(alignment);
-    userThemeContext.setButtonTextAlignment(alignment);
+    userTheme.setButtonTextAlignment(alignment);
   };
   const borderRadiusChange = (className: string) => {
-    setBr(className);
-    userThemeContext.setButtonClassName(className);
+    userTheme.setButtonClassName(className);
   };
   return (
     <div>
@@ -33,11 +30,27 @@ export const BorderRadiusSelector: React.FC = () => {
       <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
         {filled.map((borderRadiusClassName) => (
           <Box
+            border={
+              borderRadiusClassName === userTheme.buttonClassName
+                ? 2
+                : 1
+            }
+            
             key={borderRadiusClassName}
-            sx={{background: 'primary', border: selectedBr === borderRadiusClassName ? 2 : 1 }}
+            sx={{
+              background: "primary",
+            }}
             className={clx("common-link", borderRadiusClassName)}
             onClick={() => borderRadiusChange(borderRadiusClassName)}
-          ><Button  sx={{height: '100%'}} fullWidth variant={selectedBr === borderRadiusClassName ? 'contained' : 'outlined'}></Button></Box>
+          >
+            <Button
+              sx={{ height: "100%" }}
+              fullWidth
+              variant={
+                userTheme.buttonClassName === borderRadiusClassName ? "contained" : "outlined"
+              }
+            ></Button>
+          </Box>
         ))}
       </div>
       <Typography sx={{ mb: 1, mt: 1, fontWeight: "bold" }} variant="h4">
@@ -46,13 +59,13 @@ export const BorderRadiusSelector: React.FC = () => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         {textAlign.map((alignment) => (
           <Button
-          key={alignment.name}
+            key={alignment.name}
             sx={{ m: 1 }}
             onClick={() => {
               alignmentChange(alignment.name);
             }}
             variant={
-              alignment.name === selectedAlignment ? "contained" : "outlined"
+              alignment.name === userTheme.buttonTextAlignment ? "contained" : "outlined"
             }
             fullWidth
           >

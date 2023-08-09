@@ -34,18 +34,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loadingContext.setLoadingTrue()
 
     const subscriber = auth.onAuthStateChanged((d) => {
-      console.log('AUTH STATE CHANGED', d)
       if (d?.uid) {
         setUser({ ...user, ...d });
         setLogIn(true);
         // used if signing in from Google
         getUsernameFromUsers({ uid:d.uid }).then((res) => {
-          console.log('AUTHUID',res)
           setUsername(res);
         }).then(() => {
-
           loadingContext.setLoadingFalse()
-        })
+          
+        }).then(() =>{window.location.pathname ==='/' && nav('/admin')})
         
       } else {
         setLogIn(false);

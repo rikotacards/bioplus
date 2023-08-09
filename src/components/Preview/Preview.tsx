@@ -2,8 +2,7 @@ import React from 'react';
 import { Profile } from '../../pages/Profile';
 import { useLinksContext } from '../../providers/LinksProvider';
 import { useAuthContext } from '../../providers/AuthProvider';
-import {  getUser, getUsernameFromUsers } from '../../db/api';
-import { useUserThemeContext } from '../../providers/UserThemeProvider';
+import {  getUser } from '../../db/api';
 
 export const Preview: React.FC = () => {
   const linksContext = useLinksContext();

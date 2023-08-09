@@ -50,7 +50,6 @@ export const UserThemeProvider: React.FC<
   );
   const auth = useAuthContext();
   const location = useLocation();
-  console.log(location)
   const isPrivate = location.pathname === "/appearance";
   const usernameFromPath = location.pathname.split("/").join("");
   const uid = auth?.user?.uid;
@@ -66,7 +65,7 @@ export const UserThemeProvider: React.FC<
   };
   
   React.useEffect(() => {
-    
+    console.log('1. Effect Running')
     if (!isPrivate && usernameFromPath) {
       getUsernameDetails(usernameFromPath).then((res) => {
         console.log("Rds", res)
@@ -92,13 +91,17 @@ export const UserThemeProvider: React.FC<
       return;
     }
     getTheme({ uid }).then((res) => {
-      console.log("Getting theme", res);
+      console.log("2. Getting theme", res);
       if (!res) {
         return;
       }
-      setTheme(() => {
-        console.log("setting");
-        return res.theme;
+      if(JSON.stringify(theme) === JSON.stringify(res.theme)){
+        console.log('Same as Db')
+        return;
+      }
+      setTheme((p) => {
+        console.log('3. Setting theme from db:', res.theme)
+        return {...p, ...res.theme};
       });
     });
   }, [
@@ -117,23 +120,23 @@ export const UserThemeProvider: React.FC<
       theme: { ...theme, palette: { mode: "light" } },
     }));
   const setButtonClassName = (className: string) => {
-    setTheme(() => ({ ...theme, buttonClassName: className }));
+    setTheme((t) => ({ ...t, buttonClassName: className }));
     save({ buttonClassName: className });
   };
   const setCustomBackgroundImageSrc = (src: string) => {
-    setTheme(() => ({ ...theme, customBackgroundImageSrc: src }));
+    setTheme((t) => ({ ...t, customBackgroundImageSrc: src }));
     save({ customBackgroundImageSrc: src });
   };
   const setBackgroundClassName = (className: string) => {
-    setTheme(() => ({ ...theme, backgroundClassName: className }));
+    setTheme((t) => ({ ...t, backgroundClassName: className }));
     save({ backgroundClassName: className });
   };
   const setButtonTextAlignment = (className: string) => {
-    setTheme(() => ({ ...theme, buttonTextAlignment: className }));
+    setTheme((t) => ({ ...t, buttonTextAlignment: className }));
     save({ buttonTextAlignment: className });
   };
   const setButtonTransparency = (className: string) => {
-    setTheme(() => ({ ...theme, buttonTransparency: className }));
+    setTheme((t) => ({ ...t, buttonTransparency: className }));
     save({ buttonTransparency: className });
   };
   const updateTheme = () => {

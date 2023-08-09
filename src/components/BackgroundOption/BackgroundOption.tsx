@@ -2,7 +2,7 @@ import React from "react";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
 import { BackgroundName } from "../../configs/backgrounds";
 import { BackgroundMapping } from "../../configs/backgroundMapping";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import "./BackgroundOption.css";
 interface BackgroundOptionsProps {
   name: BackgroundName;
@@ -10,20 +10,18 @@ interface BackgroundOptionsProps {
 }
 export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
   name,
-  isSelected,
 }) => {
   const userTheme = useUserThemeContext();
 
   const onClick = (styleName: string) => {
     userTheme.setBackgroundClassName(styleName);
   };
+  const isSelected = name === userTheme.backgroundClassName
   const background = <BackgroundMapping backgroundComponentName={name}/>
   return (
-    <div
-      style={{
-        border: isSelected ? "1px solid white" : undefined,
-        borderRadius: "5px",
-      }}
+    <Box
+    border={isSelected ? 1 : 0}
+      borderRadius={1}
     >
       <div className="background-option" onClick={() => onClick(name)}>
         {background}
@@ -32,6 +30,6 @@ export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
       <div style={{ textAlign: "center" }}>
         <Typography>{name}</Typography>
       </div>
-    </div>
+    </Box>
   );
 };

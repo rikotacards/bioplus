@@ -3,12 +3,12 @@ import React from "react";
 import { backgrounds } from "../../configs/backgrounds";
 import { BackgroundOption } from "../BackgroundOption/BackgroundOption";
 import { CustomBackgroundImage } from "../CustomBackgroundImage/CustomBackgroundImage";
+import { useUserThemeContext } from "../../providers/UserThemeProvider";
 
 export const BackgroundSelector: React.FC = () => {
-  const [selected, setSelected] = React.useState("");
-  const onClick = (name: string) => {
-    setSelected(name);
-  };
+
+  const userTheme = useUserThemeContext();
+  
   return (
     <div>
       <div>
@@ -27,11 +27,8 @@ export const BackgroundSelector: React.FC = () => {
         {backgrounds.map((b) => (
           <div
             key={b.name}
-            onClick={() => {
-              onClick(b.name);
-            }}
           >
-            <BackgroundOption isSelected={b.name === selected} name={b.name} />
+            <BackgroundOption name={b.name} />
           </div>
         ))}
       </div>
