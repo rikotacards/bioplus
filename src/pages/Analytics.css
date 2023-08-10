@@ -1,0 +1,16 @@
+.get-premium {
+  background: red;
+  border-width: 15px; /* Adjust the border width as needed */
+  border-image: linear-gradient(to bottom, #ffa07a, #ffc0cb, #ff7f50, #ff4500, #ff8c00, #ffd700) 1;
+  border-image-slice: 1;
+  animation: gradientShift 10s infinite linear;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}

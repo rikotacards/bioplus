@@ -1,31 +1,21 @@
 import React from "react";
 import {
   Button,
-  Card,
-  CardContent,
+
   Divider,
-  TextField,
-  Toolbar,
+  
   Typography,
 } from "@mui/material";
-import { useOnSignIn } from "../util/onSignIn";
+import './Landing.css'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { useNavigate } from "react-router-dom";
-import { getAuth } from "firebase/auth";
 import { useAuthContext } from "../providers/AuthProvider";
 import { onSignOut } from "../util/onSignOut";
 export const Landing: React.FC = () => {
-  const onSignIn = useOnSignIn();
   const nav = useNavigate();
   const auth = useAuthContext();
 
-  const [text, setText] = React.useState("bioup.io/");
-  const [ref, setRef] = React.useState("");
-  const onClick = () => {
-    setRef(document.referrer);
-  };
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  };
+  
 
   return (
     <div
@@ -38,24 +28,37 @@ export const Landing: React.FC = () => {
       }}
     >
       <div>
-        <Typography sx={{ fontWeight: "bold", mb: 1 }} variant="h4">
-          Your bio, upgraded. Everything you are, in one simple link in bio.
+        <Typography sx={{ fontWeight: "bold", mb: 1 }} variant="h3">
+          Your bio,
+        </Typography>
+        <div className={'upgrade-text-container'}>
+          
+        <Typography variant='h3' sx={{mb:1, fontWeight: 'bold'}} className='rainbow-text'>
+        Upgraded
+        </Typography>
+        </div>
+        <Typography sx={{ fontWeight: "bold", mb: 1 }} variant="h3">
+        Everything you are, in one simple link in bio.
         </Typography>
       </div>
       {auth.isLoggedIn ? (
-        <Button fullWidth onClick={onSignOut}>Sign Out</Button>
+        <Button variant='outlined' sx={{marginTop: 'auto'}} fullWidth onClick={onSignOut}>Sign Out</Button>
       ) : (
+        <div style={{textAlign:'center'}}>
         <Button
-          sx={{ mb: 0 }}
+          sx={{ mb: 0, fontWeight: 'bold' }}
           size="large"
           onClick={() => nav("/signup")}
           fullWidth
           variant="contained"
         >
-          Upgrade your bio
+        <RocketLaunchIcon fontSize="small"/>  Upgrade your bio
         </Button>
+        <Divider sx={{ mt: 1, mb: 1 }} />
+        <Typography  variant='caption'>If you already have an account</Typography>
+        <Button size='large'   onClick={() => {nav('/signIn')}} sx={{mt:'auto'}} fullWidth variant='outlined'>Sign in</Button>
+        </div>
       )}
-      <Divider sx={{ mt: 1, mb: 1 }} />
     </div>
   );
 };

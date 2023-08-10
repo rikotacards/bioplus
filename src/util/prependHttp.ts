@@ -1,4 +1,4 @@
-export const prependHttp=(string: string)=> {
+export const prependHttp=(string: string): string=> {
   let url;
   try {
     url = new URL(string);
@@ -12,6 +12,6 @@ export const prependHttp=(string: string)=> {
     url = new URL("https://" + string);
   }
 
-  return url;
+  return `${url}`;
 }
 

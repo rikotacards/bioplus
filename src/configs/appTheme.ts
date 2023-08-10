@@ -3,7 +3,6 @@ import { red } from '@mui/material/colors';
 
 // Create a theme instance.
 const appTheme = createTheme({
-
 palette: {
   
   mode: 'dark',
@@ -13,6 +12,7 @@ palette: {
     // default: 'black'
   },
    primary: {
+
       main: '#556cd6',
    },
    secondary: {
@@ -24,6 +24,6 @@ palette: {
   },
   typography: {
     fontFamily: 'system-ui'
-  }
+  },
 });
 export default appTheme;
