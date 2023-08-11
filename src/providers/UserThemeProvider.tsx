@@ -20,7 +20,6 @@ interface UserThemeContextProps extends CustomStyles {
   setButtonClassName: (className: string) => void;
   setButtonTextAlignment: (className: string) => void;
   setButtonTransparency: (className: string) => void;
-  save: () => void;
   updateTheme: (args: { [key: string]: any }) => void;
 }
 
@@ -113,10 +112,7 @@ export const UserThemeProvider: React.FC<
       });
     });
   }, [
-    theme.backgroundClassName,
-    theme.buttonClassName,
-    theme.buttonTextAlignment,
-    theme.buttonTransparency,
+   
     uid,
   ]);
   

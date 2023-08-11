@@ -53,7 +53,7 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
       }  elevation={3}>
       <CardActionArea>
         <CardContent>
-          <Typography sx={{fontWeight:'bold'}} variant="body1">{title}</Typography>
+          <Typography sx={{fontWeight:'600'}} variant="body1">{title}</Typography>
         </CardContent>
       </CardActionArea>
       </Paper>

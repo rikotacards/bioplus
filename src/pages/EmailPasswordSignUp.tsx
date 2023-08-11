@@ -2,32 +2,43 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
+import './common.css'
 import { addUsername, getUsernameDetails } from "../db/api";
 import { signInWithEmailPassword } from "../util/signInWithEmailPassword";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../providers/AuthProvider";
-
+import { TextFieldCustom } from "./TextFieldCustom";
 interface SignInObjectType {
   [key: string]: {
-    value: string;
-    isLoading: boolean;
-    hasError: boolean;
+    value?: string;
+    isLoading?: boolean;
+    hasError?: boolean;
     errorMessage: string;
   };
 }
-
-export const EmailPasswordSignUp: React.FC = () => {
+interface EmailPasswordSignUpProps {
+  onPrev?: () => void;
+  userNameFromLanding?: string;
+}
+export const parseFirebaseErrorMessage = (errorMessage: string) => {
+  if(errorMessage.indexOf('Password')){
+    console.log(errorMessage)
+    return errorMessage.split(':')[1]
+  }
+}
+export const EmailPasswordSignUp: React.FC<EmailPasswordSignUpProps> = ({onPrev, userNameFromLanding}) => {
   const nav = useNavigate();
   const auth = useAuthContext();
   const [signUpObject, setSignUpObject] = React.useState<SignInObjectType>({
     username: {
-      value: "",
-      isLoading: false,
+      value: userNameFromLanding|| "",
+      isLoading: !!userNameFromLanding ? true : false,
       hasError: false,
       errorMessage: "",
     },
@@ -52,7 +63,7 @@ export const EmailPasswordSignUp: React.FC = () => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpObject((o) => ({
       ...o,
-      [e.target.name]: { ...o[e.target.name], value: e.target.value },
+      [e.target.name]: { ...o[e.target.name], value: e.target.value, isLoading: undefined, error: undefined },
     }));
     console.log(signUpObject);
   };
@@ -63,25 +74,36 @@ export const EmailPasswordSignUp: React.FC = () => {
   const setErrorMessage = (field: string, errorMessage: string) => {
     setSignUpObject((o) => ({ ...o, [field]: { ...o[field], errorMessage } }));
   };
+  const setLoading = (field: string, isLoading: boolean) => {
+    setSignUpObject((o) => ({ ...o, [field]: { ...o[field], isLoading } }));
+  };
 
   const onSuccess = () => {
     setSignUpSuccess(true);
   };
 
   const checkUsernameExist = (username: string) => {
+    setLoading("username", true)
+    setError("username", false);
+    setErrorMessage("username", "");
+
     getUsernameDetails(username).then((res) => {
       if (res) {
         setError("username", true);
         setErrorMessage("username", "username exists");
-        throw new Error("username exists");
+        setLoading('username', false)
       } else {
         setError("username", false);
+        setLoading('username', false)
         setErrorMessage("username", "");
       }
     });
   };
   const { email, password, username } = signUpObject;
   const onSignupClick = () => {
+    if(!email?.value || !password?.value){
+      return;
+    }
     signInWithEmailPassword({ email: email.value, password: password.value })
       .then((res) => {
         if (res?.user) {
@@ -90,41 +112,50 @@ export const EmailPasswordSignUp: React.FC = () => {
               .then((res) => {
                 onSuccess();
                 auth.setUsername(username.value);
-                nav("/admin");
+                nav("/welcome");
               })
-              .catch((e) => {
+              .catch(() => {
                 setError("username", true);
+                setLoading('username', false)
                 setErrorMessage("username", "Username has been taken");
               });
         }
       })
       .catch((e) => {
-        console.log(e);
+        const readable = parseFirebaseErrorMessage(e.message)
+        setError("email", true)
         setLoginError(true);
-        setLoginErrorMessage(e);
+        setLoginErrorMessage(readable || "");
       });
   };
+  React.useEffect(() => {
+    if(!userNameFromLanding){
+      return;
+    }
+    checkUsernameExist(userNameFromLanding)
+  }, [])
 
+  console.log(username)
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        paddingTop: "8px",
+        padding: "0px 16px",
       }}
     >
-      <Typography pb={1} variant='h3' fontWeight={'bold'}>Almost there</Typography>
+      <Typography className='rainbow-text' pb={1} variant='h3' fontWeight={'bold'}>Almost there</Typography>
       <Typography pb={1} variant='body1' fontWeight={'bold'}>Create your username</Typography>
 
-      <TextField
+      <TextFieldCustom
         onChange={onChange}
         onBlur={() => checkUsernameExist(username.value)}
         error={username.hasError}
         sx={{ mb: 1 }}
-        InputProps={{
-          startAdornment: <InputAdornment sx={{mr:0}} position="start"><Typography>bioUp.io/</Typography></InputAdornment>,
-        }}
+        isLoading={username.isLoading}
+        value={username.value}
+        startAdornmentComponent={<InputAdornment sx={{mr:0.5}} position="start"><Typography>bioUp.io/</Typography></InputAdornment>}
         name="username"
         placeholder={"username"}
         helperText={username.errorMessage}
@@ -141,6 +172,7 @@ export const EmailPasswordSignUp: React.FC = () => {
       </div>
       <TextField
         error={email.hasError}
+        value={email.value}
         sx={{ mb: 1 }}
         onChange={onChange}
         name="email"
@@ -148,6 +180,8 @@ export const EmailPasswordSignUp: React.FC = () => {
       />
       <TextField
         sx={{ mb: 1 }}
+        error={password.hasError}
+        value={password.value}
         onChange={onChange}
         name="password"
         type="password"
@@ -157,13 +191,13 @@ export const EmailPasswordSignUp: React.FC = () => {
         Sign Up
       </Button>
       {loginError && (
-        <Card color="error">
+        <Card sx={{mb:1, color: 'red'}}>
           <CardContent>
-            {loginError && "Error Logging in" + loginErrorMessage}
+            {loginError && loginErrorMessage}
           </CardContent>
         </Card>
       )}
-      <Button variant="outlined" onClick={() => nav("/")}>
+      <Button variant="outlined" onClick={onPrev}>
         Back
       </Button>
     </div>

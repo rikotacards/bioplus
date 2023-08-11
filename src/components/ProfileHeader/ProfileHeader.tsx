@@ -20,7 +20,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, us
       >
        {profilePhotoUrl? <Avatar src={profilePhotoUrl} sx={avatarStyle} />: <Skeleton variant='circular' sx={avatarStyle} />}
         <div style={{alignItems: 'center', margin: "8px", display: 'flex', flexDirection: 'column', width: '100%'}}>
-          <Typography sx={{fontWeight: 'bold'}}>@{username||'Username'}</Typography>
+          <Typography sx={{fontWeight: '900', fontSize:'18px'}}>@{username||'Username'}</Typography>
           <Typography>{bio}</Typography>
         </div>
       </CardContent>

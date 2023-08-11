@@ -5,26 +5,34 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import LinkIcon from "@mui/icons-material/Link";
 import { Leaderboard } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import "./Welcome.css";
 
-const todos = [{}];
+const steps = [
+  {
+    desc: "Add your links in Admin",
+    url: "/admin",
+    icon: <LinkIcon fontSize="large" sx={{mr:1}} />,
+    name: "admin",
+  },
+  {
+    desc: "Customize your Appearance",
+    url: "/appearance",
+    icon: <VisibilityIcon fontSize="large" sx={{mr:1}}  />,
+    name: "appeareance",
+  },
+  {
+    desc: "See Performance in Analytics",
+    url: "/analytics",
+    icon: <Leaderboard fontSize="large" sx={{mr:1}}  />,
+    name: "analytics",
+  },
+];
 
 export const Welcome: React.FC = () => {
   const nav = useNavigate();
-  return (
-    <div
-      style={{ padding: "0px 8px", display: "flex", flexDirection: "column" }}
-    >
-      <Card>
-        <CardContent>
-          <Typography marginBottom={1} fontWeight={"bold"} variant="h3">
-            Welcome to BioUp
-          </Typography>
-          <Typography fontWeight={"bold"} variant="h5">
-            It's easy as 1, 2, 3
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card sx={{ borderRadius: 2, mt: 1, mb: 1 }}>
+  const displayedSteps = steps.map((step, i) => {
+    return (
+      <div style={{ borderRadius: 2, mt: 1, mb: 1 }}>
         <CardContent
           sx={{
             display: "flex",
@@ -40,84 +48,53 @@ export const Welcome: React.FC = () => {
               width: "100%",
             }}
           >
-            <Typography sx={{ mr: 2 }} variant="h4">
-              1
+            <Typography className={"rainbow-text"} sx={{ mr: 2 }} variant="h4">
+              {i + 1}
             </Typography>
-            <LinkIcon fontSize="large" sx={{ mr: 2 }} />
-            <Typography fontWeight={"bold"} variant="h6">
-              Add your links in Admin
+            
+            <Typography
+              fontWeight={"bold"}
+              variant="h6"
+            >
+              {step.desc}
             </Typography>
           </div>
           <Button
             onClick={() => nav("/admin")}
             fullWidth
+            className={"rainbow-text"}
             size="large"
             variant="outlined"
           >
-            <LinkIcon />
-            Admin
+            {step.icon}
+            {step.name}
           </Button>
         </CardContent>
-      </Card>
-      <Card sx={{ borderRadius: 2, mb: 1 }}>
-        <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "8px",
-              width: "100%",
-            }}
-          >
-            <Typography sx={{ mr: 2 }} variant="h4">
-              2
-            </Typography>
+      </div>
+    );
+  });
+  return (
+    <div
+      style={{ padding: "0px 16px",
+      marginTop: "8px", display: "flex", flexDirection: "column" }}
+    >
+      <div>
+        <div style={{ display: 'flex', flexDirection: 'row'}}>
 
-            <VisibilityIcon fontSize="large" sx={{ mr: 2 }} />
-            <Typography fontWeight={"bold"} variant="h6">
-              Customize in Appearance
-            </Typography>
+        <Typography
+          className={"rainbow-text"}
+          marginBottom={1}
+          fontWeight={"900"}
+          variant="h3"
+          >
+          Welcome to BioUp
+        </Typography>
           </div>
-          <Button
-            onClick={() => nav("/appearance")}
-            fullWidth
-            size="large"
-            variant="outlined"
-          >
-            <VisibilityIcon />
-            Appearance
-          </Button>
-        </CardContent>
-      </Card>
-      <Card sx={{ borderRadius: 2, mb: 1 }}>
-        <CardContent sx={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "8px",
-            }}
-          >
-            <Typography sx={{ mr: 2 }} variant="h4">
-              3
-            </Typography>
-
-            <Leaderboard fontSize="large" sx={{ mr: 2 }} />
-            <Typography fontWeight={"bold"} variant="h6">
-              See Perfomance in Analytics
-            </Typography>
-          </div>
-          <Button
-            onClick={() => nav("/analytics")}
-            fullWidth
-            size="large"
-            variant="outlined"
-          >
-            <Leaderboard sx={{ mr: 1 }} />
-            Analytics
-          </Button>
-        </CardContent>
-      </Card>
+        <Typography fontWeight={"900"} variant="h5">
+          It's easy as 1, 2, 3
+        </Typography>
+      </div>
+      {displayedSteps}
     </div>
   );
 };
