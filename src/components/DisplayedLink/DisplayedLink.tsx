@@ -1,6 +1,6 @@
 import React from "react";
 import "../../configs/linkStyles.css";
-import { CardActionArea, Card, CardContent, Typography, Paper } from "@mui/material";
+import { CardActionArea, Card, CardContent, Typography, Paper, Box } from "@mui/material";
 import { prependHttp } from "../../util/prependHttp";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
 import { incrementLinkClick } from "../../db/api";
@@ -23,7 +23,7 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
   const url = prependHttp(link);
   const userThemeContext = useUserThemeContext();
   return (
-    <div
+    <Box
       onClick={async () => {
         if (!uid) {
           return;
@@ -40,12 +40,14 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
       style={{ margin: "4px", marginLeft: '16px', marginRight: '16px' }}
       
     >
-      <Paper className={
+      <Paper 
+      sx={{backgroundColor: userThemeContext.linkBackgroundColor}}
+      className={
         clx(
           ['display-link-common',
           userThemeContext.buttonClassName,
           userThemeContext.buttonTextAlignment,
-          userThemeContext.buttonTransparency
+          userThemeContext.buttonTransparency,
         ]
         )
       }  elevation={3}>
@@ -55,6 +57,6 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
         </CardContent>
       </CardActionArea>
       </Paper>
-    </div>
+    </Box>
   );
 };

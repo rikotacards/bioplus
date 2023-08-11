@@ -1,6 +1,7 @@
 .background-option {
-  height: 150px;
+  height: 160px;
   width: 100px;
   position: relative;
   margin: 4px;
+  z-index:0;
 }

@@ -24,7 +24,7 @@ import {
   uploadString,
 } from "firebase/storage";
 import { User } from "firebase/auth";
-import { getCountry } from "../util/getCountry";
+import { getCountry, getState } from "../util/getCountry";
 const storage = getStorage();
 
 export const claimUsername = async () => {};
@@ -205,13 +205,13 @@ export const incrementLinkClick = async ({
 }) => {
   try {
     const country = getCountry();
-    console.log("INCS");
+    const state = getState()
     console.log(uid, linkId);
     const res = await setDoc(
       doc(firestore, "users", uid, "links", linkId),
       {
         clicks: increment(1),
-        geo: { [country]: increment(1) },
+        geo: { [country]: increment(1), [state||""]:increment(1) },
         referrer: { [window?.document?.referrer || "direct"]: increment(1) },
       },
       { merge: true }

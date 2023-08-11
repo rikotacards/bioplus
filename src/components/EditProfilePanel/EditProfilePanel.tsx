@@ -13,6 +13,8 @@ export const EditProfilePanel: React.FC = () => {
   const [images, setImages] = React.useState([] as any);
   const [localImagePaths, setLocalImagePaths] = React.useState<string[]>([]);
   const [bioText, setBioText] = React.useState('')
+  const [isLoading, setLoading] = React.useState(true);
+
   const setImagePaths = (localImagePaths: string[]) => {
     setLocalImagePaths((p) => [...p, ...localImagePaths]);
   };
@@ -32,9 +34,10 @@ export const EditProfilePanel: React.FC = () => {
   };
   React.useEffect(() => {
     if (!uid) {
+      setLoading(false);
       return;
     }
-    getUser({ uid }).then((res) => { setUser(res) })
+    getUser({ uid }).then((res) => { setUser(res) }).then(()=> setLoading(false))
     getBio({ uid }).then((res) => setBioText(res))
 
   }, [uid])
@@ -50,7 +53,7 @@ export const EditProfilePanel: React.FC = () => {
         </div>
       </div>
       <TextField disabled sx={{ mb: 1 }} value={'@' + username} />
-      <TextField value={bioText} rows={3} multiline onBlur={() => { uid && updateBio({ uid, bio: bioText }) }} onChange={onChange} placeholder="bio" />
+      <TextField disabled={!uid} value={bioText} rows={3} multiline onBlur={() => { uid && updateBio({ uid, bio: bioText }) }} onChange={onChange} placeholder="Bio" />
     </div>
   );
 };

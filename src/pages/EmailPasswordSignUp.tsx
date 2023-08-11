@@ -1,8 +1,15 @@
-import { Button, Card, CardContent, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { addUsername, getUsernameDetails } from "../db/api";
 import { signInWithEmailPassword } from "../util/signInWithEmailPassword";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../providers/AuthProvider";
 
 interface SignInObjectType {
@@ -11,7 +18,7 @@ interface SignInObjectType {
     isLoading: boolean;
     hasError: boolean;
     errorMessage: string;
-  }
+  };
 }
 
 export const EmailPasswordSignUp: React.FC = () => {
@@ -34,26 +41,28 @@ export const EmailPasswordSignUp: React.FC = () => {
       hasError: false,
       value: "",
       isLoading: false,
-      errorMessage: ""
-    }
+      errorMessage: "",
+    },
   });
 
-  const [signUpSuccess, setSignUpSuccess] = React.useState(false)
+  const [signUpSuccess, setSignUpSuccess] = React.useState(false);
   const [loginError, setLoginError] = React.useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = React.useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSignUpObject((o) => ({ ...o, [e.target.name]: { ...o[e.target.name], value: e.target.value } }))
-    console.log(signUpObject)
-  }
+    setSignUpObject((o) => ({
+      ...o,
+      [e.target.name]: { ...o[e.target.name], value: e.target.value },
+    }));
+    console.log(signUpObject);
+  };
 
   const setError = (field: string, hasError: boolean) => {
-    setSignUpObject((o) => ({ ...o, [field]: { ...o[field], hasError } }))
-  }
+    setSignUpObject((o) => ({ ...o, [field]: { ...o[field], hasError } }));
+  };
   const setErrorMessage = (field: string, errorMessage: string) => {
-    setSignUpObject((o) => ({ ...o, [field]: { ...o[field], errorMessage } }))
-  }
-
+    setSignUpObject((o) => ({ ...o, [field]: { ...o[field], errorMessage } }));
+  };
 
   const onSuccess = () => {
     setSignUpSuccess(true);
@@ -62,16 +71,16 @@ export const EmailPasswordSignUp: React.FC = () => {
   const checkUsernameExist = (username: string) => {
     getUsernameDetails(username).then((res) => {
       if (res) {
-        setError('username', true)
+        setError("username", true);
         setErrorMessage("username", "username exists");
         throw new Error("username exists");
       } else {
-        setError('username', false);
-        setErrorMessage('username', "");
+        setError("username", false);
+        setErrorMessage("username", "");
       }
     });
   };
-  const { email, password, username } = signUpObject
+  const { email, password, username } = signUpObject;
   const onSignupClick = () => {
     signInWithEmailPassword({ email: email.value, password: password.value })
       .then((res) => {
@@ -84,8 +93,8 @@ export const EmailPasswordSignUp: React.FC = () => {
                 nav("/admin");
               })
               .catch((e) => {
-                setError('username', true);
-                setErrorMessage('username', "Username has been taken");
+                setError("username", true);
+                setErrorMessage("username", "Username has been taken");
               });
         }
       })
@@ -97,27 +106,38 @@ export const EmailPasswordSignUp: React.FC = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%", paddingTop: '8px' }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        paddingTop: "8px",
+      }}
+    >
+      <Typography pb={1} variant='h3' fontWeight={'bold'}>Almost there</Typography>
+      <Typography pb={1} variant='body1' fontWeight={'bold'}>Create your username</Typography>
+
       <TextField
         onChange={onChange}
         onBlur={() => checkUsernameExist(username.value)}
         error={username.hasError}
         sx={{ mb: 1 }}
+        InputProps={{
+          startAdornment: <InputAdornment sx={{mr:0}} position="start"><Typography>bioUp.io/</Typography></InputAdornment>,
+        }}
         name="username"
         placeholder={"username"}
         helperText={username.errorMessage}
       />
       <div>
-        <Card sx={{mb:1}}>
+        <Card sx={{ mb: 1 }}>
           <CardContent>
-
-        <Typography sx={{mb:1}}>
-
-This will be your personal BioUp url. However, to login you will still login via Email.
-</Typography>
+            <Typography sx={{ mb: 1 }}>
+              This will be your personal BioUp url. To login, you will
+              still login via Email.
+            </Typography>
           </CardContent>
         </Card>
-       
       </div>
       <TextField
         error={email.hasError}
@@ -136,13 +156,16 @@ This will be your personal BioUp url. However, to login you will still login via
       <Button sx={{ mb: 1 }} onClick={onSignupClick} variant="contained">
         Sign Up
       </Button>
-      {loginError && <Card color='error'>
-        <CardContent>
-
-          {loginError && "Error Logging in" + loginErrorMessage}
-        </CardContent>
-      </Card>}
-      <Button variant='outlined' onClick={() => nav('/')}>Back</Button>
+      {loginError && (
+        <Card color="error">
+          <CardContent>
+            {loginError && "Error Logging in" + loginErrorMessage}
+          </CardContent>
+        </Card>
+      )}
+      <Button variant="outlined" onClick={() => nav("/")}>
+        Back
+      </Button>
     </div>
   );
 };

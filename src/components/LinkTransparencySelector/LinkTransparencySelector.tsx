@@ -15,7 +15,7 @@ export const LinkTransparencySelector: React.FC = () => {
   return (
     <div>
       <div>
-        <Typography sx={{ mb: 1, mt: 1, fontWeight: "bold" }} variant="h4">
+        <Typography sx={{ mb: 1, mt: 1, fontWeight: "bold" }} variant="h5">
           Link Transparency
         </Typography>
       </div>

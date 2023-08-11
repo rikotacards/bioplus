@@ -12,7 +12,10 @@ interface UserThemeContextProps extends CustomStyles {
   backgroundClassName: string;
   customBackgroundImageSrc: string;
   setCustomBackgroundImageSrc: (src: string) => void;
-
+  backgroundColor: string;
+  setBackgroundColor: (color: string) => void;
+  linkBackgroundColor: string;
+  setLinkBackgroundColor: (color: string) => void;
   setBackgroundClassName: (className: string) => void;
   setButtonClassName: (className: string) => void;
   setButtonTextAlignment: (className: string) => void;
@@ -26,6 +29,9 @@ const defaultTheme = {
   customBackgroundImageSrc: "",
   buttonTextAlignment: "left",
   buttonTransparency: "",
+  linkBackgroundColor: "",
+  backgroundColor: "",
+  backgroundClassName: ""
 };
 
 const UserThemeContext = React.createContext({} as UserThemeContextProps);
@@ -40,6 +46,8 @@ interface CustomStyles {
   buttonTextAlignment: string;
   buttonTransparency: string;
   customBackgroundImageSrc: string;
+  backgroundColor: string;
+  linkBackgroundColor: string;
 }
 
 export const UserThemeProvider: React.FC<
@@ -139,6 +147,15 @@ export const UserThemeProvider: React.FC<
     setTheme((t) => ({ ...t, buttonTransparency: className }));
     save({ buttonTransparency: className });
   };
+  const setBackgroundColor = (color: string) => {
+    console.log('COO')
+    setTheme((t) => ({ ...t, backgroundColor: color }));
+    save({ backgroundColor: color });
+  }
+  const setLinkBackgroundColor = (color: string) => {
+    setTheme((t) => ({ ...t, linkBackgroundColor: color }));
+    save({ linkBackgroundColor: color });
+  }
   const updateTheme = () => {
     setTheme((t) => ({ ...t }));
   };
@@ -153,6 +170,10 @@ export const UserThemeProvider: React.FC<
     setButtonTextAlignment,
     setButtonTransparency,
     setCustomBackgroundImageSrc,
+    setLinkBackgroundColor,
+    backgroundColor: theme.backgroundColor || "",
+    linkBackgroundColor: theme.linkBackgroundColor || "",
+    setBackgroundColor,
     customBackgroundImageSrc: theme.customBackgroundImageSrc || "",
     backgroundClassName: theme.backgroundClassName || "",
     buttonClassName: theme.buttonClassName || "",

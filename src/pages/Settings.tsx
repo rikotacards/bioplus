@@ -6,7 +6,7 @@ export const Settings: React.FC = () => {
   const auth = useAuthContext();
   const signOut = auth.signOut;
   return (
-    <div style={{marginTop: '8px'}}>
+    <div style={{margin: '8px'}}>
     <Button onClick={signOut} fullWidth variant='outlined'>Sign Out</Button>
     </div>
   )

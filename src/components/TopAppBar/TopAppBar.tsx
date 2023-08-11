@@ -6,13 +6,10 @@ import {
   Button,
   LinearProgress,
   Paper,
-  IconButton,
-  Divider,
 } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { MainNav } from "../MainNav/MainNav";
 import { useOnSignIn } from "../../util/onSignIn";
-import { onSignOut } from "../../util/onSignOut";
 import { useAuthContext } from "../../providers/AuthProvider";
 import { useLoadingContext } from "../../providers/LoadingProvider";
 import { useNavigate } from "react-router-dom";

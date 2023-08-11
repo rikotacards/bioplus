@@ -12,6 +12,7 @@ interface AuthContextProps {
   user?: User;
   username?: string;
   signOut: () => void;
+  isLoggingIn: boolean;
   setUsername: (username: string) => void;
 }
 export const AuthContext = React.createContext({} as AuthContextProps);
@@ -23,6 +24,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const [username, setUsername]=React.useState("")
   const [user, setUser] = React.useState({} as User);
+  const [isLoggingIn, setIsLogginIn] = React.useState(true);
   const onSignOut = () => {
     signOut(auth).then(() => {
       setUser({} as User);
@@ -37,16 +39,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (d?.uid) {
         setUser({ ...user, ...d });
         setLogIn(true);
+        setIsLogginIn(false);
         // used if signing in from Google
         getUsernameFromUsers({ uid:d.uid }).then((res) => {
           setUsername(res);
         }).then(() => {
           loadingContext.setLoadingFalse()
           
-        }).then(() =>{window.location.pathname ==='/' && nav('/admin')})
+        })
         
       } else {
         setLogIn(false);
+        setIsLogginIn(false)
         setUser({} as User);
         loadingContext.setLoadingFalse()
         
@@ -63,6 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoggedIn,
     user,
     username,
+    isLoggingIn,
     signOut: onSignOut,
     setUsername: (username: string) => setUsername(username)
 

@@ -61,7 +61,7 @@ export const MainNav: React.FC = () => {
           <HomeIcon />
         </IconButton>
       </Link>}
-      <div style={{ width:'100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+      <div style={{ width:'100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', overflow: 'scroll' }}>
 
         {navItems}
       </div>

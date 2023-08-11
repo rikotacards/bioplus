@@ -15,6 +15,7 @@ export const CustomBackgroundImage: React.FC = () => {
   const [isLoading, setLoading] = React.useState(true);
   React.useEffect(() => {
     if (!uid) {
+      setLoading(false);
       return;
     }
     getImagePath(backgroundImagePath)
@@ -74,10 +75,11 @@ export const CustomBackgroundImage: React.FC = () => {
           display: "flex",
           alignItems: "center",
           position: "relative",
-          width: "100px",
+          width: "110px",
           overflow: "hidden",
-          height: "150px",
+          height: "160px",
           margin: "4px",
+
           justifyContent: "center",
           borderRadius: "5px",
         }}
@@ -116,6 +118,7 @@ export const CustomBackgroundImage: React.FC = () => {
       <Button
         size="small"
         fullWidth
+        disabled={!uid}
         sx={{ textTransform: "capitalize" }}
         color="inherit"
         onClick={onClick}

@@ -6,8 +6,8 @@ import { BackgroundSelector } from "../components/BackgroundSelector/BackgroundS
 import { BorderRadiusSelector } from "../components/LinkStyleSelector/LinkStyleSelector";
 import "./Appearance.css";
 import { LinkTransparencySelector } from "../components/LinkTransparencySelector/LinkTransparencySelector";
-import { useUserThemeContext } from "../providers/UserThemeProvider";
 import { PageSpacing } from "../PageSpacing/PageSpacing";
+import { TextAlignmentSelector } from "../components/TextAlignmentSelector/TextAlignmentSelector";
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   return (
@@ -22,6 +22,7 @@ export const Appearance: React.FC = () => {
         <EditProfilePanel />
         <BackgroundSelector />
         <BorderRadiusSelector />
+        <TextAlignmentSelector/>
         <LinkTransparencySelector />
 
         <div

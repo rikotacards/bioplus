@@ -6,11 +6,9 @@
 
 }
 
-.border {
-  border: 2px solid white
-}
+
 .display-link-common {
-  overflow: hidden
+  overflow: hidden;
 }
 .br-high {
   border-radius: 100px !important;
@@ -18,6 +16,14 @@
 .br-medium {
   border-radius: 15px !important;
 }
+.outlined {
+  background: transparent !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+
+
 .left {
   text-align: left;
 }

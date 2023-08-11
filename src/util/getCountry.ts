@@ -13,7 +13,7 @@ export const getCountry = () => {
 	return country;
 }
 
-function getState(){
+export const getState=()=>{
 		const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 	if (timezone === "" || !timezone) {
