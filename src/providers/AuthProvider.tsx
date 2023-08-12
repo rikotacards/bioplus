@@ -10,7 +10,7 @@ interface AuthProviderProps {
 }
 interface AuthContextProps {
   isLoggedIn: boolean;
-  user?: User;
+  user?: UserCustom;
   username?: string;
   signOut: () => void;
   isLoggingIn: boolean;

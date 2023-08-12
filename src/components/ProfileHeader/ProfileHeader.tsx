@@ -1,5 +1,7 @@
 import React from "react";
-import { Avatar, Typography, CardContent, Skeleton } from "@mui/material";
+import { Avatar, Typography, CardContent, Skeleton, Button } from "@mui/material";
+import { useAuthContext } from "../../providers/AuthProvider";
+import { useNavigate } from "react-router-dom";
 interface ProfileHeaderProps {
   username?: string;
   profilePhotoUrl?: string;
@@ -7,8 +9,12 @@ interface ProfileHeaderProps {
 }
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, username, bio}) => {
   const avatarStyle = {height:"150px", width: '150px'}
+  const auth = useAuthContext();
+  const nav = useNavigate();
+  const usernameFromPath = location.pathname.split("/").join("");
+  const showEdit = usernameFromPath === auth.username
   return (
-    <div>
+    <div style={{padding: '0 16px'}}>
       <div
         style={{
           display: "flex",
@@ -28,6 +34,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, us
       }}>
           <Typography sx={{fontWeight: '900', fontSize:'18px'}}>@{username||'Username'}</Typography>
           <Typography>{bio}</Typography>
+          {showEdit && <Button variant='outlined' color='inherit' onClick={()=>nav('/signIn')} fullWidth>Sign in to edit</Button>}
         </div>
       </div>
     </div>

@@ -37,7 +37,7 @@ export const EditProfilePanel: React.FC = () => {
       setLoading(false);
       return;
     }
-    getUser({ uid }).then((res) => { console.log('uto', user);setUser(res) }).then(()=> setLoading(false))
+    getUser({ uid }).then((res) => { console.log('uto', res);setUser(res) }).then(()=> setLoading(false))
     getBio({ uid }).then((res) => setBioText(res))
 
   }, [uid])

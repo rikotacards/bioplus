@@ -12,11 +12,11 @@ export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   React.useEffect(() => {
     console.log('in Appearance.tsx, setting component to preview')
-    drawerContext.setComponent('preview')
   },[])
+
   const onClick = () => {
-    drawerContext.setComponent('preview')
-    drawerContext.onToggle()
+    drawerContext?.setComponent('preview')
+    drawerContext?.onToggle()
   }
   return (
     <PageSpacing>
@@ -48,7 +48,7 @@ export const Appearance: React.FC = () => {
             variant="extended"
             onClick={onClick}
           >
-            <Typography sx={{ textTransform: "capitalize" }}>
+            <Typography variant='body2' sx={{ textTransform: "capitalize" }}>
               Preview
             </Typography>
           </Fab>

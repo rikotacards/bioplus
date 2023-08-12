@@ -1,12 +1,10 @@
-import { Drawer, Fab, Paper } from "@mui/material";
+import { Drawer} from "@mui/material";
 import React from "react";
-import CloseIcon from "@mui/icons-material/Close";
 interface DrawerContextProps {
   onToggle: () => void;
   setComponentData:(data:Object) => void;
   setComponent: (componentName:string) => void;
 }
-import { Preview } from "../components/Preview/Preview";
 import { PreviewDrawerContent } from "../components/PreviewDrawerContent/PreviewDrawerContent";
 import { LinkThumbnailPanel } from "../components/LinkThumbnailPanel/LinkThumbnailPanel";
 import { PublicProfileDrawerContent } from "../components/PublicProfileDrawerContent/PublicProfileDrawerContent";
@@ -26,6 +24,7 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
   const [open, setOpen] = React.useState(false);
   const [componentName, setComponentName] = React.useState("")
   const [data, setData] = React.useState({} as ComponentDataType )
+  
   const setComponent = (componentName: string) => {
     setComponentName(componentName)
   }
@@ -39,7 +38,6 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
   const drawerComponents = {
     preview: <PreviewDrawerContent/>,
     thumbnail: <LinkThumbnailPanel linkId={data?.linkId}/>,
-    more: <PublicProfileDrawerContent username={data?.username}/>
   }
   const drawerContent = drawerComponents[componentName]
 

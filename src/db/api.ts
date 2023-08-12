@@ -24,7 +24,6 @@ import {
   uploadBytes,
   uploadString,
 } from "firebase/storage";
-import { User } from "firebase/auth";
 import { getCountry, getState } from "../util/getCountry";
 import { UserCustom } from "../providers/AuthProvider";
 const storage = getStorage();

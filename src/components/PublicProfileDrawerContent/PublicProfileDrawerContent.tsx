@@ -1,19 +1,18 @@
 import React from "react";
 import { useDrawerContext } from "../../providers/DrawerProvider";
-import { Button, IconButton, Typography } from "@mui/material";
+import { AppBar, Button, IconButton, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
 interface PublicProfileDrawerContentProps {
   username?: string;
+  toggle: () => void;
 }
 export const PublicProfileDrawerContent: React.FC<
   PublicProfileDrawerContentProps
-> = ({ username }) => {
-  const drawerContext = useDrawerContext();
-  const toggle = drawerContext.onToggle;
+> = ({ username , toggle}) => {
   const nav = useNavigate();
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ display: "flex", flexDirection: "column", borderTopLeftRadius: '50px', borderTopRightRadius: '50px' }}>
       <div
         style={{
           alignItems: "center",
@@ -22,6 +21,9 @@ export const PublicProfileDrawerContent: React.FC<
           justifyContent: "center",
           fontWeight: "bold",
           padding:'16px',
+          borderTopLeftRadius: '10px',
+          borderTopRightRadius: '10px',
+          overflow: 'hidden'
         }}
       >
         @{username}
@@ -33,10 +35,10 @@ export const PublicProfileDrawerContent: React.FC<
      
       </div>
       <div style={{display: 'flex', flexDirection: 'column', margin:'16px'}}>
-          <Typography fontWeight={'900'} marginBottom={2}>
+          <Typography fontWeight={'600'} marginBottom={2}>
             Create your BioUp
           </Typography>
-        <Button variant='contained' onClick={() => {drawerContext.onToggle(); nav('/')}}>Sign up free</Button>
+        <Button variant='contained' onClick={() => {toggle(); nav('/')}}>Sign up free</Button>
         </div>
     </div>
   );

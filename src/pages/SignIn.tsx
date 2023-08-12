@@ -1,4 +1,4 @@
-import { Button, Divider, TextField, Typography } from "@mui/material";
+import { Button, Card, CardContent, Divider, TextField, Typography } from "@mui/material";
 import {
   GoogleAuthProvider,
   getAuth,
@@ -43,7 +43,6 @@ export const SignIn: React.FC = () => {
   const onSignInWithEmailPassword = () => {
     setLoading(true)
     signInWithEmailAndPassword(auth, email, pw).then((res) => {
-      console.log('SIGNIN EMAIL RES', res)
       setLoading(false);
       setError(false);
       console.log('res', res)
@@ -124,13 +123,21 @@ export const SignIn: React.FC = () => {
       <Button
         size="large"
         startIcon={<GoogleIcon />}
-        sx={{ borderRadius: "20px" }}
+        sx={{ borderRadius: "20px", mb:1 }}
         fullWidth
         variant="contained"
         onClick={onGoogleSignIn}
       >
         Continue Google
       </Button>
+      <Card color='inherit' variant='outlined'>
+      
+      <CardContent>
+        <Typography>
+          Google sign-in only works on the device browser and not via Instagram's in-app browser. However, you can continue with email and password with the form above.
+        </Typography>
+      </CardContent>
+      </Card>
     </div>
   );
 };
