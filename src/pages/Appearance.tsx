@@ -10,6 +10,13 @@ import { PageSpacing } from "../PageSpacing/PageSpacing";
 import { TextAlignmentSelector } from "../components/TextAlignmentSelector/TextAlignmentSelector";
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
+  React.useEffect(() => {
+    drawerContext.setComponent('preview')
+  },[])
+  const onClick = () => {
+    drawerContext.setComponent('preview')
+    drawerContext.onToggle()
+  }
   return (
     <PageSpacing>
       <Box
@@ -38,7 +45,7 @@ export const Appearance: React.FC = () => {
           <Fab
             color="primary"
             variant="extended"
-            onClick={drawerContext?.onToggle}
+            onClick={onClick}
           >
             <Typography sx={{ textTransform: "capitalize" }}>
               Preview

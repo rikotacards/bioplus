@@ -7,6 +7,8 @@ palette: {
   
   mode: 'dark',
   background: {
+    default: 'black',
+    paper: 'black',
   },
    primary: {
       main: '#556cd6',

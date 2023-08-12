@@ -27,10 +27,8 @@ interface EmailPasswordSignUpProps {
   userNameFromLanding?: string;
 }
 export const parseFirebaseErrorMessage = (errorMessage: string) => {
-  if(errorMessage.indexOf('Password')){
-    console.log(errorMessage)
-    return errorMessage.split(':')[1]
-  }
+  return errorMessage.split(':')[1]
+
 }
 export const EmailPasswordSignUp: React.FC<EmailPasswordSignUpProps> = ({onPrev, userNameFromLanding}) => {
   const nav = useNavigate();

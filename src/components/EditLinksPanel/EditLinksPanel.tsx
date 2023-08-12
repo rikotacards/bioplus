@@ -2,9 +2,8 @@ import React from "react";
 import "./EdlintLinksPanel.css";
 import RGL, { WidthProvider } from "react-grid-layout";
 import { EditLinkWidget } from "../EditLinkWidget/EditLinkWidget";
-import { getOrder, updateOrdering } from "../../db/api";
-import { useAuthContext } from "../../providers/AuthProvider";
-import { LinksContext, useLinksContext } from "../../providers/LinksProvider";
+import { useLinksContext } from "../../providers/LinksProvider";
+import { AuthContext, useAuthContext } from "../../providers/AuthProvider";
 const ReactGridLayout = WidthProvider(RGL);
 
 interface Link {
@@ -18,8 +17,9 @@ interface EditLinksPanelProps {
 }
 export const EditLinksPanel: React.FC<EditLinksPanelProps> = (props) => {
   const linksContext = useLinksContext();
+  const auth = useAuthContext();
   const displayedLinks = linksContext.links.map((link, i) => (
-    <div key={i + link?.title} style={{ left: "-10px" }}>
+    <div key={i + link?.title} style={{ display: "flex", left: "-10px" }}>
       <EditLinkWidget
         link={link.link}
         linkId={link.linkId}
@@ -35,14 +35,19 @@ export const EditLinksPanel: React.FC<EditLinksPanelProps> = (props) => {
       onLayoutChange={(newLayout) => {
         const newOrder = [] as any;
         newLayout.forEach((row, index) => {
-          newOrder[Number(index)] = linksContext.links[row.y]
+          newOrder[Number(index)] = linksContext.links[row.y];
         });
-        linksContext.onReorder(newOrder)
+        if (JSON.stringify(newOrder) !== JSON.stringify(newLayout)) {
+          console.log("NOT SAME", newOrder, newLayout)
+          if(!auth?.username){
+            return;
+          }
+          linksContext.onReorder(newOrder);
+        }
       }}
       useCSSTransforms={true}
       isDraggable
       cols={1}
-      rowHeight={165}
       draggableHandle=".drag"
     >
       {displayedLinks}

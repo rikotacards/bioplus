@@ -9,7 +9,6 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { PageSpacing } from "../PageSpacing/PageSpacing";
 export const Admin: React.FC = () => {
   const auth = useAuthContext();
-  const uid = auth?.user?.uid;
   const [show, setShow] = React.useState(false);
   const toggle = () => {
     setShow(!show);

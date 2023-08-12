@@ -37,7 +37,7 @@ export const TopAppBar: React.FC = () => {
   const signInButton = <div style={{ marginLeft: "auto" }}>
     <Button
       onClick={
-        onSignIn
+       () => nav('/signIn')
       }
       sx={{ textTransform: 'capitalize' }}
       color="primary"

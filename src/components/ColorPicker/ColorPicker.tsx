@@ -55,6 +55,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ property }) => {
         boxShadow: "0 0 0 1px rgba(0,0,0,.1)",
         display: "inline-block",
         cursor: "pointer",
+        border: '1px solid white'
       },
       popover: {
         position: "absolute",

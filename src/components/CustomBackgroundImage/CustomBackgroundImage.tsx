@@ -9,7 +9,6 @@ export const CustomBackgroundImage: React.FC = () => {
   const auth = useAuthContext();
   const uid = auth.user?.uid;
   const backgroundImagePath = `${uid}/backgroundImage/b.jpg`;
-  const [isOpenSave, setOpenSave] = React.useState(false);
   const userTheme = useUserThemeContext();
   const [localImagePath, setLocalImagePath] = React.useState<string>("");
   const [isLoading, setLoading] = React.useState(true);
@@ -22,30 +21,22 @@ export const CustomBackgroundImage: React.FC = () => {
       .then((res) => {
         if (res) {
           setLocalImagePath(res);
+          setLoading(false)
         }
       })
-      .then(() => setLoading(false));
+      .catch(() => setLoading(false));
   }, [uid]);
 
-  const onSave = () => {
-    if (!uid || !localImagePath) {
-      return;
-    }
-    updateBackgroundImage({ uid, file: localImagePath }).then(() => {
-      setOpenSave(false);
-    });
-  };
 
-  const onClick = () => {
+
+  const containerClick = () => {
     if (!ref.current) {
       return;
     }
+    
     ref.current.click();
   };
-  const containerClick = () => {
-    userTheme.setBackgroundClassName("customImage");
-    userTheme.setCustomBackgroundImageSrc(localImagePath);
-  };
+ 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e || !e.target) {
       return;
@@ -60,10 +51,13 @@ export const CustomBackgroundImage: React.FC = () => {
       if (!e?.target) {
         return;
       }
+      if(!uid){
+        return;
+      }
+      updateBackgroundImage({ uid, file: e.target?.result as string })
       setLocalImagePath(() => e.target?.result as string);
       userTheme.setCustomBackgroundImageSrc(localImagePath);
       userTheme.setBackgroundClassName("customImage");
-      setOpenSave(true);
     };
   };
   return (
@@ -85,20 +79,6 @@ export const CustomBackgroundImage: React.FC = () => {
         }}
         border={1}
       >
-        {isOpenSave && (
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              onSave();
-            }}
-            sx={{ justifyContent: "center" }}
-            color="inherit"
-            variant="contained"
-            style={{ position: "absolute" }}
-          >
-            save?
-          </Button>
-        )}
         {!isLoading && !localImagePath && <ImageIcon />}
         {isLoading && <CircularProgress />}
         {!isLoading && localImagePath && (
@@ -112,6 +92,7 @@ export const CustomBackgroundImage: React.FC = () => {
         accept="image/*"
         type="file"
         ref={ref}
+        disabled={!uid}
         onChange={onChange}
         style={{ display: "none" }}
       />
@@ -121,9 +102,8 @@ export const CustomBackgroundImage: React.FC = () => {
         disabled={!uid}
         sx={{ textTransform: "capitalize" }}
         color="inherit"
-        onClick={onClick}
       >
-        Choose img
+        Custom img
       </Button>
       </Paper>
     </Box>

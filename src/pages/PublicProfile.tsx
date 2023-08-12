@@ -1,10 +1,7 @@
 import React from "react";
 import { Profile } from "./Profile";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Link, getPublicProfileLinks, getTheme, getUsernameDetails } from "../db/api";
-import { useUserThemeContext } from "../providers/UserThemeProvider";
-import { CircularProgress, LinearProgress, Skeleton } from "@mui/material";
-import { useLoadingContext } from "../providers/LoadingProvider";
+import { Link, getPublicProfileLinks, getUsernameDetails } from "../db/api";
 
 export const PublicProfile: React.FC = () => {
   const location = useLocation();
@@ -19,9 +16,9 @@ export const PublicProfile: React.FC = () => {
     setLinks(links);
   };
   
-  const username = location.pathname.split("/").join("");
+  const usernameFromPath = location.pathname.split("/").join("");
   React.useEffect(() => {
-    getUsernameDetails(username).then((res) => {
+    getUsernameDetails(usernameFromPath).then((res) => {
       if (res?.uid) {
        
         getPublicProfileLinks(res.uid).then((res) => {
@@ -38,10 +35,11 @@ export const PublicProfile: React.FC = () => {
   return (
     <div style={{  height: "100vh", width: '100%' }}>
       {user&& <Profile
+        isPreview={false}
         bio={user?.bio}
         uid={user?.uid}
         profilePhotoUrl={user?.photoUrl || ""}
-        username={username}
+        username={usernameFromPath}
         links={links}
       />}
     </div>

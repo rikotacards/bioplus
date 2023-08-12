@@ -1,9 +1,10 @@
 import React from "react";
 import { auth } from "../firebase/firebase";
 import { User, getRedirectResult, signOut } from "firebase/auth";
-import { addUserToDb, getUsernameFromUsers } from "../db/api";
+import { addUserToDb, addUsername, getUsernameFromUid } from "../db/api";
 import { useLoadingContext } from "./LoadingProvider";
 import { useNavigate } from "react-router-dom";
+import { useLinksContext } from "./LinksProvider";
 interface AuthProviderProps {
   children: React.ReactNode;
 }
@@ -29,10 +30,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signOut(auth).then(() => {
       setUser({} as User);
       setUsername('')
+      setIsLogginIn(false)
       setLogIn(false)
     }).then(() => nav('/'))
   }
   React.useEffect(() => {
+    console.log('In Auth Context, Effect')
     loadingContext.setLoadingTrue()
 
     const subscriber = auth.onAuthStateChanged((d) => {
@@ -41,8 +44,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setLogIn(true);
         setIsLogginIn(false);
         // used if signing in from Google
-        getUsernameFromUsers({ uid:d.uid }).then((res) => {
-          setUsername(res);
+        getUsernameFromUid({ uid:d.uid }).then((res) => {
+          console.log("Username from getUsername", res)
+          if(res?.length > 0){
+            setUsername(res);
+          }
         }).then(() => {
           loadingContext.setLoadingFalse()
           
@@ -56,13 +62,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
     }
     });
-    getRedirectResult(auth).then((res) => {
-      res?.user &&
-        res.user?.photoURL &&
-        addUserToDb({ uid: res.user.uid, photoUrl: res.user.photoURL }).then(() => nav('/admin'))
-    });
+    // getRedirectResult(auth).then((res) => {
+    //   console.log('Getting redirect result', auth)
+    //   res?.user &&
+    //     res.user?.photoURL &&
+    //     addUserToDb({ uid: res.user.uid, photoUrl: res.user.photoURL }).then(() => nav('/admin'))
+    // });
     return subscriber;
-  }, [isLoggedIn]);
+  }, [isLoggedIn, addUsername, username]);
   const context: AuthContextProps = {
     isLoggedIn,
     user,
@@ -70,7 +77,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoggingIn,
     signOut: onSignOut,
     setUsername: (username: string) => setUsername(username)
-
   };
   
   return (

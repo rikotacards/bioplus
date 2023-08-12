@@ -16,7 +16,7 @@ export const Preview: React.FC = () => {
   },[uid])
   return (
     <div style={{ height: '100vh', display: 'flex'}}>
-      <Profile bio={user?.bio} profilePhotoUrl={user?.photoUrl}username={user?.username} links={linksContext.links || []}/>
+      <Profile isPreview={true} uid={uid} bio={user?.bio} profilePhotoUrl={user?.photoUrl}username={user?.username} links={linksContext.links || []}/>
     </div>
   )
 }

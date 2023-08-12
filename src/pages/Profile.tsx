@@ -1,7 +1,6 @@
 import React from "react";
 import { ProfileHeader } from "../components/ProfileHeader/ProfileHeader";
 import { DisplayedLink } from "../components/DisplayedLink/DisplayedLink";
-import { incrementLinkClick } from "../db/api";
 import { useUserThemeContext } from "../providers/UserThemeProvider";
 import { ThemeProvider } from "@emotion/react";
 import {
@@ -11,14 +10,19 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { BackgroundMapping, backgroundMapping } from "../configs/backgroundMapping";
+import {
+  BackgroundMapping,
+} from "../configs/backgroundMapping";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
+import { useDrawerContext } from "../providers/DrawerProvider";
 interface ProfileProps {
   username?: string;
   uid?: string;
   profilePhotoUrl: string;
   bio?: string;
+  isPreview?: boolean;
+
   links: {
     title: string;
     linkId: string;
@@ -32,11 +36,25 @@ export const Profile: React.FC<ProfileProps> = ({
   profilePhotoUrl,
   links,
   username,
+  isPreview,
 }) => {
-  console.log(uid,'hi')
   const userThemeContext = useUserThemeContext();
   const theme = createTheme(userThemeContext.theme);
-  const backgroud = <BackgroundMapping uid={uid} backgroundComponentName={userThemeContext.backgroundClassName}/>
+  const drawerContext = useDrawerContext();
+  React.useEffect(() => {
+    if(isPreview){
+      return;
+    }
+    drawerContext.setComponent("more");
+    drawerContext.setComponentData({ username });
+  }, []);
+  const onMoreClick = drawerContext.onToggle;
+  const backgroud = (
+    <BackgroundMapping
+      uid={uid}
+      backgroundComponentName={userThemeContext.backgroundClassName}
+    />
+  );
   const nav = useNavigate();
   return (
     <ThemeProvider theme={theme}>
@@ -54,9 +72,14 @@ export const Profile: React.FC<ProfileProps> = ({
         }}
       >
         <div style={{ width: "100%", display: "flex" }}>
-          <IconButton sx={{ ml: "auto" }}>
-            <MoreHorizIcon />
-          </IconButton>
+          <div style={{ border: '1px solid white', backdropFilter:'blur(8px)', marginLeft:'auto', marginRight: '8px', marginTop: '8px', borderRadius: "50%" }}>
+            <IconButton
+              color="primary"
+              onClick={onMoreClick}
+            >
+              <MoreHorizIcon />
+            </IconButton>
+          </div>
         </div>
         <ProfileHeader
           bio={bio}
@@ -70,7 +93,6 @@ export const Profile: React.FC<ProfileProps> = ({
           />
         )}
         {links.map((link, index) => {
-         
           if (link.isDisplayed) {
             return (
               <DisplayedLink

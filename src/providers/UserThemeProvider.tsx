@@ -29,7 +29,7 @@ const defaultTheme = {
   buttonTextAlignment: "left",
   buttonTransparency: "",
   linkBackgroundColor: "",
-  backgroundColor: "",
+  backgroundColor: "rgb(128,128,128)",
   backgroundClassName: ""
 };
 
@@ -72,21 +72,17 @@ export const UserThemeProvider: React.FC<
   };
   
   React.useEffect(() => {
-    console.log('1. Effect Running')
     if (!isPrivate && usernameFromPath) {
+      console.log('fromUserTHeme')
       getUsernameDetails(usernameFromPath).then((res) => {
-        console.log("Rds", res)
         if (res?.uid) {
-          console.log("LOL")
           const uidFromPath = res.uid;
           getTheme({ uid: uidFromPath })
           .then((res) => {
-            console.log("Getting theme", res);
             if (!res) {
               return;
             }
             setTheme(() => {
-              console.log("setting");
               return res.theme;
             })
           })
@@ -98,16 +94,13 @@ export const UserThemeProvider: React.FC<
       return;
     }
     getTheme({ uid }).then((res) => {
-      console.log("2. Getting theme", res);
       if (!res) {
         return;
       }
       if(JSON.stringify(theme) === JSON.stringify(res.theme)){
-        console.log('Same as Db')
         return;
       }
       setTheme((p) => {
-        console.log('3. Setting theme from db:', res.theme)
         return {...p, ...res.theme};
       });
     });
@@ -144,7 +137,6 @@ export const UserThemeProvider: React.FC<
     save({ buttonTransparency: className });
   };
   const setBackgroundColor = (color: string) => {
-    console.log('COO')
     setTheme((t) => ({ ...t, backgroundColor: color }));
     save({ backgroundColor: color });
   }

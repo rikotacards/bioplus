@@ -6,16 +6,19 @@ import {
   Card,
   Switch,
   Button,
+  Collapse,
 } from "@mui/material";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import ImageIcon from "@mui/icons-material/Image";
 
-import BarChartIcon from "@mui/icons-material/BarChart";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import AdsClickIcon from '@mui/icons-material/AdsClick';
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { EditableTextField } from "../EditableTextField/EditableTextField";
 import { useLinksContext } from "../../providers/LinksProvider";
 import { getLinkDetails } from "../../db/api";
 import { useAuthContext } from "../../providers/AuthProvider";
+import { LinkThumbnailPanel } from "../LinkThumbnailPanel/LinkThumbnailPanel";
+import { useDrawerContext } from "../../providers/DrawerProvider";
 interface EditLinkWidgetProps {
   title?: string;
   link?: string;
@@ -26,6 +29,12 @@ interface EditLinkWidgetProps {
 export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
   const { isDisplayed, link, title, index, linkId } = props;
   const auth = useAuthContext();
+  const drawerContext = useDrawerContext();
+  const onImageClick = () => {
+    drawerContext.setComponentData({linkId})
+    drawerContext.setComponent('thumbnail')
+    drawerContext.onToggle();
+  }
   const uid = auth?.user?.uid
   const linksContext = useLinksContext();
   const [linkStats, setLink] = React.useState('')
@@ -45,15 +54,17 @@ export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
         display: "flex",
         width: "100%",
         alignItems: 'center',
+      
       }}
     >
-      <div className={"drag"} style={{ display: 'flex', height: '100%', alignItems: 'center', cursor: 'pointer', marginLeft: '4px' }}>
+      <div className={"drag"} style={{display: 'flex', height: '100%', alignItems: 'center', cursor: 'pointer', marginLeft: '4px' }}>
         <div>
           <DragIndicatorIcon />
         </div>
       </div>
+    
       <div
-        style={{ padding: 2,paddingLeft:'4px', paddingRight: '16px', width: '100%' }}
+        style={{display: 'flex', flexDirection: 'column', padding: 2,paddingLeft:'4px', paddingRight: '16px', width: '100%' }}
 
       >
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -73,9 +84,15 @@ export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
           />
 
         </div>
-        <div style={{ display: 'flex', width: '100%' }}>
-          <div style={{ textTransform: 'capitalize', display: 'flex', alignItems: 'center' }} variant='outlined'>
-            <LeaderboardIcon sx={{mr:0.5}} fontSize="small" />{linkStats || 0} Clicks
+        <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+          <div>
+            <IconButton onClick={onImageClick}>
+
+            <ImageIcon  fontSize="large" />
+            </IconButton>
+          </div>
+          <div style={{ textTransform: 'capitalize', display: 'flex', alignItems: 'center' }}>
+            <AdsClickIcon sx={{mr:0.5}} fontSize="small" />{linkStats || 0}
           </div>
           <div style={{ display: 'flex', marginLeft: 'auto' }}>
             <IconButton onClick={() => linksContext.onDeleteLink(index)}>
@@ -92,9 +109,11 @@ export const EditLinkWidget: React.FC<EditLinkWidgetProps> = (props) => {
               }}
             />
           </div>
+          
         </div>
-
+     
       </div>
+      
     </Card>
   );
 };

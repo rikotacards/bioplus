@@ -52,7 +52,7 @@ export const EditProfilePanel: React.FC = () => {
           {open && <Button onClick={onSave}>Save</Button>}
         </div>
       </div>
-      <TextField disabled sx={{ mb: 1 }} value={'@' + username} />
+      <TextField disabled sx={{ mb: 1 }} value={'@' + user?.username} />
       <TextField disabled={!uid} value={bioText} rows={3} multiline onBlur={() => { uid && updateBio({ uid, bio: bioText }) }} onChange={onChange} placeholder="Bio" />
     </div>
   );
