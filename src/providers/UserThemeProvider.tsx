@@ -4,7 +4,7 @@ import { userDefaultTheme } from "../configs/userDefaultTheme";
 import { useAuthContext } from "./AuthProvider";
 import { UserTheme, getTheme, getUidFromUsername, updateUserTheme } from "../db/api";
 import { useLocation } from "react-router-dom";
-interface UserThemeContextProps extends CustomStyles {
+interface UserThemeContextProps extends ThemeProperties {
   theme: ThemeOptions;
   setDarkMode: () => void;
   setLightMode: () => void;
@@ -39,7 +39,7 @@ export const useUserThemeContext = () => React.useContext(UserThemeContext);
 interface UserThemeProviderProps {
   children: React.ReactNode;
 }
-interface CustomStyles {
+export interface ThemeProperties {
   buttonClassName: string;
   backgroundClassName: string;
   buttonTextAlignment: string;
@@ -50,9 +50,9 @@ interface CustomStyles {
 }
 
 export const UserThemeProvider: React.FC<
-  UserThemeProviderProps & CustomStyles
+  UserThemeProviderProps & ThemeProperties
 > = ({ children }) => {
-  const [theme, setTheme] = React.useState<CustomStyles>(
+  const [theme, setTheme] = React.useState<ThemeProperties>(
     defaultTheme as UserThemeContextProps
   );
   const auth = useAuthContext();
@@ -73,25 +73,9 @@ export const UserThemeProvider: React.FC<
   
   React.useEffect(() => {
     console.log('1.Theme effect')
-    if (!isPrivate && usernameFromPath) {
-      console.log('fromUserTHeme')
-      getUidFromUsername(usernameFromPath).then((res) => {
-        if (res?.uid) {
-          const uidFromPath = res.uid;
-          getTheme({ uid: uidFromPath })
-          .then((res) => {
-            if (!res) {
-              return;
-            }
-            setTheme(() => {
-              return res.theme;
-            })
-          })
-        }
-      });
-      return;
-    }
+    
     if(!uid){
+      console.log('userTheme, no Uid, stopping')
       return;
     }
     getTheme({ uid }).then((res) => {

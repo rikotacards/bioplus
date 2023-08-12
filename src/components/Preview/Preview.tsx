@@ -8,15 +8,7 @@ export const Preview: React.FC = () => {
   const linksContext = useLinksContext();
   const auth = useAuthContext();
   const uid = auth?.user?.uid;
-  
-  const [user, setUser] = React.useState({})
-  React.useEffect(() => {
-    console.log('in Preview.tsx, auth.user', auth.user)
-   uid && getUser({uid}).then((res) => {
-    console.log('preview', res)
-    setUser(res)
-   })
-  },[uid])
+  const user = auth.user
   return (
     <div style={{ height: '100vh', display: 'flex'}}>
       <Profile isPreview={true} uid={uid} bio={user?.bio} profilePhotoUrl={user?.photoUrl}username={user?.username} links={linksContext.links || []}/>

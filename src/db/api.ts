@@ -26,6 +26,7 @@ import {
 } from "firebase/storage";
 import { User } from "firebase/auth";
 import { getCountry, getState } from "../util/getCountry";
+import { UserCustom } from "../providers/AuthProvider";
 const storage = getStorage();
 
 export const claimUsername = async () => {};
@@ -73,9 +74,9 @@ export const getUser = async ({ uid }: GetUsernameProps) => {
   if (snap.exists()) {
     const name = snap.data();
     console.log(name);
-    return snap.data() as User;
+    return snap.data() as UserCustom;
   }
-  return {};
+  return undefined;
 };
 
 interface UpdateUsernameProps {

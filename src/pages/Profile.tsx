@@ -1,7 +1,6 @@
 import React from "react";
 import { ProfileHeader } from "../components/ProfileHeader/ProfileHeader";
 import { DisplayedLink } from "../components/DisplayedLink/DisplayedLink";
-import { useUserThemeContext } from "../providers/UserThemeProvider";
 import { ThemeProvider } from "@emotion/react";
 import {
   Card,
@@ -22,7 +21,11 @@ interface ProfileProps {
   profilePhotoUrl: string;
   bio?: string;
   isPreview?: boolean;
-
+  linkButtonClassName: string;
+  linkButtonTransparency: string;
+  linkButtonBackgroundColor: string;
+  linkButtonTextAlignment: string;
+  backgroundComponent: React.ReactNode;
   links: {
     title: string;
     linkId: string;
@@ -30,35 +33,19 @@ interface ProfileProps {
     isDisplayed: boolean;
   }[];
 }
-export const Profile: React.FC<ProfileProps> = ({
-  uid,
-  bio,
-  profilePhotoUrl,
-  links,
-  username,
-  isPreview,
-}) => {
-  const userThemeContext = useUserThemeContext();
-  const theme = createTheme(userThemeContext.theme);
+export const Profile: React.FC<ProfileProps> = (props) => {
   const drawerContext = useDrawerContext();
   React.useEffect(() => {
-    if(isPreview){
+    if(props.isPreview){
       return;
     }
     drawerContext.setComponent("more");
-    drawerContext.setComponentData({ username });
+    props.username && drawerContext.setComponentData({ username: props.username });
   }, []);
-  console.log('background', userThemeContext)
   const onMoreClick = drawerContext.onToggle;
-  const backgroud = (
-    <BackgroundMapping
-      uid={uid}
-      backgroundComponentName={userThemeContext.backgroundClassName}
-    />
-  );
+  
   const nav = useNavigate();
   return (
-    <ThemeProvider theme={theme}>
       <div
         id="container"
         style={{
@@ -83,17 +70,17 @@ export const Profile: React.FC<ProfileProps> = ({
           </div>
         </div>
         <ProfileHeader
-          bio={bio}
-          profilePhotoUrl={profilePhotoUrl}
-          username={username}
+          bio={props.bio || ""}
+          profilePhotoUrl={props.profilePhotoUrl}
+          username={props.username}
         />
-        {links.length === 0 && (
+        {props.links.length === 0 && (
           <Skeleton
             sx={{ m: 0.5, borderRadius: "5px", height: "60px" }}
             variant="rectangular"
           />
         )}
-        {links.map((link, index) => {
+        {props.links.map((link, index) => {
           if (link.isDisplayed) {
             return (
               <DisplayedLink
@@ -101,12 +88,16 @@ export const Profile: React.FC<ProfileProps> = ({
                 title={link.title}
                 link={link.link}
                 linkId={link.linkId}
-                uid={uid}
+                uid={props.uid || ""}
+                linkButtonClassName={props.linkButtonClassName}
+                linkButtonTransparency={props.linkButtonTransparency}
+                linkButtonBackgroundColor={props.linkButtonBackgroundColor}
+                linkButtonTextAlignment={props.linkButtonTextAlignment}
               />
             );
           }
         })}
-        {backgroud}
+        {props.backgroundComponent}
         <div
           style={{ display: "flex", width: "100%", justifyContent: "center" }}
         >
@@ -129,6 +120,5 @@ export const Profile: React.FC<ProfileProps> = ({
           </Card>
         </div>
       </div>
-    </ThemeProvider>
   );
 };

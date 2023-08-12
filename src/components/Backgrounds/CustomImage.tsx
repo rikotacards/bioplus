@@ -24,7 +24,7 @@ export const CustomImage: React.FC<CustomImageProps> = ({ passedInUid }) => {
         setImagePath(res);
       })
       .catch((e) => console.log("loser", e));
-  }, [userTheme.customBackgroundImageSrc, imagePath]);
+  }, [userTheme.customBackgroundImageSrc, imagePath, passedInUid]);
 
   return (
     <Box

@@ -16,7 +16,10 @@ interface DisplayedLinkProps {
   link: string;
   linkId: string;
   uid: string;
-  onClick: () => void;
+  linkButtonClassName: string;
+  linkButtonTransparency: string;
+  linkButtonBackgroundColor: string;
+  linkButtonTextAlignment: string;
 }
 
 export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
@@ -24,8 +27,11 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
   link,
   linkId,
   uid,
+  linkButtonClassName,
+  linkButtonTransparency,
+  linkButtonBackgroundColor,
+  linkButtonTextAlignment,
 }) => {
-  console.log("dispoayed", uid);
   const url = prependHttp(link);
   const [thumbnailPath, setThumbnailPath] = React.useState("");
   React.useEffect(() => {
@@ -34,8 +40,6 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
       setThumbnailPath(res);
     }).catch((e) => console.log(e))
   }, [uid, thumbnailPath]);
-  const userThemeContext = useUserThemeContext();
-  console.log("f", userThemeContext.buttonTextAlignment);
   return (
     <Box
       onClick={async () => {
@@ -51,11 +55,11 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
       style={{ marginBottom: "8px", marginLeft: "16px", marginRight: "16px" }}
     >
       <Paper
-        sx={{ backgroundColor: userThemeContext.linkBackgroundColor }}
+        sx={{ backgroundColor: linkButtonBackgroundColor }}
         className={clx([
           "display-link-common",
-          userThemeContext.buttonClassName,
-          userThemeContext.buttonTransparency,
+          linkButtonClassName,
+          linkButtonTransparency,
         ])}
         elevation={3}
       >
@@ -71,7 +75,7 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
             {thumbnailPath && (
               <img
                 src={thumbnailPath}
-                className={clx([userThemeContext.buttonClassName])}
+                className={clx([linkButtonClassName])}
                 style={{
                   marginRight: "8px",
                   borderRadius: "10px",
@@ -86,11 +90,11 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
             <div
               className={clx([
                 "display-link-common",
-                userThemeContext.buttonTextAlignment,
+                linkButtonTextAlignment,
               ])}
               style={{ display: "block", width: "100%" }}
             >
-              <Typography sx={{ fontWeight: "600" }} variant="body1">
+              <Typography sx={{ fontWeight: "500" }} variant="body1">
                 {title || url}
               </Typography>
             </div>

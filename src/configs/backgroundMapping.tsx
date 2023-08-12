@@ -25,6 +25,7 @@ export const BackgroundMapping: React.FC<BackgroundMappingProps> = ({
   uid,
   backgroundComponentName,
 }) => {
+  
   const backgroundMappingType: BackgroundMappingType = {
     default: <Default />,
     solid: <Solid />,
