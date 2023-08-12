@@ -2,7 +2,7 @@ import { ThemeOptions } from "@mui/material";
 import React from "react";
 import { userDefaultTheme } from "../configs/userDefaultTheme";
 import { useAuthContext } from "./AuthProvider";
-import { UserTheme, getTheme, getUsernameDetails, updateUserTheme } from "../db/api";
+import { UserTheme, getTheme, getUidFromUsername, updateUserTheme } from "../db/api";
 import { useLocation } from "react-router-dom";
 interface UserThemeContextProps extends CustomStyles {
   theme: ThemeOptions;
@@ -72,9 +72,10 @@ export const UserThemeProvider: React.FC<
   };
   
   React.useEffect(() => {
+    console.log('1.Theme effect')
     if (!isPrivate && usernameFromPath) {
       console.log('fromUserTHeme')
-      getUsernameDetails(usernameFromPath).then((res) => {
+      getUidFromUsername(usernameFromPath).then((res) => {
         if (res?.uid) {
           const uidFromPath = res.uid;
           getTheme({ uid: uidFromPath })
@@ -94,18 +95,19 @@ export const UserThemeProvider: React.FC<
       return;
     }
     getTheme({ uid }).then((res) => {
+      console.log('geting', res)
       if (!res) {
         return;
       }
       if(JSON.stringify(theme) === JSON.stringify(res.theme)){
         return;
       }
+      console.log('setting')
       setTheme((p) => {
         return {...p, ...res.theme};
       });
     });
   }, [
-   
     uid,
   ]);
   

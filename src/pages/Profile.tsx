@@ -48,6 +48,7 @@ export const Profile: React.FC<ProfileProps> = ({
     drawerContext.setComponent("more");
     drawerContext.setComponentData({ username });
   }, []);
+  console.log('background', userThemeContext)
   const onMoreClick = drawerContext.onToggle;
   const backgroud = (
     <BackgroundMapping
@@ -72,7 +73,7 @@ export const Profile: React.FC<ProfileProps> = ({
         }}
       >
         <div style={{ width: "100%", display: "flex" }}>
-          <div style={{ border: '1px solid white', backdropFilter:'blur(8px)', marginLeft:'auto', marginRight: '8px', marginTop: '8px', borderRadius: "50%" }}>
+          <div style={{ border: '1px solid white', backdropFilter:'blur(20px)', marginLeft:'auto', marginRight: '8px', marginTop: '8px', borderRadius: "50%" }}>
             <IconButton
               color="primary"
               onClick={onMoreClick}

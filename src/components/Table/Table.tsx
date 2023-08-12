@@ -4,6 +4,10 @@ interface TableProps {
   data: { clicks: number; url?: string; referrer?: string }[];
 }
 export const Table: React.FC<TableProps> = ({ data }) => {
+  if(data.length === 0){
+    return 'Not enough data'
+  }
+  console.log(data)
   return (
     <>
       {data.map((row) => {

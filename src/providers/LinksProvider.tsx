@@ -1,6 +1,6 @@
 import React from'react'
 import { useAuthContext } from './AuthProvider';
-import { Link, addLink, deleteLinkNew, getUsernameDetails, onSnapshotUser, updateLinksNew } from '../db/api';
+import { Link, addLink, deleteLinkNew, getUidFromUsername, onSnapshotUser, updateLinksNew } from '../db/api';
 import { mockLinks } from '../mocks/mockState.data';
 interface LinksContextProps {
   links: Link[];
@@ -31,7 +31,7 @@ export const LinksProvider: React.FC<LinksProviderProps> = ({children}) => {
     if(!auth.username){
       return;
     }
-    getUsernameDetails(auth?.username).then((res) => {
+    getUidFromUsername(auth?.username).then((res) => {
       console.log('getting links', res)
       setLinks(res.links)
     })

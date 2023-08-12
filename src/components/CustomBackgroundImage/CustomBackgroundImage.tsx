@@ -30,10 +30,14 @@ export const CustomBackgroundImage: React.FC = () => {
 
 
   const containerClick = () => {
+    console.log('containerclick')
     if (!ref.current) {
       return;
     }
-    
+    if(userTheme.backgroundClassName!=='customImage'){
+      userTheme.setBackgroundClassName('customImage')
+      return;
+    }
     ref.current.click();
   };
  
@@ -56,7 +60,7 @@ export const CustomBackgroundImage: React.FC = () => {
       }
       updateBackgroundImage({ uid, file: e.target?.result as string })
       setLocalImagePath(() => e.target?.result as string);
-      userTheme.setCustomBackgroundImageSrc(localImagePath);
+      userTheme.setCustomBackgroundImageSrc(e.target?.result);
       userTheme.setBackgroundClassName("customImage");
     };
   };

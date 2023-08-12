@@ -45,6 +45,7 @@ export const AddLinkWidget: React.FC<AddLinkWidgetProps> = ({toggle}) => {
       if(res){
         linksContext.onAddLink({link:url, title: '', linkId: res, isDisplayed: true})
       }
+      toggle()
     })
     setUrl('')
     

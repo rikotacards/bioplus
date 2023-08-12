@@ -20,7 +20,7 @@ export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
     userTheme.setBackgroundClassName(styleName);
   };
   const isSelected = name === userTheme.backgroundClassName;
-  const background = <BackgroundMapping backgroundComponentName={name} />;
+  const background = <BackgroundMapping uid={""} backgroundComponentName={name} />;
   return (
     <Box border={isSelected ? 0 : 0} borderRadius={1}>
       <Paper sx={{ zIndex: 0,padding:0.5 }} elevation={isSelected ? 10 : 0}>

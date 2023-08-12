@@ -83,24 +83,29 @@ interface UpdateUsernameProps {
   username: string;
 }
 
-export const getUsernameDetails = async (username: string) => {
+export const getUidFromUsername = async (username: string) => {
+  // used for when accessing profile via path
   // Checks the usernames collections
   // owner is the uid
-  const cleaned = username.toLowerCase();
-  console.log('cleaned', cleaned)
-  const usernamesRef = doc(firestore, "usernames", cleaned);
-  const snap = await getDoc(usernamesRef);
-  if (snap.exists()) {
-    const data = snap.data();
-    return data;
+  try {
+    const cleaned = username.toLowerCase();
+    console.log("cleaned", cleaned);
+    const usernamesRef = doc(firestore, "usernames", cleaned);
+    const snap = await getDoc(usernamesRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      return data;
+    }
+    return undefined;
+  } catch (e) {
+    throw e;
   }
-  return undefined;
 };
 
 export const addUsername = async ({ uid, username }: UpdateUsernameProps) => {
   // check all usernames
   const lowercase = username.toLowerCase();
-  const usernameDetails = await getUsernameDetails(lowercase);
+  const usernameDetails = await getUidFromUsername(lowercase);
   if (usernameDetails) {
     throw new Error("Username already exists");
   } else {
@@ -120,7 +125,7 @@ export const addUserToDb = async ({
   photoUrl,
 }: {
   uid: string;
-  photoUrl: string;
+  photoUrl: string | null;
 }) => {
   try {
     const userProfileRef = doc(firestore, "users", uid);
@@ -145,7 +150,7 @@ export const getLinksByUsername = async ({
 }: {
   username: string;
 }) => {
-  const usernameDetails = await getUsernameDetails(username);
+  const usernameDetails = await getUidFromUsername(username);
   if (!usernameDetails) {
     throw new Error("No username");
   }
@@ -153,13 +158,6 @@ export const getLinksByUsername = async ({
   const links = await getDocs(collection(firestore, "users", uid, "links"));
   const res = links.docs.map((doc) => doc.data());
   return res;
-};
-
-export const getPublicProfileLinks = async (uid: string) => {
-  const snap = await getDoc(doc(firestore, "users", uid));
-  if (snap.exists()) {
-    return snap.data();
-  }
 };
 
 export const onLinksChange = (uid: string, setState) => {
@@ -321,7 +319,7 @@ export const updateLinksNew = (
   uid: string,
   links: { title: string; link: string; linkId: string; isDisplayed: boolean }[]
 ) => {
-  console.log('UPDATE CALLED', links);
+  console.log("UPDATE CALLED", links);
 
   setDoc(doc(firestore, "users", uid), { links }, { merge: true });
 };
@@ -337,7 +335,7 @@ export const onSnapshotUser = (
 ) =>
   onSnapshot(doc(firestore, "users", uid), (doc) => {
     const data = (doc.data() as any) || [];
-    console.log('from snapshot', uid, data)
+    console.log("from snapshot", uid, data);
     setState(data?.links || []);
   });
 
@@ -464,7 +462,7 @@ export const updateUserTheme = async ({
 }) => {
   // backgroundclassname
   try {
-    console.log("update");
+    console.log("update user theme");
     setDoc(doc(firestore, "themes", uid), { theme }, { merge: true });
   } catch (e) {
     throw e;

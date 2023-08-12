@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import './common.css'
-import { addUsername, getUsernameDetails } from "../db/api";
+import { addUsername, getUidFromUsername } from "../db/api";
 import { signInWithEmailPassword } from "../util/signInWithEmailPassword";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../providers/AuthProvider";
@@ -85,7 +85,7 @@ export const EmailPasswordSignUp: React.FC<EmailPasswordSignUpProps> = ({onPrev,
     setError("username", false);
     setErrorMessage("username", "");
 
-    getUsernameDetails(username).then((res) => {
+    getUidFromUsername(username).then((res) => {
       if (res) {
         setError("username", true);
         setErrorMessage("username", "username exists");

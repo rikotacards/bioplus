@@ -37,11 +37,10 @@ export const EditProfilePanel: React.FC = () => {
       setLoading(false);
       return;
     }
-    getUser({ uid }).then((res) => { setUser(res) }).then(()=> setLoading(false))
+    getUser({ uid }).then((res) => { console.log('uto', user);setUser(res) }).then(()=> setLoading(false))
     getBio({ uid }).then((res) => setBioText(res))
 
   }, [uid])
-  const username = auth?.username
   return (
     <div
       style={{ display: "flex", width: "100%", flexDirection: "column" }}
@@ -49,7 +48,7 @@ export const EditProfilePanel: React.FC = () => {
       <div style={{ alignItems: 'center', padding: '4px', display: "flex" }}>
         <div style={{ alignItems: 'center', width: '100%', display: "flex", flexDirection: "column" }}>
           {uid ? <UploadProfileImage photoUrl={localImagePaths[0] || user.photoUrl} images={images} setImagePaths={setImagePaths} onImageChange={onImageChange} uid={uid} /> : <Skeleton variant="circular" height={150} width={150} sx={{mb:1}} />}
-          {open && <Button onClick={onSave}>Save</Button>}
+          {open && <Button sx={{mt:1}}  variant='contained' onClick={onSave}>Save</Button>}
         </div>
       </div>
       <TextField disabled sx={{ mb: 1 }} value={'@' + user?.username} />

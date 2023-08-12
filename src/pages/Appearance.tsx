@@ -11,6 +11,7 @@ import { TextAlignmentSelector } from "../components/TextAlignmentSelector/TextA
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   React.useEffect(() => {
+    console.log('in Appearance.tsx, setting component to preview')
     drawerContext.setComponent('preview')
   },[])
   const onClick = () => {

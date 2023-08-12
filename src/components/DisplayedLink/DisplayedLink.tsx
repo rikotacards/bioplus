@@ -2,7 +2,6 @@ import React from "react";
 import "../../configs/linkStyles.css";
 import {
   CardActionArea,
-  CardContent,
   Typography,
   Paper,
   Box,
@@ -26,15 +25,17 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
   linkId,
   uid,
 }) => {
+  console.log("dispoayed", uid);
   const url = prependHttp(link);
   const [thumbnailPath, setThumbnailPath] = React.useState("");
   React.useEffect(() => {
     const path = `${uid}/linkThumbnails/${linkId}.jpg`;
     getImagePath(path).then((res) => {
       setThumbnailPath(res);
-    });
-  },[uid, thumbnailPath]);
+    }).catch((e) => console.log(e))
+  }, [uid, thumbnailPath]);
   const userThemeContext = useUserThemeContext();
+  console.log("f", userThemeContext.buttonTextAlignment);
   return (
     <Box
       onClick={async () => {
@@ -47,30 +48,53 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
             })
           : () => {};
       }}
-      style={{marginBottom: '8px',  marginLeft: "16px", marginRight: "16px" }}
+      style={{ marginBottom: "8px", marginLeft: "16px", marginRight: "16px" }}
     >
       <Paper
         sx={{ backgroundColor: userThemeContext.linkBackgroundColor }}
         className={clx([
           "display-link-common",
           userThemeContext.buttonClassName,
-          userThemeContext.buttonTextAlignment,
           userThemeContext.buttonTransparency,
         ])}
         elevation={3}
       >
         <CardActionArea>
-          <CardContent sx={{ padding: '8px', display: 'flex', alignItems: 'center'}}>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              padding: "8px",
+              alignItems: "center",
+            }}
+          >
             {thumbnailPath && (
               <img
                 src={thumbnailPath}
-                style={{marginRight: '8px', borderRadius: '10px', objectFit: "cover", height: "80px", width: "80px" }}
+                className={clx([userThemeContext.buttonClassName])}
+                style={{
+                  marginRight: "8px",
+                  borderRadius: "10px",
+                  objectFit: "cover",
+                  height: "70px",
+                  width: "70px",
+                  display: "flex",
+                  flexShrink: 1,
+                }}
               />
             )}
-            <Typography sx={{ fontWeight: "600" }} variant="body1">
-              {title}
-            </Typography>
-          </CardContent>
+            <div
+              className={clx([
+                "display-link-common",
+                userThemeContext.buttonTextAlignment,
+              ])}
+              style={{ display: "block", width: "100%" }}
+            >
+              <Typography sx={{ fontWeight: "600" }} variant="body1">
+                {title || url}
+              </Typography>
+            </div>
+          </div>
         </CardActionArea>
       </Paper>
     </Box>

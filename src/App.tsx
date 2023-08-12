@@ -19,6 +19,7 @@ import { Analytics } from "./pages/Analytics";
 import { UserThemeProvider } from "./providers/UserThemeProvider";
 import { Welcome } from "./pages/Welcome";
 import { LandingWithSteps } from "./pages/LandingWithSteps";
+import { CreateUsername } from "./pages/CreateUsername";
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   React.useLayoutEffect(() => {
@@ -41,10 +42,9 @@ function App() {
                       <Route path="/home" element={<LandingWithSteps />} />
                       <Route path="/signup" element={<EmailPasswordSignUp />} />
                       <Route path="/analytics" element={<Analytics />} />
-
                       <Route path="/signIn" element={<SignIn />} />
                       <Route path="/welcome" element={<Welcome />} />
-
+                      <Route path='/create-username' element={<CreateUsername/>}/>
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/appearance" element={<Appearance />} />
                       <Route path="/settings" element={<Settings />} />
