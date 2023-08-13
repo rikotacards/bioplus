@@ -3,6 +3,7 @@ import {
   CardContent,
   Chip,
   CircularProgress,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -12,7 +13,7 @@ import { useAuthContext } from "../providers/AuthProvider";
 import { useGetLinks } from "../hooks/useGetLinks";
 import { LinkDetails, getLinksByUid } from "../db/api";
 import { Table } from "../components/Table/Table";
-import { getTopReferrers } from "../util/getTopReferrers";
+import { getSortedFieldByClicks } from "../util/getTopReferrers";
 import { getTopCountries } from "../util/getTopCountries";
 import {
   topCountriesData,
@@ -21,58 +22,55 @@ import {
 } from "../mocks/mockAnalytics.data";
 import { SignUpCard } from "../components/SignUpBanner/SignUpBanner";
 import { PageSpacing } from "../PageSpacing/PageSpacing";
+import { getLifetimeClicks } from "../util/getLifetimeClicks";
+import { getTopLinks } from "../util/getTopLinks";
 const Loading = (
   <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
     <CircularProgress />{" "}
   </div>
 );
-const getLifetimeClicks = (links: LinkDetails[]) => {
-  let total = 0;
-
-  links.forEach((link) => (total = total + link.clicks));
-  return total;
-};
-
-const getTopLinks = (links: LinkDetails[]) => {
-  const res: { url: string; clicks: number }[] = [];
-  links.forEach((link) => res.push({ url: link.link, clicks: link.clicks }));
-  return res.sort((a, b) => b.clicks - a.clicks);
-};
 
 export const Analytics: React.FC = () => {
   const auth = useAuthContext();
   const isLoggedIn = auth.isLoggedIn;
   const uid = auth?.user?.uid;
-  const [data, setData] = React.useState([])
-  const [isLoading, setLoading] = React.useState(true)
-  console.log(data)
+  const [data, setData] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(true);
+  const showSample: boolean =
+    !auth.isLoggedIn && !auth.isLoggingIn && !isLoading;
+
+  console.log(data);
+
   React.useEffect(() => {
-    if(!uid){return}
-    getLinksByUid({uid}).then((res) => {
-      setData(res)
-    })
-  },[uid])
-  const showLoading = auth.isLoggingIn 
-  const lifetimeClicks = isLoggedIn
-    ? !isLoading && !data?.length
-      ? 0
-      : getLifetimeClicks(data || [])
-    : "5461";
-  const topLinks = isLoggedIn
-    ? !isLoading && !data?.length
-      ? []
-      : getTopLinks(data || [])
-    : topPerformingLinksData;
-  const topReffers = isLoggedIn
-    ? !isLoading &&  !data?.length
-      ? []
-      : getTopReferrers(data || [])
-    : topReferrersData;
-  const topCountries = isLoggedIn
-    ? !isLoading &&  !data?.length
-      ? []
-      : getTopCountries(data || [])
-    : topCountriesData;
+    if (!uid) {
+      setLoading(false);
+      return;
+    }
+    getLinksByUid({ uid })
+      .then((res) => {
+        if (res) {
+          console.log("linksbyuid", res);
+          setData(res);
+          setLoading(false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+      });
+  }, [uid]);
+  const showLoading = auth.isLoggingIn;
+  const lifetimeClicks = showSample ? "1000" : getLifetimeClicks(data);
+  const topLinks = showSample
+    ? topPerformingLinksData
+    : getTopLinks(data || []);
+  const topRefs = showSample
+    ? topReferrersData
+    : getSortedFieldByClicks(data, "referrer");
+  const topRegions = showSample
+    ? topCountriesData
+    : getSortedFieldByClicks(data, "geo");
+
   return (
     <div style={{ marginTop: 8 }}>
       <PageSpacing>
@@ -107,9 +105,7 @@ export const Analytics: React.FC = () => {
             marginTop: "4",
           }}
         >
-          <h3  >
-            Top Performing Links
-          </h3>
+          <h3>Top Performing Links</h3>
           {!isLoggedIn && (
             <Chip
               className="get-premium"
@@ -140,9 +136,9 @@ export const Analytics: React.FC = () => {
             marginBottom: "4px",
             marginTop: "4",
           }}
-        >        <h3>
-            Top Referrers
-          </h3>
+        >
+          {" "}
+          <h3>Top Referrers</h3>
           {!isLoggedIn && (
             <Chip
               className="get-premium"
@@ -154,7 +150,7 @@ export const Analytics: React.FC = () => {
         </div>
         <Card sx={{ mb: 2, borderRadius: "10px" }}>
           <CardContent>
-            {showLoading ? Loading : <Table data={topReffers} />}
+            {showLoading ? Loading : <Table data={topRefs} />}
           </CardContent>
           {!isLoggedIn && (
             <div style={{ display: "flex" }}>
@@ -172,9 +168,9 @@ export const Analytics: React.FC = () => {
             marginBottom: "4px",
             marginTop: "4",
           }}
-        >        <h3>
-            Top Countries
-          </h3>
+        >
+          {" "}
+          <h3>Top Countries</h3>
           {!isLoggedIn && (
             <Chip
               className="get-premium"
@@ -186,7 +182,7 @@ export const Analytics: React.FC = () => {
         </div>
         <Card sx={{ borderRadius: "10px" }}>
           <CardContent>
-            {showLoading ? Loading : <Table data={topCountries} />}
+            {showLoading ? Loading : <Table data={topRegions} />}
           </CardContent>
           {!isLoggedIn && (
             <div style={{ display: "flex" }}>
@@ -197,6 +193,8 @@ export const Analytics: React.FC = () => {
           )}
         </Card>
       </PageSpacing>
+      <Toolbar />
+      <Toolbar />
     </div>
   );
 };

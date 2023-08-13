@@ -4,6 +4,7 @@ import {
   Divider,
   InputAdornment,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import "./Landing.css";
@@ -57,7 +58,7 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
           </Typography>
         </div>
         <Typography sx={{ fontWeight: "900", mb: 0 }} variant="h4"></Typography>
-        <Typography sx={{ fontWeight: "700", mb: 2 }} variant="h6">
+        <Typography sx={{ fontWeight: "700", mb: 1 }} variant="h6">
           Who you are, what you've created, everything that matters, all in one
           place.
         </Typography>
@@ -97,25 +98,23 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
               ></TextField>
               <Button
                 className="next-button"
-                fullWidth
                 size="large"
-                sx={{ mt: 1, fontWeight: 'bold' }}
+                sx={{ mt: 1, fontWeight: "bold" }}
                 variant="contained"
                 onClick={onNext}
+                fullWidth
               >
                 Next
               </Button>
             </div>
           )}
           <Divider sx={{ mt: 1, mb: 1 }} />
-          <div style={{display: 'flex'}}>
-            <Typography sx={{mr:1}} variant="body1">
+          <div style={{ display: "flex" }}>
+            <Typography sx={{ mr: 1 }} variant="body1">
               If you already have an account
             </Typography>
-            <Link to={'/signIn'}>Signin</Link>
+            <Link to={"/signIn"}>Signin</Link>
           </div>
-
-        
         </div>
       )}
     </div>

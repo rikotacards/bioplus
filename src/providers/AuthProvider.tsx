@@ -13,6 +13,7 @@ interface AuthContextProps {
   user?: UserCustom;
   username?: string;
   signOut: () => void;
+  name?: string;
   isLoggingIn: boolean;
   setUsername: (username: string) => void;
 }

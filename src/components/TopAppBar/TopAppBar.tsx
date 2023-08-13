@@ -19,17 +19,15 @@ import { useNavigate } from "react-router-dom";
 import { getBrowser } from "../../platform/getBrowser";
 import { ENABLE_BOTTOM_BAR, ENABLE_TITLE_BAR } from "../../configs/flags";
 import { useDrawerContext } from "../../providers/DrawerProvider";
+import { AddUrlDrawerContent } from "../../AddUrlDrawerContent/AddUrlDrawerContent";
 
 export const TopAppBar: React.FC = () => {
   const auth = useAuthContext();
   const nav = useNavigate();
   const browser = getBrowser();
   const onSignIn = useOnSignIn();
-  const drawerContext = useDrawerContext();
-  const onAdd = () => {
-    drawerContext.setComponent("addLink");
-    drawerContext.onToggle();
-  };
+  
+  
   const isSafari = browser && browser === "safari";
   const loadingContext = useLoadingContext();
   const isLoggedIn = auth?.isLoggedIn;
@@ -84,25 +82,27 @@ export const TopAppBar: React.FC = () => {
   );
   return (
     <>
-     {ENABLE_TITLE_BAR && <AppBar
-        sx={!ENABLE_BOTTOM_BAR ? { top: "auto", bottom: 0 } : {}}
-        position="fixed"
-      >
-        <Paper
-          elevation={isSafari ? 0 : 3}
-          sx={{
-            borderRadius: 0,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
+      {ENABLE_TITLE_BAR && (
+        <AppBar
+          sx={!ENABLE_BOTTOM_BAR ? { top: "auto", bottom: 0 } : {}}
+          position="fixed"
         >
-          <Toolbar>
-            <Typography fontWeight={'bold'}>Bioup</Typography>
-          </Toolbar>
-        </Paper>
-        <Divider/>
-      </AppBar>}
+          <Paper
+            elevation={isSafari ? 0 : 3}
+            sx={{
+              borderRadius: 0,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Toolbar>
+              <Typography fontWeight={"bold"}>Bioup</Typography>
+            </Toolbar>
+          </Paper>
+          <Divider />
+        </AppBar>
+      )}
       <AppBar
         sx={ENABLE_BOTTOM_BAR ? { top: "auto", bottom: 0 } : {}}
         position="fixed"
@@ -112,29 +112,17 @@ export const TopAppBar: React.FC = () => {
           sx={{
             borderRadius: 0,
             display: "flex",
-            width: '100%',
+            width: "100%",
             flexDirection: "column",
             justifyContent: "center",
           }}
         >
           {ENABLE_BOTTOM_BAR && <Divider />}
           {ENABLE_BOTTOM_BAR && (
-            <Collapse sx={{display: 'flex', justifyContent:'center', alignItems: 'center', padding: '0 16px'}} in={location.pathname === "/admin"}>
-              <Button
-                fullWidth
-                sx={{
-                  marginTop: "8px",
-                  borderRadius: "50px",
-                  textTransform: "capitalize",
-               
-                }}
-                variant="contained"
-                size="large"
-                onClick={onAdd}
-              >
-                Add Link
-              </Button>
-            </Collapse>
+            <>
+                <AddUrlDrawerContent/>
+              
+            </>
           )}
 
           {!ENABLE_BOTTOM_BAR && isSafari && mainBar}

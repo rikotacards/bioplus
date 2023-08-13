@@ -1,13 +1,7 @@
 import React from "react";
 import { ProfileHeader } from "../components/ProfileHeader/ProfileHeader";
 import { DisplayedLink } from "../components/DisplayedLink/DisplayedLink";
-import {
-  Chip,
-  Drawer,
-  IconButton,
-  Skeleton,
-  Typography,
-} from "@mui/material";
+import { Box, Chip, Drawer, IconButton, Skeleton, Typography } from "@mui/material";
 import "../pages/Landing.css";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +16,7 @@ interface ProfileProps {
   linkButtonTransparency: string;
   linkButtonBackgroundColor: string;
   linkButtonTextAlignment: string;
+  name?: string;
   backgroundComponent: React.ReactNode;
   links: {
     title: string;
@@ -61,14 +56,23 @@ export const Profile: React.FC<ProfileProps> = (props) => {
           }}
         >
           <Chip
-            sx={{ display: 'flex', alignItems: 'center', backdropFilter: "blur(5px)" }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              backdropFilter: "blur(5px)",
+            }}
             size="small"
             onClick={toggle}
-            label={<IconButton size='small'><MoreHorizIcon /></IconButton>}
+            label={
+              <IconButton size="small">
+                <MoreHorizIcon />
+              </IconButton>
+            }
           />
         </div>
       </div>
       <ProfileHeader
+        name={props.name}
         bio={props.bio || ""}
         profilePhotoUrl={props.profilePhotoUrl}
         username={props.username}
@@ -99,22 +103,22 @@ export const Profile: React.FC<ProfileProps> = (props) => {
       {props.backgroundComponent}
       <div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
         {!props.isPreview && (
-          <Chip
-            onClick={() => nav("/")}
-            style={{
+          <Box
+          onClick={() => nav('/')}
+            sx={{
+              border: "1px solid white",
               margin: "8px",
               display: "flex",
               justifyContent: "center",
-              bottom: '12%',
+              bottom: "12%",
               position: "absolute",
-              backdropFilter:'blur(5px)'
+              borderRadius: "50px",
+              padding: "8px",
+              backdropFilter: "blur(20px)",
             }}
-            label={
-              <Typography  variant="caption">
-                Get your BioUp
-              </Typography>
-            }
-          />
+          >
+            <Typography variant="body2">Get your BioUp</Typography>
+          </Box>
         )}
       </div>
       <Drawer
@@ -122,7 +126,7 @@ export const Profile: React.FC<ProfileProps> = (props) => {
         anchor="bottom"
         onClose={toggle}
         open={open}
-        sx={{zIndex: '3000'}}
+        sx={{ zIndex: "3000" }}
       >
         <PublicProfileDrawerContent toggle={toggle} username={props.username} />
       </Drawer>

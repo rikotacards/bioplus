@@ -37,6 +37,7 @@ export const Preview: React.FC = () => {
       isPreview={true}
       bio={user.bio}
       uid={user.uid}
+      name={user.name}
       backgroundComponent={background}
       profilePhotoUrl={user?.photoURL || ""}
       username={user.username}
