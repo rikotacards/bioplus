@@ -6,7 +6,9 @@ import {
   Card,
   CardContent,
   IconButton,
+  Toolbar,
 } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import { addLink } from '../db/api';
 import { useDrawerContext } from '../providers/DrawerProvider';
@@ -51,7 +53,10 @@ export const AddUrlDrawerContent: React.FC = () => {
     
   return (
 <div style={{display: 'flex', flexDirection: 'column', padding: '8px', WebkitBorderTopRightRadius:'50px'}}>
-          <Typography mb={1} variant='body1' fontWeight={'bold'}>Enter Url</Typography>
+  <Toolbar>
+  <Typography mb={1} variant='body1' fontWeight={'bold'}>Enter Url</Typography><div style={{marginLeft: 'auto'}}><IconButton onClick={dc.onToggle} ><KeyboardArrowDownIcon/></IconButton></div>
+  </Toolbar>
+         
           <TextField
             name="url"
             placeholder="www.myawesomesite.com"
@@ -64,7 +69,7 @@ export const AddUrlDrawerContent: React.FC = () => {
             helperText={errorMessage}
           />
           <Button size="large" fullWidth onClick={onAdd} sx={{ mt: 1 }} variant="contained">
-            Add
+            Add Url
           </Button>
         </div>
   )

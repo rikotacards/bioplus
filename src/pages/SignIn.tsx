@@ -62,7 +62,7 @@ export const SignIn: React.FC = () => {
   return (
     <div
       style={{
-        marginTop: "8px",
+        marginTop: "16px",
         padding: "0px 16px",
         display: "flex",
         flexDirection: "column",
