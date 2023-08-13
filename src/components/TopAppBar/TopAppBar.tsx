@@ -112,19 +112,21 @@ export const TopAppBar: React.FC = () => {
           sx={{
             borderRadius: 0,
             display: "flex",
+            width: '100%',
             flexDirection: "column",
             justifyContent: "center",
           }}
         >
           {ENABLE_BOTTOM_BAR && <Divider />}
           {ENABLE_BOTTOM_BAR && (
-            <Collapse in={location.pathname === "/admin"}>
+            <Collapse sx={{display: 'flex', justifyContent:'center', alignItems: 'center', padding: '0 16px'}} in={location.pathname === "/admin"}>
               <Button
                 fullWidth
                 sx={{
                   marginTop: "8px",
                   borderRadius: "50px",
                   textTransform: "capitalize",
+               
                 }}
                 variant="contained"
                 size="large"

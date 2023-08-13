@@ -59,7 +59,6 @@ export const Appearance: React.FC = () => {
         </Button>}
         <BackgroundSelector />
         <BorderRadiusSelector />
-        <LinkTransparencySelector />
 
         <div
           style={{

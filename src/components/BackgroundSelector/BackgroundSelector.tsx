@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import React from "react";
 import { backgrounds } from "../../configs/backgrounds";
 import { BackgroundOption } from "../BackgroundOption/BackgroundOption";
@@ -9,17 +9,18 @@ export const BackgroundSelector: React.FC = () => {
   const auth = useAuthContext();
   const isPremium = auth.user?.isPremium
   return (
-    <div>
+    <div style={{marginBottom: '8px'}}>
       <div>
         <Typography sx={{ mb: 1, mt: 1, fontWeight: "bold" }} variant="h5">
-          Background
+          Backgrounds
         </Typography>
       </div>
+      <Card elevation={3} sx={{padding:1}}>
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "flex-start",
+          justifyContent: "space-around",
         }}
       >
         <CustomBackgroundImage />
@@ -32,8 +33,10 @@ export const BackgroundSelector: React.FC = () => {
           );
         })}
       </div>
-      <Typography variant="h6">Color</Typography>
+      <Typography fontWeight={600} variant="h6">Color</Typography>
       <ColorPicker property="backgroundColor" />
+      </Card>
     </div>
+    
   );
 };

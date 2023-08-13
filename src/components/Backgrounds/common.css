@@ -6,4 +6,5 @@
   position: absolute;
   z-index: -1;
   cursor: pointer;
+  border-radius: 5px;
 }

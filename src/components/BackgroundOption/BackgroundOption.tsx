@@ -22,8 +22,7 @@ export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
   const isSelected = name === userTheme.backgroundClassName;
   const background = <BackgroundMapping uid={""} backgroundComponentName={name} />;
   return (
-    <Box border={isSelected ? 0 : 0} borderRadius={1}>
-      <Paper sx={{ zIndex: 0,padding:0.5 }} elevation={isSelected ? 10 : 0}>
+    <Box border={isSelected ? 1 : 1} borderColor={isSelected ? undefined :'transparent'} borderRadius={1} margin={0.5}>
         <div className="background-option" onClick={() => onClick(name)}>
           {isLocked && <div style={{display: 'flex', justifyContent:'flex-end', alignItems: 'center', padding: '8px'}}>
             <LockIcon sx={{ marginRight: '4px'}} fontSize="small"/>
@@ -34,7 +33,6 @@ export const BackgroundOption: React.FC<BackgroundOptionsProps> = ({
         <div style={{ textAlign: "center" }}>
           <Typography variant="body1">{name}</Typography>
         </div>
-      </Paper>
     </Box>
   );
 };
