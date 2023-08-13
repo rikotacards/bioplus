@@ -8,7 +8,7 @@ export const MultiPageSteps: React.FC = () => {
   const [page, setPage] = React.useState(0);
   const [username, setUsername] = React.useState("");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let trimmed = e.target.value.trimEnd().trimStart()
+    let trimmed = e.target.value.trimEnd().trimStart().toLowerCase()
     setUsername(trimmed);
   };
   const onNext = () => {

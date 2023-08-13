@@ -1,5 +1,6 @@
 import {
  
+  IconButton,
   InputAdornment,
   TextField,
 } from "@mui/material";
@@ -46,9 +47,12 @@ export const EditableTextField: React.FC<EditableTextFieldProps> = ({
         toggleShowClear(true);
       }}
       InputProps={{
-        endAdornment: !showClear ? null : (
-          <InputAdornment position="end">
+        endAdornment: !false ? null : (
+          <InputAdornment  position="end">
+            <IconButton onClick={()=>{setText('')}}>
+
             <CancelIcon />
+            </IconButton>
           </InputAdornment>
         ),
       }}

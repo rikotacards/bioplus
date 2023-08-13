@@ -7,7 +7,7 @@ export const Table: React.FC<TableProps> = ({ data }) => {
   if(data.length === 0){
     return 'Not enough data'
   }
-  console.log(data)
+  console.log('data', data)
   return (
     <>
       {data.map((row) => {

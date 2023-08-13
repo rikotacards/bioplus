@@ -47,11 +47,11 @@ export const EditProfilePanel: React.FC = () => {
     >
       <div style={{ alignItems: 'center', padding: '4px', display: "flex" }}>
         <div style={{ alignItems: 'center', width: '100%', display: "flex", flexDirection: "column" }}>
-          {uid ? <UploadProfileImage photoUrl={localImagePaths[0] || user.photoUrl} images={images} setImagePaths={setImagePaths} onImageChange={onImageChange} uid={uid} /> : <Skeleton variant="circular" height={150} width={150} sx={{mb:1}} />}
+          {uid ? <UploadProfileImage photoURL={localImagePaths[0] || user.photoURL} images={images} setImagePaths={setImagePaths} onImageChange={onImageChange} uid={uid} /> : <Skeleton variant="circular" height={150} width={150} sx={{mb:1}} />}
           {open && <Button sx={{mt:1}}  variant='contained' onClick={onSave}>Save</Button>}
         </div>
       </div>
-      <TextField disabled sx={{ mb: 1 }} value={'@' + user?.username} />
+      <TextField disabled sx={{ mb: 1 }} value={'@' + (user?.username|| 'username')} />
       <TextField disabled={!uid} value={bioText} rows={3} multiline onBlur={() => { uid && updateBio({ uid, bio: bioText }) }} onChange={onChange} placeholder="Bio" />
     </div>
   );

@@ -1,8 +1,14 @@
 import React from "react";
 import { ProfileHeader } from "../components/ProfileHeader/ProfileHeader";
 import { DisplayedLink } from "../components/DisplayedLink/DisplayedLink";
-import { Card, Drawer, IconButton, Skeleton, Typography } from "@mui/material";
-
+import {
+  Chip,
+  Drawer,
+  IconButton,
+  Skeleton,
+  Typography,
+} from "@mui/material";
+import "../pages/Landing.css";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router-dom";
 import { PublicProfileDrawerContent } from "../components/PublicProfileDrawerContent/PublicProfileDrawerContent";
@@ -27,6 +33,7 @@ interface ProfileProps {
 export const Profile: React.FC<ProfileProps> = (props) => {
   const [open, setOpen] = React.useState(false);
   const toggle = () => {
+    console.log("toggle");
     setOpen(!open);
   };
 
@@ -48,17 +55,17 @@ export const Profile: React.FC<ProfileProps> = (props) => {
       <div style={{ width: "100%", display: "flex" }}>
         <div
           style={{
-            border: "1px solid white",
-            backdropFilter: "blur(20px)",
             marginLeft: "auto",
             marginRight: "8px",
-            marginTop: "8px",
-            borderRadius: "50%",
+            marginTop: "16px",
           }}
         >
-          <IconButton color="inherit" onClick={toggle}>
-            <MoreHorizIcon color="inherit" />
-          </IconButton>
+          <Chip
+            sx={{ display: 'flex', alignItems: 'center', backdropFilter: "blur(5px)" }}
+            size="small"
+            onClick={toggle}
+            label={<IconButton size='small'><MoreHorizIcon /></IconButton>}
+          />
         </div>
       </div>
       <ProfileHeader
@@ -92,41 +99,30 @@ export const Profile: React.FC<ProfileProps> = (props) => {
       {props.backgroundComponent}
       <div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
         {!props.isPreview && (
-          <Card
+          <Chip
             onClick={() => nav("/")}
-            variant="outlined"
             style={{
-              padding: "8px",
-              borderRadius: "100px",
               margin: "8px",
               display: "flex",
               justifyContent: "center",
-              bottom: 0,
+              bottom: '12%',
               position: "absolute",
+              backdropFilter:'blur(5px)'
             }}
-          >
-            (
-            <Typography color="GrayText" variant="caption">
-              Powered by BioUp
-            </Typography>
-            )
-          </Card>
+            label={
+              <Typography  variant="caption">
+                Get your BioUp
+              </Typography>
+            }
+          />
         )}
       </div>
       <Drawer
-        sx={{
-          width: "100%",
-          flexDirection: "column",
-          display: "flex",
-          alignItems: "center",
-          borderTopLeftRadius: "50px",
-          borderTopRightRadius: "50px",
-          overflow: "hidden",
-        }}
-        hideBackdrop
+        // hideBackdrop
         anchor="bottom"
         onClose={toggle}
         open={open}
+        sx={{zIndex: '3000'}}
       >
         <PublicProfileDrawerContent toggle={toggle} username={props.username} />
       </Drawer>

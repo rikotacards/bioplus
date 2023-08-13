@@ -4,8 +4,11 @@ import {
   Card,
   CardActionArea,
   Collapse,
+  Drawer,
+  Fab,
   IconButton,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -17,7 +20,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { PageSpacing } from "../PageSpacing/PageSpacing";
 import { useLoadingContext } from "../providers/LoadingProvider";
 import { CreateUsernameNotice } from "../components/CreateUsernameNotice/CreateUsernameNotice";
-
+import { AddLinkBanner } from "../components/AddLinkBanner/AddLinkBanner";
+import { ENABLE_BOTTOM_BAR } from "../configs/flags";
 
 export const Admin: React.FC = () => {
   const auth = useAuthContext();
@@ -40,12 +44,24 @@ export const Admin: React.FC = () => {
   };
   const linksContext = useLinksContext();
   return (
-    <div style={{ marginTop: "8px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        position: 'relative',
+        marginTop: ENABLE_BOTTOM_BAR ? "16px" : "8px",
+        justifyContent: "center",
+      }}
+    >
       <PageSpacing>
-        {!loadingContext.isLoading && auth?.isLoggedIn && !auth?.isLoggingIn && !auth?.username && <CreateUsernameNotice/>}
+        {!loadingContext.isLoading &&
+          auth?.isLoggedIn &&
+          !auth?.isLoggingIn &&
+          !auth?.username && <CreateUsernameNotice />}
         <Button
-        fullWidth
-        disabled={!auth?.username}
+          fullWidth
+          disabled={!auth?.username}
           variant="outlined"
           onClick={onClick}
           sx={{
@@ -66,34 +82,15 @@ export const Admin: React.FC = () => {
             </div>
           </CardActionArea>
         </Button>
-        <div>
-          <Collapse in={!show}>
-            <CardActionArea sx={{borderRadius: '50px'}}>
-            <div
-              onClick={!!auth?.username ? toggle: undefined}
-              style={{
-                height: "50px",
-                margin: 1,
-                cursor: 'pointer',
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+       
+        {!auth.isLoggingIn && !auth.isLoggedIn && <AddLinkBanner />}
 
-              <AddCircleOutlineIcon />
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                Add Link
-              </Typography>
-            </div>
-            </CardActionArea>
-          </Collapse>
-          <Collapse in={show}>
-            <AddLinkWidget toggle={toggle} links={linksContext?.links || []} />
-          </Collapse>
-        </div>
         <EditLinksPanel links={linksContext?.links || []} />
       </PageSpacing>
+      {ENABLE_BOTTOM_BAR && <Toolbar/>}
+      {ENABLE_BOTTOM_BAR && <Toolbar/>}
+
+    
     </div>
   );
 };

@@ -121,6 +121,7 @@ export const SignIn: React.FC = () => {
 
       </div>
       <Button
+      className='gradient-button'
         size="large"
         startIcon={<GoogleIcon />}
         sx={{ borderRadius: "20px", mb:1 }}

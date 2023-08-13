@@ -8,6 +8,7 @@ interface LinksContextProps {
   onUpdateLink: (index: number, updatedLink: Link) => void;
   onAddLink:(link: Link) => void;
   onReorder: (links: Link[]) => void;
+  reset: () => void;
 }
 
 interface LinksProviderProps {
@@ -24,6 +25,9 @@ export const LinksProvider: React.FC<LinksProviderProps> = ({children}) => {
   
   const set = (links: Link[]) => {
     setLinks(links)
+  }
+  const reset = () => {
+    setLinks([])
   }
   
   React.useEffect(() => {
@@ -75,7 +79,7 @@ export const LinksProvider: React.FC<LinksProviderProps> = ({children}) => {
     updateLinksNew(uid, links)
   }
 
-  const context = {onReorder, onUpdateLink, links: links || [], onDeleteLink, onAddLink}
+  const context = {reset, onReorder, onUpdateLink, links: links || [], onDeleteLink, onAddLink}
   return (
     <LinksContext.Provider value={context}>
     {children}

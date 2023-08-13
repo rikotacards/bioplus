@@ -122,10 +122,10 @@ export const addUsername = async ({ uid, username }: UpdateUsernameProps) => {
 
 export const addUserToDb = async ({
   uid,
-  photoUrl,
+  photoURL,
 }: {
   uid: string;
-  photoUrl: string | null;
+  photoURL: string | null;
 }) => {
   try {
     const userProfileRef = doc(firestore, "users", uid);
@@ -133,7 +133,7 @@ export const addUserToDb = async ({
     if (snap.exists()) {
       return;
     } else {
-      setDoc(userProfileRef, { uid: uid, photoUrl }, { merge: true });
+      setDoc(userProfileRef, { uid: uid, photoURL }, { merge: true });
     }
   } catch (e) {
     throw new Error("Error when adding user");
@@ -342,6 +342,9 @@ export const onSnapshotUser = (
 export const updateBio = ({ uid, bio }: { uid: string; bio: string }) => {
   setDoc(doc(firestore, "users", uid), { bio }, { merge: true });
 };
+export const updateUserPhotoURL = ({ uid, photoURL }: { uid: string; photoURL: string }) => {
+  setDoc(doc(firestore, "users", uid), { photoURL }, { merge: true });
+};
 export const getBio = async ({ uid }: { uid: string }) => {
   const usernamesRef = doc(firestore, "users", uid);
   const snap = await getDoc(usernamesRef);
@@ -371,7 +374,7 @@ export const updateProfileImage = async (
   await setDoc(
     doc(firestore, "users", uid),
     {
-      photoUrl: url,
+      photoURL: url,
     },
     { merge: true }
   );
@@ -420,9 +423,11 @@ export const uploadImage = async ({
 }) => {
   const storageRef = ref(storage, path);
   try {
+
     await uploadString(storageRef, file, "data_url");
     const downloadUrl = await getImagePath(path);
-    console.log(downloadUrl);
+    
+    console.log('updload and download');
     return downloadUrl;
   } catch (e) {
     throw e;

@@ -1,5 +1,5 @@
 import React from "react";
-import { deleteImage, getImagePath, updateLink, uploadImage } from "../../db/api";
+import { deleteImage, getImagePath, updateLink, updateUserPhotoURL, uploadImage } from "../../db/api";
 import { useAuthContext } from "../../providers/AuthProvider";
 import ImageIcon from "@mui/icons-material/Image";
 import { Avatar, Box, Button, CircularProgress, Typography } from "@mui/material";
@@ -56,9 +56,11 @@ const onDelete = () => {
       if (!e?.target) {
         return;
       }
+      console.log(e.target.result)
       setLocalImagePath(() => e.target?.result as string);
       uploadImage({ path, file: e.target?.result as string }).then(
-        () => {
+        (res) => {
+          updateUserPhotoURL({uid, photoURL:res})
           setLoading(false);
         }
       );

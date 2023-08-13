@@ -10,6 +10,7 @@ import "./Landing.css";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../providers/AuthProvider";
+import { ENABLE_BOTTOM_BAR } from "../configs/flags";
 export const enableSignUpOnLanding = true;
 
 interface LandingProps {
@@ -27,7 +28,7 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
         display: "flex",
         flexDirection: "column",
         padding: "0px 16px",
-        marginTop: "36px",
+        marginTop: ENABLE_BOTTOM_BAR ? "8px" :"36px",
       }}
     >
       <div>
@@ -55,7 +56,7 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
           </Typography>
         </div>
         <Typography sx={{ fontWeight: "900", mb: 0 }} variant="h4"></Typography>
-        <Typography sx={{ fontWeight: "500", mb: 2 }} variant="h6">
+        <Typography sx={{ fontWeight: "700", mb: 2 }} variant="h6">
           Who you are, what you've created, everything that matters, all in one
           place.
         </Typography>
@@ -94,6 +95,7 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
                 }}
               ></TextField>
               <Button
+              className='next-button'
                 fullWidth
                 size="large"
                 sx={{ mt: 1 }}

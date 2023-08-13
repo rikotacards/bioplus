@@ -5,7 +5,6 @@ import { Layout } from "./layout/Layout";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Admin } from "./pages/Admin";
 import { Settings } from "./pages/Settings";
-import { Landing } from "./pages/Landing";
 import { Appearance } from "./pages/Appearance";
 import { DrawerProvider } from "./providers/DrawerProvider";
 import { AuthProvider } from "./providers/AuthProvider";
@@ -20,6 +19,8 @@ import { UserThemeProvider } from "./providers/UserThemeProvider";
 import { Welcome } from "./pages/Welcome";
 import { LandingWithSteps } from "./pages/LandingWithSteps";
 import { CreateUsername } from "./pages/CreateUsername";
+import { Preview } from "./components/Preview/Preview";
+import { Toolbar } from "@mui/material";
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   React.useLayoutEffect(() => {
@@ -48,17 +49,20 @@ function App() {
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/appearance" element={<Appearance />} />
                       <Route path="/settings" element={<Settings />} />
+                      <Route path="/profile" element={<Preview />} />
+
                     </Route>
                     <Route path="/no-content" element={<ErrorPage />} />
                     <Route path="/*" element={<PublicProfile />} />
                   </Routes>
                 </Wrapper>
-                <div style={{ height: "100px" }} />
               </DrawerProvider>
             </LinksProvider>
           </UserThemeProvider>
         </AuthProvider>
       </LoadingProvider>
+
+
     </>
   );
 }

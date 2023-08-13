@@ -20,6 +20,7 @@ export interface UserCustom extends User {
   bio?: string;
   username?: string;
   links: Link[]
+  isPremium?: boolean;
 }
 export const AuthContext = React.createContext({} as AuthContextProps);
 export const useAuthContext = () => React.useContext(AuthContext);
@@ -31,6 +32,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [username, setUsername]=React.useState("")
   const [user, setUser] = React.useState({} as UserCustom);
   const [isLoggingIn, setIsLogginIn] = React.useState(true);
+  const links = useLinksContext();
   const onSignOut = () => {
     signOut(auth).then(() => {
       setUser({} as UserCustom);
@@ -45,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const subscriber = auth.onAuthStateChanged((authObject) => {
       if (authObject?.uid) {
         setUser({ ...user, ...authObject });
-        addUserToDb({ uid: authObject?.uid, photoUrl: authObject.photoURL })
+        addUserToDb({ uid: authObject?.uid, photoURL: authObject.photoURL })
         setLogIn(true);
         setIsLogginIn(false);
         // used if signing in from Google

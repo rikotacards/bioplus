@@ -8,6 +8,8 @@ interface DrawerContextProps {
 import { PreviewDrawerContent } from "../components/PreviewDrawerContent/PreviewDrawerContent";
 import { LinkThumbnailPanel } from "../components/LinkThumbnailPanel/LinkThumbnailPanel";
 import { PublicProfileDrawerContent } from "../components/PublicProfileDrawerContent/PublicProfileDrawerContent";
+import { PublicPreview } from "../components/PublicPreview/PublicPreview";
+import { AddUrlDrawerContent } from "../AddUrlDrawerContent/AddUrlDrawerContent";
 export const DrawerContext = React.createContext({} as DrawerContextProps);
 export const useDrawerContext = () => React.useContext(DrawerContext);
 
@@ -19,6 +21,14 @@ type ComponentDataType = {
   linkId?: string;
   username?: string;
 }
+
+const drawerStyles = {
+  '& .MuiDrawer-paper': {
+    backgroundColor: 'transparent', // Make the drawer container transparent
+    boxShadow: 'none', // Remove any box shadow
+  },
+};
+
 
 export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -36,7 +46,9 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
   };
 
   const drawerComponents = {
+    addLink: <AddUrlDrawerContent/>,
     preview: <PreviewDrawerContent/>,
+    publicPreview: <PublicPreview/>,
     thumbnail: <LinkThumbnailPanel linkId={data?.linkId}/>,
   }
   const drawerContent = drawerComponents[componentName]
@@ -51,7 +63,7 @@ export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
     <DrawerContext.Provider value={context}>
       {props.children}
       <Drawer
-        sx={{width: '100%', flexDirection: 'column', display: "flex", alignItems: 'center' }}
+        sx={{zIndex:'2000', width: '100%', flexDirection: 'column', alignItems: 'center' }}
         anchor="bottom"
         onClose={onToggle}
         open={open}

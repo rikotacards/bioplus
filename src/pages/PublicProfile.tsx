@@ -11,7 +11,7 @@ export type User = {
   bio?: string;
   uid: string;
   username?: string;
-  photoUrl?: string;
+  photoURL?: string;
 };
 // public facing component, we use the window path name
 export const PublicProfile: React.FC = () => {
@@ -68,7 +68,7 @@ export const PublicProfile: React.FC = () => {
     />
   );
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div style={{ height: "100%", width: "100%" }}>
       {user && (
         <Profile
           isPreview={false}

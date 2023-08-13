@@ -34,7 +34,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, us
       }}>
           <Typography sx={{fontWeight: '900', fontSize:'18px'}}>@{username||'Username'}</Typography>
           <Typography>{bio}</Typography>
-          {showEdit && <Button variant='outlined' color='inherit' onClick={()=>nav('/signIn')} fullWidth>Sign in to edit</Button>}
         </div>
       </div>
     </div>
