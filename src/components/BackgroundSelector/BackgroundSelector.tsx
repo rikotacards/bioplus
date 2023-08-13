@@ -3,16 +3,15 @@ import React from "react";
 import { backgrounds } from "../../configs/backgrounds";
 import { BackgroundOption } from "../BackgroundOption/BackgroundOption";
 import { CustomBackgroundImage } from "../CustomBackgroundImage/CustomBackgroundImage";
-import { useUserThemeContext } from "../../providers/UserThemeProvider";
-
+import { ColorPicker } from "../ColorPicker/ColorPicker";
+import { useAuthContext } from "../../providers/AuthProvider";
 export const BackgroundSelector: React.FC = () => {
-
-  const userTheme = useUserThemeContext();
-  
+  const auth = useAuthContext();
+  const isPremium = auth.user?.isPremium
   return (
     <div>
       <div>
-        <Typography sx={{ mb: 1, mt: 1, fontWeight: "bold" }} variant="h4">
+        <Typography sx={{ mb: 1, mt: 1, fontWeight: "bold" }} variant="h5">
           Background
         </Typography>
       </div>
@@ -23,15 +22,18 @@ export const BackgroundSelector: React.FC = () => {
           justifyContent: "flex-start",
         }}
       >
-        <CustomBackgroundImage/>
-        {backgrounds.map((b) => (
-          <div
-            key={b.name}
-          >
-            <BackgroundOption name={b.name} />
-          </div>
-        ))}
+        <CustomBackgroundImage />
+        {backgrounds.map((b) => {
+          b.isPremium
+          return (
+            <div key={b.name}>
+              <BackgroundOption isLocked={!isPremium} name={b.name} />
+            </div>
+          );
+        })}
       </div>
+      <Typography variant="h6">Color</Typography>
+      <ColorPicker property="backgroundColor" />
     </div>
   );
 };

@@ -2,9 +2,9 @@ import { ThemeOptions } from "@mui/material";
 import React from "react";
 import { userDefaultTheme } from "../configs/userDefaultTheme";
 import { useAuthContext } from "./AuthProvider";
-import { UserTheme, getTheme, getUsernameDetails, updateUserTheme } from "../db/api";
+import { UserTheme, getTheme, getUidFromUsername, updateUserTheme } from "../db/api";
 import { useLocation } from "react-router-dom";
-interface UserThemeContextProps extends CustomStyles {
+interface UserThemeContextProps extends ThemeProperties {
   theme: ThemeOptions;
   setDarkMode: () => void;
   setLightMode: () => void;
@@ -12,12 +12,14 @@ interface UserThemeContextProps extends CustomStyles {
   backgroundClassName: string;
   customBackgroundImageSrc: string;
   setCustomBackgroundImageSrc: (src: string) => void;
-
+  backgroundColor: string;
+  setBackgroundColor: (color: string) => void;
+  linkBackgroundColor: string;
+  setLinkBackgroundColor: (color: string) => void;
   setBackgroundClassName: (className: string) => void;
   setButtonClassName: (className: string) => void;
   setButtonTextAlignment: (className: string) => void;
   setButtonTransparency: (className: string) => void;
-  save: () => void;
   updateTheme: (args: { [key: string]: any }) => void;
 }
 
@@ -26,6 +28,9 @@ const defaultTheme = {
   customBackgroundImageSrc: "",
   buttonTextAlignment: "left",
   buttonTransparency: "",
+  linkBackgroundColor: "",
+  backgroundColor: "rgb(128,128,128)",
+  backgroundClassName: ""
 };
 
 const UserThemeContext = React.createContext({} as UserThemeContextProps);
@@ -34,18 +39,20 @@ export const useUserThemeContext = () => React.useContext(UserThemeContext);
 interface UserThemeProviderProps {
   children: React.ReactNode;
 }
-interface CustomStyles {
+export interface ThemeProperties {
   buttonClassName: string;
   backgroundClassName: string;
   buttonTextAlignment: string;
   buttonTransparency: string;
   customBackgroundImageSrc: string;
+  backgroundColor: string;
+  linkBackgroundColor: string;
 }
 
 export const UserThemeProvider: React.FC<
-  UserThemeProviderProps & CustomStyles
+  UserThemeProviderProps & ThemeProperties
 > = ({ children }) => {
-  const [theme, setTheme] = React.useState<CustomStyles>(
+  const [theme, setTheme] = React.useState<ThemeProperties>(
     defaultTheme as UserThemeContextProps
   );
   const auth = useAuthContext();
@@ -65,50 +72,26 @@ export const UserThemeProvider: React.FC<
   };
   
   React.useEffect(() => {
-    console.log('1. Effect Running')
-    if (!isPrivate && usernameFromPath) {
-      getUsernameDetails(usernameFromPath).then((res) => {
-        console.log("Rds", res)
-        if (res?.uid) {
-          console.log("LOL")
-          const uidFromPath = res.uid;
-          getTheme({ uid: uidFromPath })
-          .then((res) => {
-            console.log("Getting theme", res);
-            if (!res) {
-              return;
-            }
-            setTheme(() => {
-              console.log("setting");
-              return res.theme;
-            })
-          })
-        }
-      });
-      return;
-    }
+    console.log('1.Theme effect')
+    
     if(!uid){
+      console.log('userTheme, no Uid, stopping')
       return;
     }
     getTheme({ uid }).then((res) => {
-      console.log("2. Getting theme", res);
+      console.log('geting', res)
       if (!res) {
         return;
       }
       if(JSON.stringify(theme) === JSON.stringify(res.theme)){
-        console.log('Same as Db')
         return;
       }
+      console.log('setting')
       setTheme((p) => {
-        console.log('3. Setting theme from db:', res.theme)
         return {...p, ...res.theme};
       });
     });
   }, [
-    theme.backgroundClassName,
-    theme.buttonClassName,
-    theme.buttonTextAlignment,
-    theme.buttonTransparency,
     uid,
   ]);
   
@@ -139,6 +122,14 @@ export const UserThemeProvider: React.FC<
     setTheme((t) => ({ ...t, buttonTransparency: className }));
     save({ buttonTransparency: className });
   };
+  const setBackgroundColor = (color: string) => {
+    setTheme((t) => ({ ...t, backgroundColor: color }));
+    save({ backgroundColor: color });
+  }
+  const setLinkBackgroundColor = (color: string) => {
+    setTheme((t) => ({ ...t, linkBackgroundColor: color }));
+    save({ linkBackgroundColor: color });
+  }
   const updateTheme = () => {
     setTheme((t) => ({ ...t }));
   };
@@ -153,6 +144,10 @@ export const UserThemeProvider: React.FC<
     setButtonTextAlignment,
     setButtonTransparency,
     setCustomBackgroundImageSrc,
+    setLinkBackgroundColor,
+    backgroundColor: theme.backgroundColor || "",
+    linkBackgroundColor: theme.linkBackgroundColor || "",
+    setBackgroundColor,
     customBackgroundImageSrc: theme.customBackgroundImageSrc || "",
     backgroundClassName: theme.backgroundClassName || "",
     buttonClassName: theme.buttonClassName || "",

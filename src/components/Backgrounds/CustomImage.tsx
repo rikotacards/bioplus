@@ -8,32 +8,40 @@ import { useAuthContext } from "../../providers/AuthProvider";
 interface CustomImageProps {
   passedInUid: string;
 }
-export const CustomImage: React.FC<CustomImageProps> = ({passedInUid}) => {
-  const [imagePath, setImagePath] = React.useState<string|undefined>(undefined);
+export const CustomImage: React.FC<CustomImageProps> = ({ passedInUid }) => {
+  const [imagePath, setImagePath] = React.useState<string | undefined>(
+    undefined
+  );
+  console.log('passed', passedInUid)
   const auth = useAuthContext();
-  const uid = auth?.user?.uid
+  const uid = auth?.user?.uid;
   const userTheme = useUserThemeContext();
-  const path = `${passedInUid || uid}/backgroundImage/b.jpg`
+  const path = `${passedInUid || uid}/backgroundImage/b.jpg`;
   React.useEffect(() => {
     getImagePath(path)
-      .then((res) => {console.log('image', res);setImagePath(res)})
+      .then((res) => {
+        console.log("image", res, userTheme.customBackgroundImageSrc);
+        setImagePath(res);
+      })
       .catch((e) => console.log("loser", e));
-  }, [userTheme.customBackgroundImageSrc, imagePath]);
+  }, [userTheme.customBackgroundImageSrc, imagePath, passedInUid]);
 
-    return (
-      <Box
-        display={"flex"}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        className="common-background"
-      >
-        {(imagePath || userTheme.customBackgroundImageSrc) && <img style={{objectFit: 'cover', height: '100%', width: '100%'}} src={ userTheme.customBackgroundImageSrc || imagePath}/>}
-      
-      </Box>
-    );
-  
-  
+  return (
+    <Box
+      display={"flex"}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      className="common-background"
+    >
+      {(imagePath || userTheme.customBackgroundImageSrc) && (
+        <img
+          style={{ objectFit: "cover", height: "100%", width: "100%" }}
+          src={imagePath || userTheme.customBackgroundImageSrc}
+        />
+      )}
+    </Box>
+  );
 };

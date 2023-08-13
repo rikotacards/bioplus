@@ -9,42 +9,38 @@ export const CustomBackgroundImage: React.FC = () => {
   const auth = useAuthContext();
   const uid = auth.user?.uid;
   const backgroundImagePath = `${uid}/backgroundImage/b.jpg`;
-  const [isOpenSave, setOpenSave] = React.useState(false);
   const userTheme = useUserThemeContext();
   const [localImagePath, setLocalImagePath] = React.useState<string>("");
   const [isLoading, setLoading] = React.useState(true);
   React.useEffect(() => {
     if (!uid) {
+      setLoading(false);
       return;
     }
     getImagePath(backgroundImagePath)
       .then((res) => {
         if (res) {
           setLocalImagePath(res);
+          setLoading(false)
         }
       })
-      .then(() => setLoading(false));
+      .catch(() => setLoading(false));
   }, [uid]);
 
-  const onSave = () => {
-    if (!uid || !localImagePath) {
+
+
+  const containerClick = () => {
+    console.log('containerclick')
+    if (!ref.current) {
       return;
     }
-    updateBackgroundImage({ uid, file: localImagePath }).then(() => {
-      setOpenSave(false);
-    });
-  };
-
-  const onClick = () => {
-    if (!ref.current) {
+    if(userTheme.backgroundClassName!=='customImage'){
+      userTheme.setBackgroundClassName('customImage')
       return;
     }
     ref.current.click();
   };
-  const containerClick = () => {
-    userTheme.setBackgroundClassName("customImage");
-    userTheme.setCustomBackgroundImageSrc(localImagePath);
-  };
+ 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e || !e.target) {
       return;
@@ -59,10 +55,13 @@ export const CustomBackgroundImage: React.FC = () => {
       if (!e?.target) {
         return;
       }
+      if(!uid){
+        return;
+      }
+      updateBackgroundImage({ uid, file: e.target?.result as string })
       setLocalImagePath(() => e.target?.result as string);
-      userTheme.setCustomBackgroundImageSrc(localImagePath);
+      userTheme.setCustomBackgroundImageSrc(e.target?.result);
       userTheme.setBackgroundClassName("customImage");
-      setOpenSave(true);
     };
   };
   return (
@@ -74,29 +73,16 @@ export const CustomBackgroundImage: React.FC = () => {
           display: "flex",
           alignItems: "center",
           position: "relative",
-          width: "100px",
+          width: "110px",
           overflow: "hidden",
-          height: "150px",
+          height: "160px",
           margin: "4px",
+
           justifyContent: "center",
           borderRadius: "5px",
         }}
         border={1}
       >
-        {isOpenSave && (
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              onSave();
-            }}
-            sx={{ justifyContent: "center" }}
-            color="inherit"
-            variant="contained"
-            style={{ position: "absolute" }}
-          >
-            save?
-          </Button>
-        )}
         {!isLoading && !localImagePath && <ImageIcon />}
         {isLoading && <CircularProgress />}
         {!isLoading && localImagePath && (
@@ -110,17 +96,18 @@ export const CustomBackgroundImage: React.FC = () => {
         accept="image/*"
         type="file"
         ref={ref}
+        disabled={!uid}
         onChange={onChange}
         style={{ display: "none" }}
       />
       <Button
         size="small"
         fullWidth
+        disabled={!uid}
         sx={{ textTransform: "capitalize" }}
         color="inherit"
-        onClick={onClick}
       >
-        Choose img
+        Custom img
       </Button>
       </Paper>
     </Box>

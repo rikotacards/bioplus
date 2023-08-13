@@ -7,12 +7,10 @@ palette: {
   
   mode: 'dark',
   background: {
-    //
-    // paper: 'black',
-    // default: 'black'
+    default: 'black',
+    paper: 'black',
   },
    primary: {
-
       main: '#556cd6',
    },
    secondary: {

@@ -5,7 +5,6 @@ import { Layout } from "./layout/Layout";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Admin } from "./pages/Admin";
 import { Settings } from "./pages/Settings";
-import { Landing } from "./pages/Landing";
 import { Appearance } from "./pages/Appearance";
 import { DrawerProvider } from "./providers/DrawerProvider";
 import { AuthProvider } from "./providers/AuthProvider";
@@ -15,8 +14,13 @@ import { PublicProfile } from "./pages/PublicProfile";
 import { ErrorPage } from "./pages/ErrorPage";
 import { EmailPasswordSignUp } from "./pages/EmailPasswordSignUp";
 import { SignIn } from "./pages/SignIn";
-import { Analytics } from "./pages/Anayltics";
+import { Analytics } from "./pages/Analytics";
 import { UserThemeProvider } from "./providers/UserThemeProvider";
+import { Welcome } from "./pages/Welcome";
+import { LandingWithSteps } from "./pages/LandingWithSteps";
+import { CreateUsername } from "./pages/CreateUsername";
+import { Preview } from "./components/Preview/Preview";
+import { Toolbar } from "@mui/material";
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   React.useLayoutEffect(() => {
@@ -35,26 +39,30 @@ function App() {
                 <Wrapper>
                   <Routes>
                     <Route element={<Layout />}>
-                      <Route path="/" element={<Landing />} />
-                      <Route path="/home" element={<Landing />} />
+                      <Route path="/" element={<LandingWithSteps />} />
+                      <Route path="/home" element={<LandingWithSteps />} />
                       <Route path="/signup" element={<EmailPasswordSignUp />} />
                       <Route path="/analytics" element={<Analytics />} />
-
                       <Route path="/signIn" element={<SignIn />} />
+                      <Route path="/welcome" element={<Welcome />} />
+                      <Route path='/create-username' element={<CreateUsername/>}/>
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/appearance" element={<Appearance />} />
                       <Route path="/settings" element={<Settings />} />
+                      <Route path="/profile" element={<Preview />} />
+
                     </Route>
                     <Route path="/no-content" element={<ErrorPage />} />
                     <Route path="/*" element={<PublicProfile />} />
                   </Routes>
                 </Wrapper>
-                <div style={{ height: "100px" }} />
               </DrawerProvider>
             </LinksProvider>
           </UserThemeProvider>
         </AuthProvider>
       </LoadingProvider>
+
+
     </>
   );
 }

@@ -1,10 +1,15 @@
-import { Drawer, Fab, Paper } from "@mui/material";
+import { Drawer} from "@mui/material";
 import React from "react";
-import CloseIcon from "@mui/icons-material/Close";
 interface DrawerContextProps {
   onToggle: () => void;
+  setComponentData:(data:Object) => void;
+  setComponent: (componentName:string) => void;
 }
-import { Preview } from "../components/Preview/Preview";
+import { PreviewDrawerContent } from "../components/PreviewDrawerContent/PreviewDrawerContent";
+import { LinkThumbnailPanel } from "../components/LinkThumbnailPanel/LinkThumbnailPanel";
+import { PublicProfileDrawerContent } from "../components/PublicProfileDrawerContent/PublicProfileDrawerContent";
+import { PublicPreview } from "../components/PublicPreview/PublicPreview";
+import { AddUrlDrawerContent } from "../AddUrlDrawerContent/AddUrlDrawerContent";
 export const DrawerContext = React.createContext({} as DrawerContextProps);
 export const useDrawerContext = () => React.useContext(DrawerContext);
 
@@ -12,38 +17,58 @@ interface DrawerProviderProps {
   children: React.ReactNode;
 }
 
+type ComponentDataType = {
+  linkId?: string;
+  username?: string;
+}
+
+const drawerStyles = {
+  '& .MuiDrawer-paper': {
+    backgroundColor: 'transparent', // Make the drawer container transparent
+    boxShadow: 'none', // Remove any box shadow
+  },
+};
+
+
 export const DrawerProvider: React.FC<DrawerProviderProps> = (props) => {
   const [open, setOpen] = React.useState(false);
+  const [componentName, setComponentName] = React.useState("")
+  const [data, setData] = React.useState({} as ComponentDataType )
+  
+  const setComponent = (componentName: string) => {
+    setComponentName(componentName)
+  }
+  const setComponentData = (data: Object) => {
+    setData(data)
+  }
   const onToggle = () => {
     setOpen(!open);
   };
 
+  const drawerComponents = {
+    addLink: <AddUrlDrawerContent/>,
+    preview: <PreviewDrawerContent/>,
+    publicPreview: <PublicPreview/>,
+    thumbnail: <LinkThumbnailPanel linkId={data?.linkId}/>,
+  }
+  const drawerContent = drawerComponents[componentName]
+
+
   const context = {
     onToggle,
+    setComponent,
+    setComponentData
   };
   return (
     <DrawerContext.Provider value={context}>
       {props.children}
       <Drawer
-        sx={{ display: "flex", justifyContent: 'center' }}
+        sx={{zIndex:'2000', width: '100%', flexDirection: 'column', alignItems: 'center' }}
         anchor="bottom"
         onClose={onToggle}
         open={open}
       >
-        <Paper elevation={0}>
-          <Preview />
-        </Paper>
-        <Fab
-          sx={{
-            position: "fixed",
-            bottom: "0px",
-            alignSelf: "center",
-            margin: "20px",
-          }}
-          onClick={onToggle}
-        >
-          <CloseIcon />
-        </Fab>
+        {drawerContent}
       </Drawer>
     </DrawerContext.Provider>
   );

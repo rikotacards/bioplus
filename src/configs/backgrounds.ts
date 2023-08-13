@@ -8,28 +8,34 @@ export type BackgroundName = 'solid' |
 
 export type BackgroundType = {
   name: BackgroundName;
+  isPremium: boolean;
 }[]
 
 export const backgrounds: BackgroundType = [
   {
-    name: 'default'
-  },
-  {
     name: 'solid',
+    isPremium: false
 
   },
   {
     name: 'gradient',
+    isPremium: false
+
 
   },
   {
     name: 'sunset',
+    isPremium: true
+
   
   },
   {
-    name: 'flux'
+    name: 'flux',
+    isPremium: true
+
   },
   {
-    name: 'rainbow'
+    name: 'rainbow',
+    isPremium: true
   }
 ]

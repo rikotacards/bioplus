@@ -26,11 +26,14 @@ export const AddLinkWidget: React.FC<AddLinkWidgetProps> = ({toggle}) => {
   const uid = auth?.user?.uid;
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
-    setUrl(e.target.value);
+    setUrl(e.target.value.toLowerCase());
   };
   const onAdd = () => {
     setError(false);
     if (!uid) {
+      return;
+    }
+    if(url.length === 0){
       return;
     }
     if (!isValidUrl(url)) {
@@ -42,6 +45,7 @@ export const AddLinkWidget: React.FC<AddLinkWidgetProps> = ({toggle}) => {
       if(res){
         linksContext.onAddLink({link:url, title: '', linkId: res, isDisplayed: true})
       }
+      toggle()
     })
     setUrl('')
     
@@ -65,7 +69,7 @@ export const AddLinkWidget: React.FC<AddLinkWidgetProps> = ({toggle}) => {
             onChange={onChange}
             variant="outlined"
             value={url}
-            type="text"
+            type="url"
             autoComplete="off"
             helperText={errorMessage}
           />

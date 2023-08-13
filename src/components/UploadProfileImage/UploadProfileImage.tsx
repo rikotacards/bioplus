@@ -1,65 +1,103 @@
-import { Avatar } from "@mui/material";
 import React from "react";
-import { updateProfileImage } from "../../db/api";
-interface UploadProfileImageProps {
-  photoUrl: string;
-  uid: string;
-  images: string[];
-  onImageChange: (e: any) => void;
-  setImagePaths: (blob: string[]) => void;
+import { deleteImage, getImagePath, updateLink, updateUserPhotoURL, uploadImage } from "../../db/api";
+import { useAuthContext } from "../../providers/AuthProvider";
+import ImageIcon from "@mui/icons-material/Image";
+import { Avatar, Box, Button, CircularProgress, Typography } from "@mui/material";
+interface LinkThumbnailPanelProps {
+  linkId: string | undefined;
 }
-export const UploadProfileImage: React.FC<UploadProfileImageProps> = ({
-  setImagePaths,
-  images,
-  onImageChange,
-  photoUrl,
-  uid,
-}) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  React.useEffect(() => {
-    if (images.length < 1){
-      
-      return;
-    } 
-    const newlocalImageUrls: any = [];
-    images.forEach(async (image: any) => {
-      newlocalImageUrls.push(URL.createObjectURL(image));
-      let dataUrl = await new Promise((r) => {
-        let a = new FileReader();
-        a.onload = r;
-        a.readAsDataURL(image);
-      }).then((e) => {
-        // todo
-        let b = e as any;
-        return b.target?.result;
-      });
-      setImagePaths([dataUrl]);
-    });
-    setlocalImageUrls(newlocalImageUrls);
-    // setImagePaths(blobs)
-  }, [images, updateProfileImage]);
-  const [localImageUrls, setlocalImageUrls] = React.useState([]);
-
+export const UploadProfileImage: React.FC<LinkThumbnailPanelProps> = ({linkId}) => {
+  const ref = React.useRef<HTMLInputElement>(null);
+  const auth = useAuthContext();
+  
+  const uid = auth.user?.uid;
+  const path = `${uid}/profieImage/profileImage.jpg`;
   const handleClick = () => {
-    if (inputRef.current !== null) {
-      inputRef.current.click();
+    if (ref.current !== null) {
+      ref.current.click();
     }
   };
+  const [localImagePath, setLocalImagePath] = React.useState<string>("");
+  const [isLoading, setLoading] = React.useState<boolean>(true);
+  React.useEffect(() => {
+    if (!uid) {
+      setLoading(false);
+      console.log('set')
+      return;
+    }
+    getImagePath(path)
+      .then((res) => {
+        if (res) {
+          setLocalImagePath(res);
+          setLoading(false)
+        } 
+        setLoading(false)
+      })
+      .then(() => setLoading(false)).catch((e) => setLoading(false))
+  }, [uid]);
+const onDelete = () => {
+  setLocalImagePath("")
+  deleteImage({path});
+}
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e || !e.target) {
+      return;
+    }
+    if (!uid) {
+      return;
+    }
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    const reader = new FileReader();
+    file && reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      if (!e?.target) {
+        return;
+      }
+      console.log(e.target.result)
+      setLocalImagePath(() => e.target?.result as string);
+      uploadImage({ path, file: e.target?.result as string }).then(
+        (res) => {
+          updateUserPhotoURL({uid, photoURL:res})
+          setLoading(false);
+        }
+      );
+    };
 
+  };
   return (
-    <div onClick={handleClick}>
-      <input
-        type="file"
-        style={{ display: "none" }}
-        ref={inputRef}
-        accept="image/*"
-        onChange={onImageChange}
-      />
-
+    <div style={{padding: '8px', display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
       <Avatar
-        sx={{ height: "150px", width: "150px" }}
-        src={localImageUrls[0] || photoUrl}
-      ></Avatar>
+      onClick={handleClick}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        position: "relative",
+       height: '120px',
+       width: '120px',
+        overflow: "hidden",
+        margin: "4px",
+
+        justifyContent: "center",
+     
+      }}
+      src={localImagePath}
+
+    >
+     
+    </Avatar>
+      <input
+        accept="image/*"
+        type="file"
+        ref={ref}
+        onChange={onChange}
+        style={{ display: "none" }}
+      />
+      <div>
+      </div>
+        
     </div>
   );
 };

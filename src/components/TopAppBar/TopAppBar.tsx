@@ -6,23 +6,30 @@ import {
   Button,
   LinearProgress,
   Paper,
-  IconButton,
   Divider,
+  Zoom,
+  Collapse,
 } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { MainNav } from "../MainNav/MainNav";
 import { useOnSignIn } from "../../util/onSignIn";
-import { onSignOut } from "../../util/onSignOut";
 import { useAuthContext } from "../../providers/AuthProvider";
 import { useLoadingContext } from "../../providers/LoadingProvider";
 import { useNavigate } from "react-router-dom";
 import { getBrowser } from "../../platform/getBrowser";
+import { ENABLE_BOTTOM_BAR } from "../../configs/flags";
+import { useDrawerContext } from "../../providers/DrawerProvider";
 
 export const TopAppBar: React.FC = () => {
   const auth = useAuthContext();
   const nav = useNavigate();
   const browser = getBrowser();
   const onSignIn = useOnSignIn();
+  const drawerContext = useDrawerContext();
+  const onAdd = () => {
+    drawerContext.setComponent('addLink')
+    drawerContext.onToggle();
+  }
   const isSafari = browser && browser === "safari";
   const loadingContext = useLoadingContext();
   const isLoggedIn = auth?.isLoggedIn;
@@ -40,7 +47,7 @@ export const TopAppBar: React.FC = () => {
   const signInButton = <div style={{ marginLeft: "auto" }}>
     <Button
       onClick={
-        onSignIn
+       () => nav('/signIn')
       }
       sx={{ textTransform: 'capitalize' }}
       color="primary"
@@ -62,15 +69,19 @@ export const TopAppBar: React.FC = () => {
   );
   return (
     <>
-      <AppBar position="fixed">
-        <Paper elevation={isSafari ? 0 : 3} sx={{ borderRadius: 0 }}>
-          {isSafari && mainBar}
+      <AppBar sx={ENABLE_BOTTOM_BAR ? { top: 'auto', bottom: 0 } : {}} position="fixed">
+        <Paper elevation={isSafari ? 0 : 3} sx={{ borderRadius: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {ENABLE_BOTTOM_BAR && <Divider/>}
+          {ENABLE_BOTTOM_BAR &&  <Collapse in={location.pathname ==='/admin'}><Button fullWidth sx={{marginTop: '8px', borderRadius:'50px', textTransform: 'capitalize'}} variant='contained' size='large' onClick={onAdd}>Add Link</Button></Collapse>}
+
+          {!ENABLE_BOTTOM_BAR && isSafari && mainBar}
           <MainNav />
           {loadingContext.isLoading && <LinearProgress />}
+          {ENABLE_BOTTOM_BAR && <div style={{height:'5px'}}/>}
         </Paper>
       </AppBar>
-      {isSafari && <Toolbar />}
-      <Toolbar />
+      {!ENABLE_BOTTOM_BAR && isSafari && <Toolbar />}
+      {!ENABLE_BOTTOM_BAR && <Toolbar />}
     </>
   );
 };

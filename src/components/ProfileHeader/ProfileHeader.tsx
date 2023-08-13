@@ -1,5 +1,7 @@
 import React from "react";
-import { Avatar, Typography, CardContent, Skeleton } from "@mui/material";
+import { Avatar, Typography, CardContent, Skeleton, Button } from "@mui/material";
+import { useAuthContext } from "../../providers/AuthProvider";
+import { useNavigate } from "react-router-dom";
 interface ProfileHeaderProps {
   username?: string;
   profilePhotoUrl?: string;
@@ -7,9 +9,13 @@ interface ProfileHeaderProps {
 }
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, username, bio}) => {
   const avatarStyle = {height:"150px", width: '150px'}
+  const auth = useAuthContext();
+  const nav = useNavigate();
+  const usernameFromPath = location.pathname.split("/").join("");
+  const showEdit = usernameFromPath === auth.username
   return (
-    <div>
-      <CardContent
+    <div style={{padding: '0 16px'}}>
+      <div
         style={{
           display: "flex",
           alignItems: "center",
@@ -19,11 +25,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({profilePhotoUrl, us
         }}
       >
        {profilePhotoUrl? <Avatar src={profilePhotoUrl} sx={avatarStyle} />: <Skeleton variant='circular' sx={avatarStyle} />}
-        <div style={{alignItems: 'center', margin: "8px", display: 'flex', flexDirection: 'column', width: '100%'}}>
-          <Typography sx={{fontWeight: 'bold'}}>@{username||'Username'}</Typography>
+        <div style=
+        {{alignItems: 'center',
+         margin: "8px",
+          display: 'flex',
+           flexDirection: 'column',
+            width: '100%', 
+      }}>
+          <Typography sx={{fontWeight: '900', fontSize:'18px'}}>@{username||'Username'}</Typography>
           <Typography>{bio}</Typography>
         </div>
-      </CardContent>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,30 @@
+
+
+.gradient-box {
+  border-radius: 10px;
+  display: flex;
+  margin-top: 8px;
+  justify-content: 'center';
+  animation: gradientShift 5s infinite alternate;
+  text-align: left;
+}
+
+
+@keyframes gradientShift {
+  0% {
+    background-image: linear-gradient(to bottom, #ff7f50, #ff4500, #ff8c00, #d8ba0d);
+    background-size: 100% 600%;
+    background-position: 0% 0%;
+  }
+  100% {
+    background-image: linear-gradient(to bottom, #ff7f50, #ff4500, #ff8c00, #d8ba0d);
+    background-size: 100% 600%;
+    background-position: 0% 100%;
+  }
+}
+
+
+
+
+
+
