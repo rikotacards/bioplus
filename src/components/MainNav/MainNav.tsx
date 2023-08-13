@@ -66,8 +66,8 @@ export const MainNav: React.FC = () => {
       icon: <VisibilityIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
     },
     {
-      name:  isLoggedIn ? 'profile' : "you",
-      path: isLoggedIn ? "/profile" : '/you ',
+      name:  isLoggedIn ? 'profile' : "sampleProfile",
+      path: isLoggedIn ? "/profile" : '/sampleProfile ',
       icon: <AccountCircleIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
     },
   

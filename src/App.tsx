@@ -52,7 +52,7 @@ function App() {
                       <Route path="/appearance" element={<Appearance />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/profile" element={<Preview />} />
-                      <Route path="/sampleProfile" element={<PublicProfile />} />
+                      <Route path="/sampleProfile" element={<PublicPreview />} />
 
                     </Route>
                     <Route path="/no-content" element={<ErrorPage />} />
