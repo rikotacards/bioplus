@@ -4,6 +4,7 @@ import {
   Divider,
   InputAdornment,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import "./Landing.css";
@@ -11,6 +12,7 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../providers/AuthProvider";
 import { ENABLE_BOTTOM_BAR } from "../configs/flags";
+import { Link } from "react-router-dom";
 export const enableSignUpOnLanding = true;
 
 interface LandingProps {
@@ -28,7 +30,7 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
         display: "flex",
         flexDirection: "column",
         padding: "0px 16px",
-        marginTop: ENABLE_BOTTOM_BAR ? "8px" :"36px",
+        marginTop: ENABLE_BOTTOM_BAR ? "8px" : "36px",
       }}
     >
       <div>
@@ -56,7 +58,7 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
           </Typography>
         </div>
         <Typography sx={{ fontWeight: "900", mb: 0 }} variant="h4"></Typography>
-        <Typography sx={{ fontWeight: "700", mb: 2 }} variant="h6">
+        <Typography sx={{ fontWeight: "700", mb: 1 }} variant="h6">
           Who you are, what you've created, everything that matters, all in one
           place.
         </Typography>
@@ -95,32 +97,24 @@ export const Landing: React.FC<LandingProps> = ({ onNext, onChange }) => {
                 }}
               ></TextField>
               <Button
-              className='next-button'
-                fullWidth
+                className="next-button"
                 size="large"
-                sx={{ mt: 1 }}
+                sx={{ mt: 1, fontWeight: "bold" }}
                 variant="contained"
                 onClick={onNext}
+                fullWidth
               >
                 Next
               </Button>
             </div>
           )}
           <Divider sx={{ mt: 1, mb: 1 }} />
-          <Typography variant="caption">
-            If you already have an account
-          </Typography>
-          <Button
-            size="large"
-            onClick={() => {
-              nav("/signIn");
-            }}
-            sx={{ mt: "auto" }}
-            fullWidth
-            variant="outlined"
-          >
-            Sign in
-          </Button>
+          <div style={{ display: "flex" }}>
+            <Typography sx={{ mr: 1 }} variant="body1">
+              If you already have an account
+            </Typography>
+            <Link to={"/signIn"}>Signin</Link>
+          </div>
         </div>
       )}
     </div>

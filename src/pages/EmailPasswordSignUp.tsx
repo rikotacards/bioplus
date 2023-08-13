@@ -186,7 +186,7 @@ export const EmailPasswordSignUp: React.FC<EmailPasswordSignUpProps> = ({onPrev,
         placeholder="password"
       />
       <Button sx={{ mb: 1 }} onClick={onSignupClick} variant="contained">
-        Sign Up
+        Create Account
       </Button>
       {loginError && (
         <Card sx={{mb:1, color: 'red'}}>
@@ -195,9 +195,6 @@ export const EmailPasswordSignUp: React.FC<EmailPasswordSignUpProps> = ({onPrev,
           </CardContent>
         </Card>
       )}
-      <Button variant="outlined" onClick={onPrev}>
-        Back
-      </Button>
     </div>
   );
 };

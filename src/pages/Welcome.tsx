@@ -1,8 +1,10 @@
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, IconButton, Typography } from "@mui/material";
 import React from "react";
+import LinkIcon from "@mui/icons-material/Link";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import LinkIcon from "@mui/icons-material/Link";
 import { Leaderboard } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import "./Welcome.css";
@@ -19,14 +21,14 @@ const withStyle = (component: React.ReactNode) => {
 };
 const steps = [
   {
-    desc: "Add your links in Admin",
+    desc: "Add your links in",
     url: "/admin",
     icon: <LinkIcon fontSize="large" sx={{ mr: 1 }} />,
     name: "admin",
     sample: withStyle(<MockProfile/>)
   },
   {
-    desc: "Customize your Appearance",
+    desc: "Customize your Appearance in",
     url: "/appearance",
     icon: <VisibilityIcon fontSize="large" sx={{ mr: 1 }} />,
     name: "appeareance",
@@ -69,21 +71,20 @@ export const Welcome: React.FC = () => {
             </Typography>
 
             <Typography fontWeight={"bold"} variant="h6">
-              {step.desc}
+              {step.desc} 
             </Typography>
-          </div>
-          {step.sample}
+            <div style={{marginLeft: 'auto'}}>
 
-          <Button
+            <IconButton
             onClick={() => nav("/admin")}
-            fullWidth
-            className={"rainbow-text"}
-            size="large"
-            variant="outlined"
           >
             {step.icon}
-            {step.name}
-          </Button>
+          </IconButton>
+            </div>
+          </div>
+        
+
+         
         </CardContent>
       </div>
     );

@@ -78,6 +78,7 @@ export const PublicProfile: React.FC = () => {
           profilePhotoUrl={user?.photoURL || ""}
           username={usernameFromPath}
           links={links}
+          name={user?.name}
           linkButtonClassName={theme.buttonClassName}
           linkButtonTransparency={theme.buttonTransparency}
           linkButtonBackgroundColor={theme.linkBackgroundColor}

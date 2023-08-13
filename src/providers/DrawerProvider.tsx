@@ -23,10 +23,7 @@ type ComponentDataType = {
 }
 
 const drawerStyles = {
-  '& .MuiDrawer-paper': {
-    backgroundColor: 'transparent', // Make the drawer container transparent
-    boxShadow: 'none', // Remove any box shadow
-  },
+  'paper': 'red'
 };
 
 

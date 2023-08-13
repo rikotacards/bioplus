@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HomeIcon from "@mui/icons-material/Home";
 import LinkIcon from "@mui/icons-material/Link";
@@ -17,48 +17,67 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../providers/AuthProvider";
 import { ENABLE_BOTTOM_BAR } from "../../configs/flags";
-const mainNavItems = [
-  {
-    name: "admin",
-    path: "/admin",
-    icon: <LinkIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
-  },
-  {
-    name: "appearance",
-    path: "/appearance",
-    icon: <VisibilityIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
-  },
-  {
-    name: "profile",
-    path: "/profile",
-    icon: <AccountCircleIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
-  },
-  
-  {
-    name: "analytics",
-    path: "/analytics",
-    icon: <LeaderboardIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
-  },
-  {
-    name: "settings",
-    path: "/settings",
-    icon: <SettingsIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
-  },
-];
+import { useDrawerContext } from "../../providers/DrawerProvider";
+
 interface ChipButtonProps {
   name: string;
   icon: JSX.Element;
   isSelected: boolean;
-  iconOnly?:boolean;
+  iconOnly?: boolean;
 }
-export const ChipButton: React.FC<ChipButtonProps> = ({iconOnly, name, icon, isSelected }) => {
-  return <Chip sx={{color: 'white'}} variant={isSelected ? "filled" : "outlined"} icon={!iconOnly && icon} label={iconOnly? icon :<Typography variant='body2' color='white'>{name}</Typography>} />;
+export const ChipButton: React.FC<ChipButtonProps> = ({
+  iconOnly,
+  name,
+  icon,
+  isSelected,
+}) => {
+  
+  return (
+    <Chip
+      sx={{ color: "white" }}
+      variant={isSelected ? "filled" : "outlined"}
+      icon={!iconOnly && icon}
+      label={
+        iconOnly ? (
+          icon
+        ) : (
+          <Typography variant="body2" color="white">
+            {name}
+          </Typography>
+        )
+      }
+    />
+  );
 };
 export const MainNav: React.FC = () => {
   const auth = useAuthContext();
   const location = useLocation();
+  const drawer = useDrawerContext();
   const isLoggedIn = auth?.isLoggedIn;
-
+  const mainNavItems = [
+    {
+      name: "admin",
+      path: "/admin",
+      icon: <LinkIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
+    },
+    {
+      name: "appearance",
+      path: "/appearance",
+      icon: <VisibilityIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
+    },
+    {
+      name:  isLoggedIn ? 'profile' : "sampleProfile",
+      path: isLoggedIn ? "/profile" : '/sampleProfile ',
+      icon: <AccountCircleIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
+    },
+  
+    {
+      name: "analytics",
+      path: "/analytics",
+      icon: <LeaderboardIcon sx={{ mr: ENABLE_BOTTOM_BAR ? 0 : 0.5 }} />,
+    },
+    
+  ];
   const navItems = mainNavItems.map((item) => (
     <Link
       style={{ marginRight: "4px", display: "flex", alignItems: "center" }}
@@ -67,12 +86,24 @@ export const MainNav: React.FC = () => {
       to={item.path}
     >
       {ENABLE_BOTTOM_BAR ? (
-        <div style={{borderRadius: '100%', border:location.pathname.indexOf(item.name) >= 0 ? '0px solid white': 0}}>
-
-          <IconButton color={location.pathname.indexOf(item.name) >= 0 ? 'primary': 'default'} >{item.icon}</IconButton>
+        <div
+          style={{
+            borderRadius: "100%",
+            border:
+              location.pathname.indexOf(item.name) >= 0 ? "0px solid white" : 0,
+          }}
+        >
+          <IconButton
+            
+            color={
+              location.pathname.indexOf(item.name) >= 0 ? "primary" : "default"
+            }
+          >
+            {item.icon}
+          </IconButton>
         </div>
-        // <ChipButton iconOnly={true} isSelected={location.pathname.indexOf(item.name) >= 0} name={item.name} icon={item.icon} />
       ) : (
+        // <ChipButton iconOnly={true} isSelected={location.pathname.indexOf(item.name) >= 0} name={item.name} icon={item.icon} />
         <Button
           sx={{ color: "white" }}
           size="small"
@@ -97,16 +128,10 @@ export const MainNav: React.FC = () => {
         padding: "8px",
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "space-around",
       }}
     >
-      {!isLoggedIn && (
-        <Link relative={"route"} to={"/"}>
-          <IconButton>
-            <HomeIcon />
-          </IconButton>
-        </Link>
-      )}
+      
       <div
         style={{
           width: "100%",
@@ -116,7 +141,21 @@ export const MainNav: React.FC = () => {
           overflowX: "scroll",
         }}
       >
+        {!isLoggedIn && (
+        <Link relative={"route"} to={"/"}>
+          <IconButton>
+            <HomeIcon />
+          </IconButton>
+        </Link>
+      )}
         {navItems}
+        {isLoggedIn && (
+        <Link relative={"route"} to={"/settings"}>
+          <IconButton color={location.pathname.indexOf('settings') >= 0  ? 'primary': 'default'}>
+            <SettingsIcon />
+          </IconButton>
+        </Link>
+      )}
       </div>
     </div>
   );

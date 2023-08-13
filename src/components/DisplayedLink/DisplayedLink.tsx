@@ -1,16 +1,12 @@
 import React from "react";
 import "../../configs/linkStyles.css";
-import {
-  CardActionArea,
-  Typography,
-  Paper,
-  Box,
-} from "@mui/material";
+import { CardActionArea, Typography, Paper, Box } from "@mui/material";
 import { prependHttp } from "../../util/prependHttp";
 import { useUserThemeContext } from "../../providers/UserThemeProvider";
 import { getImagePath, incrementLinkClick } from "../../db/api";
 import clx from "clsx";
 import "../../configs/linkStyles.css";
+import { MoreHorizOutlined } from "@mui/icons-material";
 interface DisplayedLinkProps {
   title: string;
   link: string;
@@ -36,9 +32,11 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
   const [thumbnailPath, setThumbnailPath] = React.useState("");
   React.useEffect(() => {
     const path = `${uid}/linkThumbnails/${linkId}.jpg`;
-    getImagePath(path).then((res) => {
-      setThumbnailPath(res);
-    }).catch((e) => console.log(e))
+    getImagePath(path)
+      .then((res) => {
+        setThumbnailPath(res);
+      })
+      .catch((e) => console.log(e));
   }, [uid, thumbnailPath]);
   return (
     <Box
@@ -63,13 +61,19 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
         ])}
         elevation={3}
       >
-        <CardActionArea>
+        <CardActionArea
+          sx={{
+            display: "flex",
+            width: "100%",
+            padding: "8px",
+            alignItems: "center",
+          }}
+        >
           <div
             style={{
               display: "flex",
-              width: "100%",
-              padding: "8px",
-              alignItems: "center",
+              flexGrow: 1,
+              width: "20%",
             }}
           >
             {thumbnailPath && (
@@ -78,26 +82,36 @@ export const DisplayedLink: React.FC<DisplayedLinkProps> = ({
                 className={clx([linkButtonClassName])}
                 style={{
                   marginRight: "8px",
-                  borderRadius: "10px",
                   objectFit: "cover",
                   height: "70px",
                   width: "70px",
-                  display: "flex",
-                  flexShrink: 1,
                 }}
               />
             )}
+          </div>
+          <div
+            className={clx(["display-link-common"])}
+            style={{width: "100%", flexShrink: 1, display: "flex"}}
+          >
             <div
-              className={clx([
-                "display-link-common",
-                linkButtonTextAlignment,
-              ])}
-              style={{ display: "block", width: "100%" }}
-            >
-              <Typography sx={{ fontWeight: "500" }} variant="body1">
-                {title || url}
-              </Typography>
+            className='center'
+            style={{width:'100%'}}>
+
+            <Typography sx={{ fontWeight: "600" }} variant="body2">
+              {title || url}
+            </Typography>
             </div>
+          </div>
+          <div
+            style={{
+              width: "20%",
+              justifyContent: "flex-end",
+              display: "flex",
+              flexGrow: 1,
+              
+            }}
+          >
+            <MoreHorizOutlined />
           </div>
         </CardActionArea>
       </Paper>

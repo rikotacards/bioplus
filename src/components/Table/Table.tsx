@@ -7,13 +7,11 @@ export const Table: React.FC<TableProps> = ({ data }) => {
   if(data.length === 0){
     return 'Not enough data'
   }
-  console.log('data', data)
+  console.log('table data', data)
   return (
     <>
       {data.map((row) => {
-        if(row.clicks === 0){
-          return;
-        }
+       
         return (
           <div key={row.clicks + row?.referrer + row?.url}>
           <div

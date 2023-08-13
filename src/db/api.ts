@@ -26,6 +26,7 @@ import {
 } from "firebase/storage";
 import { getCountry, getState } from "../util/getCountry";
 import { UserCustom } from "../providers/AuthProvider";
+import { reservedNames } from "../configs/reservedNames";
 const storage = getStorage();
 
 export const claimUsername = async () => {};
@@ -105,6 +106,9 @@ export const getUidFromUsername = async (username: string) => {
 export const addUsername = async ({ uid, username }: UpdateUsernameProps) => {
   // check all usernames
   const lowercase = username.toLowerCase();
+  if(reservedNames.includes(lowercase)){
+    throw new Error("Username reserved");
+  }
   const usernameDetails = await getUidFromUsername(lowercase);
   if (usernameDetails) {
     throw new Error("Username already exists");
@@ -213,7 +217,7 @@ export const incrementLinkClick = async ({
   try {
     const country = getCountry();
     const state = getState();
-    console.log(uid, linkId);
+    console.log('CLICKED', uid, linkId);
     const res = await setDoc(
       doc(firestore, "users", uid, "links", linkId),
       {
@@ -339,8 +343,11 @@ export const onSnapshotUser = (
     setState(data?.links || []);
   });
 
-export const updateBio = ({ uid, bio }: { uid: string; bio: string }) => {
+export const updateBio = ({ uid, bio }: { uid: string; bio: string; }) => {
   setDoc(doc(firestore, "users", uid), { bio }, { merge: true });
+};
+export const updateName = ({ uid, name }: { uid: string; name: string }) => {
+  setDoc(doc(firestore, "users", uid), { name }, { merge: true });
 };
 export const updateUserPhotoURL = ({ uid, photoURL }: { uid: string; photoURL: string }) => {
   setDoc(doc(firestore, "users", uid), { photoURL }, { merge: true });

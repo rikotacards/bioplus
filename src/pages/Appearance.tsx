@@ -5,19 +5,15 @@ import { useDrawerContext } from "../providers/DrawerProvider";
 import { BackgroundSelector } from "../components/BackgroundSelector/BackgroundSelector";
 import { BorderRadiusSelector } from "../components/LinkStyleSelector/LinkStyleSelector";
 import "./Appearance.css";
-import { LinkTransparencySelector } from "../components/LinkTransparencySelector/LinkTransparencySelector";
 import { PageSpacing } from "../PageSpacing/PageSpacing";
-import { TextAlignmentSelector } from "../components/TextAlignmentSelector/TextAlignmentSelector";
 import { UserCustom, useAuthContext } from "../providers/AuthProvider";
 import { getUser } from "../db/api";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import { AppearanceBanner } from "../components/AppearanceBanner/AppearanceBanner";
-import { Upcoming } from "@mui/icons-material";
 import { ENABLE_BOTTOM_BAR } from "../configs/flags";
 export const Appearance: React.FC = () => {
   const drawerContext = useDrawerContext();
   const auth = useAuthContext();
-  const { isLoggedIn } = auth;
   const uid = auth.user?.uid;
   const [user, setUser] = React.useState<UserCustom | undefined>(
     {} as UserCustom
@@ -59,8 +55,6 @@ export const Appearance: React.FC = () => {
         </Button>}
         <BackgroundSelector />
         <BorderRadiusSelector />
-        <TextAlignmentSelector />
-        <LinkTransparencySelector />
 
         <div
           style={{

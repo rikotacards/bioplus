@@ -21,6 +21,8 @@ import { LandingWithSteps } from "./pages/LandingWithSteps";
 import { CreateUsername } from "./pages/CreateUsername";
 import { Preview } from "./components/Preview/Preview";
 import { Toolbar } from "@mui/material";
+import { PublicPreview } from "./components/PublicPreview/PublicPreview";
+import { Profile } from "./pages/Profile";
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   React.useLayoutEffect(() => {
@@ -50,6 +52,7 @@ function App() {
                       <Route path="/appearance" element={<Appearance />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/profile" element={<Preview />} />
+                      <Route path="/sampleProfile" element={<PublicPreview />} />
 
                     </Route>
                     <Route path="/no-content" element={<ErrorPage />} />
